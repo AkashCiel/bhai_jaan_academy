@@ -41,6 +41,7 @@ dependencies = [
     { name = "email-validator" },
     { name = "fastapi" },
     { name = "httpx" },
+    { name = "openai" },
     { name = "pydantic" },
     { name = "python-dotenv" },
     { name = "python-multipart" },
@@ -54,6 +55,7 @@ requires-dist = [
     { name = "email-validator", specifier = "==2.1.0" },
     { name = "fastapi", specifier = "==0.104.1" },
     { name = "httpx", specifier = "==0.25.2" },
+    { name = "openai", specifier = "==1.3.0" },
     { name = "pydantic", specifier = "==2.5.0" },
     { name = "python-dotenv", specifier = "==1.0.0" },
     { name = "python-multipart", specifier = "==0.0.6" },
@@ -196,6 +198,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44", size = 27697, upload-time = "2022-10-25T02:36:22.414Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6", size = 25335, upload-time = "2022-10-25T02:36:20.889Z" },
+]
+
+[[package]]
+name = "distro"
+version = "1.9.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/fc/f8/98eea607f65de6527f8a2e8885fc8015d3e6f5775df186e443e0964a11c3/distro-1.9.0.tar.gz", hash = "sha256:2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed", size = 60722, upload-time = "2023-12-24T09:54:32.31Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/12/b3/231ffd4ab1fc9d679809f356cebee130ac7daa00d6d6f3206dd4fd137e9e/distro-1.9.0-py3-none-any.whl", hash = "sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2", size = 20277, upload-time = "2023-12-24T09:54:30.421Z" },
 ]
 
 [[package]]
@@ -361,6 +372,24 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f1/70/7703c29685631f5a7590aa73f1f1d3fa9a380e654b86af429e0934a32f7d/idna-3.10.tar.gz", hash = "sha256:12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9", size = 190490, upload-time = "2024-09-15T18:07:39.745Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/76/c6/c88e154df9c4e1a2a66ccf0005a88dfb2650c1dffb6f5ce603dfbd452ce3/idna-3.10-py3-none-any.whl", hash = "sha256:946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3", size = 70442, upload-time = "2024-09-15T18:07:37.964Z" },
+]
+
+[[package]]
+name = "openai"
+version = "1.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "anyio" },
+    { name = "distro" },
+    { name = "httpx" },
+    { name = "pydantic" },
+    { name = "tqdm" },
+    { name = "typing-extensions", version = "4.13.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
+    { name = "typing-extensions", version = "4.14.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/1c/3c/a92cf8844ec4bf3211a42926ed5cab72f18d32bb3a0155a759783b38d6b5/openai-1.3.0.tar.gz", hash = "sha256:51d9ccd0611fd8567ff595e8a58685c20a4710763d42f6bd968e1fb630993f25", size = 120997, upload-time = "2023-11-15T18:13:34.594Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/36/11/5ff90df8e5d0e83d8825d623d1d48db58b7bd58e3eb986448cc657176cea/openai-1.3.0-py3-none-any.whl", hash = "sha256:b4cde12417ab7a9d5e9326ca285f1833dd31c68ac05a68d24f95f93312ef9e82", size = 220336, upload-time = "2023-11-15T18:13:31.049Z" },
 ]
 
 [[package]]
@@ -616,6 +645,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/06/68/559bed5484e746f1ab2ebbe22312f2c25ec62e4b534916d41a8c21147bf8/starlette-0.27.0.tar.gz", hash = "sha256:6a6b0d042acb8d469a01eba54e9cda6cbd24ac602c4cd016723117d6a7e73b75", size = 51394, upload-time = "2023-05-16T10:59:56.286Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/58/f8/e2cca22387965584a409795913b774235752be4176d276714e15e1a58884/starlette-0.27.0-py3-none-any.whl", hash = "sha256:918416370e846586541235ccd38a474c08b80443ed31c578a418e2209b3eef91", size = 66978, upload-time = "2023-05-16T10:59:53.927Z" },
+]
+
+[[package]]
+name = "tqdm"
+version = "4.67.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a8/4b/29b4ef32e036bb34e4ab51796dd745cdba7ed47ad142a9f4a1eb8e0c744d/tqdm-4.67.1.tar.gz", hash = "sha256:f8aef9c52c08c13a65f30ea34f4e5aac3fd1a34959879d7e59e63027286627f2", size = 169737, upload-time = "2024-11-24T20:12:22.481Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d0/30/dc54f88dd4a2b5dc8a0279bdd7270e735851848b762aeb1c1184ed1f6b14/tqdm-4.67.1-py3-none-any.whl", hash = "sha256:26445eca388f82e72884e0d580d5464cd801a3ea01e63e5601bdff9ba6a48de2", size = 78540, upload-time = "2024-11-24T20:12:19.698Z" },
 ]
 
 [[package]]

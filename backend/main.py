@@ -48,20 +48,12 @@ The plan should include:
 
 2. A structured 30-day curriculum that progresses from beginner to advanced concepts.
 
-3. Each day should include:
-   - Learning objectives
-   - Key concepts to focus on
-   - Recommended resources or activities
-   - Practice exercises or assignments
-
-4. The plan should be practical, actionable, and suitable for self-paced learning.
-
 Format the response as a well-structured learning plan that can be easily understood and followed.
 
 If the topic is not suitable for learning or is inappropriate, respond with exactly "ERROR"."""
 
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "You are an expert educational content creator specializing in creating structured learning plans."},
                 {"role": "user", "content": prompt}

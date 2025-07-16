@@ -1,7 +1,7 @@
 // Bhai Jaan Academy Frontend JavaScript
 
 // Configuration
-const API_BASE_URL = 'http://localhost:8000'; // Change this for production
+const API_BASE_URL = 'https://bhai-jaan-academy.onrender.com'; // Production backend URL
 
 // DOM Elements
 const form = document.getElementById('learningForm');

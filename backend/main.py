@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 import openai
 import json
+import re
 
 # Load environment variables
 load_dotenv()
@@ -31,6 +32,21 @@ app.add_middleware(
 class UserSubmission(BaseModel):
     email: EmailStr
     topic: str
+
+def sanitize_topic(raw_topic: str) -> str:
+    # Remove leading/trailing whitespace
+    topic = raw_topic.strip()
+    # Remove any HTML tags
+    topic = re.sub(r'<[^>]+>', '', topic)
+    # Remove dangerous/special characters except basic punctuation
+    topic = re.sub(r'[^a-zA-Z0-9\s\-\_\.\,\(\)\[\]\:]', '', topic)
+    # Collapse multiple spaces
+    topic = re.sub(r'\s+', ' ', topic)
+    # Limit length to 100 characters
+    topic = topic[:100]
+    # Optionally, normalize case (e.g., title case)
+    topic = topic.title()
+    return topic
 
 def generate_learning_plan(topic: str) -> str:
     """
@@ -82,15 +98,33 @@ async def health_check():
 async def submit_user_data(user_data: UserSubmission):
     """Submit user email and topic, generate AI learning plan, and send email via Mailgun"""
     try:
+        sanitized_topic = sanitize_topic(user_data.topic)
+        # Load users.json
+        import os, json
+        users_file = os.path.join(os.path.dirname(__file__), "users.json")
+        if os.path.exists(users_file):
+            with open(users_file, "r") as f:
+                users = json.load(f)
+        else:
+            users = []
+        # Check for duplicate (same email + sanitized topic)
+        for user in users:
+            if user["email"].lower() == user_data.email.lower() and user["main_topic"] == sanitized_topic:
+                return {
+                    "success": False,
+                    "message": "You already have a plan for this topic.",
+                    "email": user_data.email,
+                    "topic": sanitized_topic
+                }
         # Generate AI learning plan
-        learning_plan = generate_learning_plan(user_data.topic)
+        learning_plan = generate_learning_plan(sanitized_topic)
         
         if learning_plan == "ERROR":
             return {
                 "success": False,
                 "message": "Sorry, this topic is not suitable for learning or may be inappropriate. Please try a different topic.",
                 "email": user_data.email,
-                "topic": user_data.topic
+                "topic": sanitized_topic
             }
         
         # Get Mailgun configuration from environment
@@ -105,17 +139,17 @@ async def submit_user_data(user_data: UserSubmission):
                 "success": True,
                 "message": "Submission received and learning plan generated! (Email service not configured)",
                 "email": user_data.email,
-                "topic": user_data.topic,
+                "topic": sanitized_topic,
                 "plan_preview": learning_plan[:500] + "..." if len(learning_plan) > 500 else learning_plan
             }
         
         # Create email content with the learning plan
-        subject = f"Your 30-Day Learning Plan for {user_data.topic} - Bhai Jaan Academy"
+        subject = f"Your 30-Day Learning Plan for {sanitized_topic} - Bhai Jaan Academy"
         html_content = f"""
         <html>
         <body>
             <h2>Welcome to Bhai Jaan Academy! 🎓</h2>
-            <p>Thank you for signing up to learn about <strong>{user_data.topic}</strong>!</p>
+            <p>Thank you for signing up to learn about <strong>{sanitized_topic}</strong>!</p>
             <p>We're excited to help you master this topic in just 30 days.</p>
             <br>
             <h3>Your Personalized 30-Day Learning Plan</h3>
@@ -147,11 +181,21 @@ async def submit_user_data(user_data: UserSubmission):
         )
         
         if response.status_code == 200:
+            # Add new user entry
+            user_entry = {
+                "email": user_data.email,
+                "main_topic": sanitized_topic,
+                "learning_plan": [t.strip() for t in learning_plan.split("\n") if t.strip()],
+                "current_index": 0
+            }
+            users.append(user_entry)
+            with open(users_file, "w") as f:
+                json.dump(users, f, indent=2)
             return {
                 "success": True,
                 "message": "Welcome email with learning plan sent successfully!",
                 "email": user_data.email,
-                "topic": user_data.topic,
+                "topic": sanitized_topic,
                 "plan_preview": learning_plan[:200] + "..." if len(learning_plan) > 200 else learning_plan
             }
         else:

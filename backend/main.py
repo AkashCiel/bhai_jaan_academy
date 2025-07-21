@@ -85,6 +85,17 @@ If the topic is not suitable for learning or is inappropriate, respond with "ERR
         traceback.print_exc()
         return f"ERROR: {str(e)}"
 
+def extract_topics_from_plan(plan: str) -> list:
+    """Extract only the topic titles from the OpenAI learning plan response."""
+    topics = []
+    for line in plan.splitlines():
+        # Match lines like '1. **Topic**' or '1. Topic'
+        match = re.match(r'^\s*\d+\.\s+\*?\*?(.+?)\*?\*?\s*$', line)
+        if match:
+            topic = match.group(1).strip()
+            topics.append(topic)
+    return topics
+
 @app.get("/")
 async def health_check():
     """Health check endpoint"""
@@ -122,6 +133,9 @@ async def submit_user_data(user_data: UserSubmission):
                 "email": user_data.email,
                 "topic": sanitized_topic
             }
+        
+        # Extract only topic titles
+        topic_titles = extract_topics_from_plan(learning_plan)
         
         # Get Mailgun configuration from environment
         mailgun_api_key = os.getenv("MAILGUN_API_KEY")
@@ -181,7 +195,7 @@ async def submit_user_data(user_data: UserSubmission):
             user_entry = {
                 "email": user_data.email,
                 "main_topic": sanitized_topic,
-                "learning_plan": [t.strip() for t in learning_plan.split("\n") if t.strip()],
+                "learning_plan": topic_titles,
                 "current_index": 0
             }
             users.append(user_entry)

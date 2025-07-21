@@ -1,0 +1,39 @@
+[
+  {
+    "email": "akash.adroit.singh@gmail.com",
+    "main_topic": "Ai Alignment",
+    "learning_plan": [
+      "Introduction to AI and Machine Learning",
+      "Understanding AI Alignment",
+      "Ethics in AI",
+      "Basic Concepts of Utility Functions",
+      "Human Values and AI",
+      "The Role of Bias in AI",
+      "Introduction to Reinforcement Learning",
+      "AI Safety and Risks",
+      "Basic Mathematical Concepts for AI",
+      "Introduction to AI Governance",
+      "Deep Dive into Utility Functions",
+      "Value Learning in AI",
+      "Interpretability and Explainability in AI",
+      "Multi-Agent Systems and Cooperation",
+      "Formal Methods in AI Safety",
+      "Robustness and Adversarial Attacks",
+      "AI Alignment and Game Theory",
+      "Feedback Mechanisms in AI",
+      "Long-Term AI Safety Strategies",
+      "Case Studies of AI Misalignment",
+      "Advanced Value Alignment Techniques",
+      "Scalable Oversight",
+      "Normative Uncertainty in AI",
+      "AI and Societal Impact",
+      "The Control Problem",
+      "The Role of Simulation in AI Alignment",
+      "Ethical Theories in AI Alignment",
+      "Alignment in Complex Systems",
+      "Future Scenarios and AI Alignment",
+      "Research Frontiers in AI Alignment"
+    ],
+    "current_index": 0
+  }
+]

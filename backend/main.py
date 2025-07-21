@@ -1,15 +1,18 @@
+# Load environment variables
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 import requests
 import os
-from dotenv import load_dotenv
 import openai
 import json
 import re
-
-# Load environment variables
-load_dotenv()
+from html_generation import generate_learning_plan_html
+from supabase_client import upload_html_to_supabase
+import hashlib
 
 # Configure OpenAI client for v1.x
 client = openai.OpenAI(
@@ -103,8 +106,8 @@ async def health_check():
 
 @app.post("/submit")
 async def submit_user_data(user_data: UserSubmission):
-    """Submit user email and topic, generate AI learning plan, and send email via Mailgun"""
     try:
+        print(f"[Submit] Received submission: email={user_data.email}, topic={user_data.topic}")
         sanitized_topic = sanitize_topic(user_data.topic)
         # Load users.json
         import os, json
@@ -117,6 +120,7 @@ async def submit_user_data(user_data: UserSubmission):
         # Check for duplicate (same email + sanitized topic)
         for user in users:
             if user["email"].lower() == user_data.email.lower() and user["main_topic"] == sanitized_topic:
+                print(f"[Submit] Duplicate found for email={user_data.email}, topic={sanitized_topic}")
                 return {
                     "success": False,
                     "message": "You already have a plan for this topic.",
@@ -124,97 +128,108 @@ async def submit_user_data(user_data: UserSubmission):
                     "topic": sanitized_topic
                 }
         # Generate AI learning plan
+        print(f"[Submit] Generating learning plan for topic: {sanitized_topic}")
         learning_plan = generate_learning_plan(sanitized_topic)
-        
+        print(f"[Submit] Learning plan generated.")
         if learning_plan == "ERROR":
+            print(f"[Submit] OpenAI returned ERROR for topic: {sanitized_topic}")
             return {
                 "success": False,
                 "message": "Sorry, this topic is not suitable for learning or may be inappropriate. Please try a different topic.",
                 "email": user_data.email,
                 "topic": sanitized_topic
             }
-        
         # Extract only topic titles
         topic_titles = extract_topics_from_plan(learning_plan)
-        
-        # Get Mailgun configuration from environment
-        mailgun_api_key = os.getenv("MAILGUN_API_KEY")
-        mailgun_domain = os.getenv("MAILGUN_DOMAIN")
-        
-        if not mailgun_api_key or not mailgun_domain:
-            # For development, just log the submission and plan
-            print(f"User submitted - Email: {user_data.email}, Topic: {user_data.topic}")
-            print(f"Generated learning plan preview: {learning_plan[:200]}...")
-            return {
-                "success": True,
-                "message": "Submission received and learning plan generated! (Email service not configured)",
-                "email": user_data.email,
-                "topic": sanitized_topic,
-                "plan_preview": learning_plan[:500] + "..." if len(learning_plan) > 500 else learning_plan
-            }
-        
-        # Create email content with the learning plan
+        # Generate the initial learning plan HTML (no report links)
+        html_content = generate_learning_plan_html(
+            topic=sanitized_topic,
+            user_email=user_data.email,
+            topics=topic_titles
+        )
+        # Create a unique filename for the HTML (e.g., email-topic.html)
+        import hashlib
+        unique_id = hashlib.sha256(f"{user_data.email}-{sanitized_topic}".encode()).hexdigest()[:12]
+        filename = f"{user_data.email.replace('@', '_at_').replace('.', '_dot_')}-{unique_id}-plan.html"
+        # Upload HTML to Supabase and get public URL
+        print(f"[Submit] Uploading HTML to Supabase: {filename}")
+        public_url = upload_html_to_supabase(filename, html_content)
+        print(f"[Submit] Supabase upload complete. Public URL: {public_url}")
+        # Add new user entry
+        user_entry = {
+            "email": user_data.email,
+            "main_topic": sanitized_topic,
+            "learning_plan": topic_titles,
+            "current_index": 0,
+            "plan_url": public_url,
+            "report_links": {}  # topic index to report URL
+        }
+        users.append(user_entry)
+        with open(users_file, "w") as f:
+            json.dump(users, f, indent=2)
+        print(f"[Submit] User entry added to users.json.")
+        # Send email with the plan URL
         subject = f"Your 30-Day Learning Plan for {sanitized_topic} - Bhai Jaan Academy"
-        html_content = f"""
+        html_email_content = f"""
         <html>
         <body>
             <h2>Welcome to Bhai Jaan Academy! 🎓</h2>
             <p>Thank you for signing up to learn about <strong>{sanitized_topic}</strong>!</p>
             <p>We're excited to help you master this topic in just 30 days.</p>
+            <p>Your personalized learning plan is ready. <a href='{public_url}'>Click here to view your plan</a>.</p>
             <br>
-            <h3>Your Personalized 30-Day Learning Plan</h3>
-            <div style="white-space: pre-wrap; font-family: Arial, sans-serif; line-height: 1.6;">
-            {learning_plan}
-            </div>
-            <br>
-            <p>You'll receive daily emails with detailed lessons and progress tracking.</p>
-            <p>Best regards,</p>
-            <p>The Bhai Jaan Academy Team</p>
+            <p>remember, Rome wasn't built in a day!</p>
+            <p>— The Bhai Jaan Academy Team</p>
         </body>
         </html>
         """
-        
-        # Send email using Mailgun
-        mailgun_url = f"https://api.mailgun.net/v3/{mailgun_domain}/messages"
-        
-        data = {
-            'from': f'Bhai Jaan Academy <noreply@{mailgun_domain}>',
-            'to': user_data.email,
-            'subject': subject,
-            'html': html_content
-        }
-        
-        response = requests.post(
-            mailgun_url,
-            auth=("api", mailgun_api_key),
-            data=data
-        )
-        
-        if response.status_code == 200:
-            # Add new user entry
-            user_entry = {
-                "email": user_data.email,
-                "main_topic": sanitized_topic,
-                "learning_plan": topic_titles,
-                "current_index": 0
-            }
-            users.append(user_entry)
-            with open(users_file, "w") as f:
-                json.dump(users, f, indent=2)
+        mailgun_api_key = os.getenv("MAILGUN_API_KEY")
+        mailgun_domain = os.getenv("MAILGUN_DOMAIN")
+        if not mailgun_api_key or not mailgun_domain:
+            print(f"[Submit] Email service not configured.")
             return {
                 "success": True,
-                "message": "Welcome email with learning plan sent successfully!",
+                "message": "Submission received and learning plan generated! (Email service not configured)",
                 "email": user_data.email,
                 "topic": sanitized_topic,
-                "plan_preview": learning_plan[:200] + "..." if len(learning_plan) > 200 else learning_plan
+                "plan_url": public_url
+            }
+        import requests
+        print(f"[Submit] Sending email to {user_data.email}")
+        response = requests.post(
+            f"https://api.mailgun.net/v3/{mailgun_domain}/messages",
+            auth=("api", mailgun_api_key),
+            data={
+                "from": f"Bhai Jaan Academy <mailgun@{mailgun_domain}>",
+                "to": [user_data.email],
+                "subject": subject,
+                "html": html_email_content
+            }
+        )
+        print(f"[Submit] Mailgun response: {response.status_code} {response.text}")
+        if response.status_code == 200:
+            print(f"[Submit] Email sent successfully.")
+            return {
+                "success": True,
+                "message": "Welcome email with learning plan link sent successfully!",
+                "email": user_data.email,
+                "topic": sanitized_topic,
+                "plan_url": public_url
             }
         else:
-            print(f"Mailgun error: {response.status_code} - {response.text}")
-            raise HTTPException(status_code=500, detail="Failed to send email")
-            
+            print(f"[Submit] Failed to send email. Plan URL: {public_url}")
+            return {
+                "success": False,
+                "message": f"Failed to send email. Plan URL: {public_url}",
+                "email": user_data.email,
+                "topic": sanitized_topic,
+                "plan_url": public_url
+            }
     except Exception as e:
-        print(f"Error processing submission: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+        print(f"[Submit] Exception: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn

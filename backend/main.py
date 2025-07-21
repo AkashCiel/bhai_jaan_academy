@@ -62,11 +62,7 @@ The plan should include:
    - Intermediate (10 topics) 
    - Advanced (10 topics)
 
-2. A structured 30-day curriculum that progresses from beginner to advanced concepts.
-
-Format the response as a well-structured learning plan that can be easily understood and followed.
-
-If the topic is not suitable for learning or is inappropriate, respond with exactly "ERROR"."""
+If the topic is not suitable for learning or is inappropriate, respond with "ERROR"."""
 
         response = client.chat.completions.create(
             model="gpt-4o-mini",

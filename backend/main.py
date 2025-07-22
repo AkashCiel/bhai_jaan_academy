@@ -11,7 +11,7 @@ import openai
 import json
 import re
 from html_generation import generate_learning_plan_html
-from supabase_client import upload_html_to_supabase
+from netlify_client import deploy_html_to_netlify, NETLIFY_SITE_ID
 import hashlib
 
 # Configure OpenAI client for v1.x
@@ -151,10 +151,10 @@ async def submit_user_data(user_data: UserSubmission):
         import hashlib
         unique_id = hashlib.sha256(f"{user_data.email}-{sanitized_topic}".encode()).hexdigest()[:12]
         filename = f"{user_data.email.replace('@', '_at_').replace('.', '_dot_')}-{unique_id}-plan.html"
-        # Upload HTML to Supabase and get public URL
-        print(f"[Submit] Uploading HTML to Supabase: {filename}")
-        public_url = upload_html_to_supabase(filename, html_content)
-        print(f"[Submit] Supabase upload complete. Public URL: {public_url}")
+        # Deploy HTML to Netlify and get public URL
+        print(f"[Submit] Deploying HTML to Netlify: {filename}")
+        public_url = deploy_html_to_netlify(filename, html_content)
+        print(f"[Submit] Netlify deploy complete. Public URL: {public_url}")
         # Add new user entry
         user_entry = {
             "email": user_data.email,

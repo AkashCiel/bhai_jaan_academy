@@ -4,7 +4,13 @@ import requests
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY")
 SUPABASE_BUCKET = "daily-topic-reports"
-SUPABASE_PROJECT_REF = "fideuzunmdgywvfscuz"
+SUPABASE_PROJECT_REF = os.getenv("SUPABASE_PROJECT_REF")
+
+# Validate environment variables
+if not SUPABASE_PROJECT_REF:
+    raise ValueError("SUPABASE_PROJECT_REF environment variable is not set")
+if not SUPABASE_SERVICE_KEY:
+    raise ValueError("SUPABASE_SERVICE_KEY environment variable is not set")
 
 
 def upload_html_to_supabase(filename: str, html_content: str) -> str:
@@ -15,9 +21,12 @@ def upload_html_to_supabase(filename: str, html_content: str) -> str:
     url = f"https://{SUPABASE_PROJECT_REF}.supabase.co/storage/v1/object/{SUPABASE_BUCKET}/{filename}"
     headers = {
         "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
-        "Content-Type": "text/html",
-        "x-upsert": "true"
+        "Content-Type": "text/html; charset=utf-8",
+        "x-upsert": "true",
+        "Cache-Control": "public, max-age=3600"
     }
+    
+
     try:
         print(f"[Supabase Upload] Uploading to: {url}")
         print(f"[Supabase Upload] Headers: {headers}")

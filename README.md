@@ -87,8 +87,24 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ### Backend (.env)
 ```bash
-DATABASE_URL=postgresql://your-supabase-connection
-SENDGRID_API_KEY=your-sendgrid-api-key
+# Email Service
+MAILGUN_API_KEY=your_mailgun_api_key
+MAILGUN_DOMAIN=your_mailgun_domain
+
+# AI Service
+OPENAI_API_KEY=your_openai_api_key
+
+# Data Storage (Supabase)
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_SERVICE_KEY=your_service_role_key
+SUPABASE_BUCKET=reports
+SUPABASE_PROJECT_REF=your_project_reference_id
+
+# HTML Hosting (Netlify)
+NETLIFY_ACCESS_TOKEN=your_netlify_access_token
+NETLIFY_SITE_ID=your_netlify_site_id
+
+# Frontend URL (for CORS)
 FRONTEND_URL=https://your-app.netlify.app
 ```
 

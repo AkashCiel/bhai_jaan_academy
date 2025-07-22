@@ -11,8 +11,9 @@ import openai
 import json
 import re
 from html_generation import generate_learning_plan_html
-from netlify_client import deploy_html_to_netlify, NETLIFY_SITE_ID
+from report_uploads.github_report_uploader import upload_report
 import hashlib
+import time
 
 # Configure OpenAI client for v1.x
 client = openai.OpenAI(
@@ -147,14 +148,8 @@ async def submit_user_data(user_data: UserSubmission):
             user_email=user_data.email,
             topics=topic_titles
         )
-        # Create a unique filename for the HTML (e.g., email-topic.html)
-        import hashlib
-        unique_id = hashlib.sha256(f"{user_data.email}-{sanitized_topic}".encode()).hexdigest()[:12]
-        filename = f"{user_data.email.replace('@', '_at_').replace('.', '_dot_')}-{unique_id}-plan.html"
-        # Deploy HTML to Netlify and get public URL
-        print(f"[Submit] Deploying HTML to Netlify: {filename}")
-        public_url = deploy_html_to_netlify(filename, html_content)
-        print(f"[Submit] Netlify deploy complete. Public URL: {public_url}")
+        # Upload HTML report to GitHub and get public URL
+        public_url = upload_report(user_data.email, sanitized_topic, html_content)
         # Add new user entry
         user_entry = {
             "email": user_data.email,
@@ -168,6 +163,9 @@ async def submit_user_data(user_data: UserSubmission):
         with open(users_file, "w") as f:
             json.dump(users, f, indent=2)
         print(f"[Submit] User entry added to users.json.")
+        # Delay email to allow GitHub Pages to deploy
+        print("[Submit] Waiting 5 minutes before sending email to allow GitHub Pages to deploy...")
+        time.sleep(300)
         # Send email with the plan URL
         subject = f"Your 30-Day Learning Plan for {sanitized_topic} - Bhai Jaan Academy"
         html_email_content = f"""

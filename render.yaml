@@ -13,4 +13,8 @@ services:
       - key: FRONTEND_URL
         sync: false
       - key: DATABASE_URL
+        sync: false
+      - key: NETLIFY_ACCESS_TOKEN
+        sync: false
+      - key: NETLIFY_SITE_ID
         sync: false 

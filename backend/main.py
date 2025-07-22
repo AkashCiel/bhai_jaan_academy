@@ -1,14 +1,19 @@
+# Load environment variables
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 import requests
 import os
-from dotenv import load_dotenv
 import openai
 import json
-
-# Load environment variables
-load_dotenv()
+import re
+from html_generation import generate_learning_plan_html
+from report_uploads.github_report_uploader import upload_report
+import hashlib
+import time
 
 # Configure OpenAI client for v1.x
 client = openai.OpenAI(
@@ -32,6 +37,21 @@ class UserSubmission(BaseModel):
     email: EmailStr
     topic: str
 
+def sanitize_topic(raw_topic: str) -> str:
+    # Remove leading/trailing whitespace
+    topic = raw_topic.strip()
+    # Remove any HTML tags
+    topic = re.sub(r'<[^>]+>', '', topic)
+    # Remove dangerous/special characters except basic punctuation
+    topic = re.sub(r'[^a-zA-Z0-9\s\-\_\.\,\(\)\[\]\:]', '', topic)
+    # Collapse multiple spaces
+    topic = re.sub(r'\s+', ' ', topic)
+    # Limit length to 100 characters
+    topic = topic[:100]
+    # Optionally, normalize case (e.g., title case)
+    topic = topic.title()
+    return topic
+
 def generate_learning_plan(topic: str) -> str:
     """
     Generate a 30-day learning plan using OpenAI GPT-4
@@ -46,11 +66,7 @@ The plan should include:
    - Intermediate (10 topics) 
    - Advanced (10 topics)
 
-2. A structured 30-day curriculum that progresses from beginner to advanced concepts.
-
-Format the response as a well-structured learning plan that can be easily understood and followed.
-
-If the topic is not suitable for learning or is inappropriate, respond with exactly "ERROR"."""
+If the topic is not suitable for learning or is inappropriate, respond with "ERROR"."""
 
         response = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -73,6 +89,17 @@ If the topic is not suitable for learning or is inappropriate, respond with exac
         traceback.print_exc()
         return f"ERROR: {str(e)}"
 
+def extract_topics_from_plan(plan: str) -> list:
+    """Extract only the topic titles from the OpenAI learning plan response."""
+    topics = []
+    for line in plan.splitlines():
+        # Match lines like '1. **Topic**' or '1. Topic'
+        match = re.match(r'^\s*\d+\.\s+\*?\*?(.+?)\*?\*?\s*$', line)
+        if match:
+            topic = match.group(1).strip()
+            topics.append(topic)
+    return topics
+
 @app.get("/")
 async def health_check():
     """Health check endpoint"""
@@ -80,87 +107,127 @@ async def health_check():
 
 @app.post("/submit")
 async def submit_user_data(user_data: UserSubmission):
-    """Submit user email and topic, generate AI learning plan, and send email via Mailgun"""
     try:
+        print(f"[Submit] Received submission: email={user_data.email}, topic={user_data.topic}")
+        sanitized_topic = sanitize_topic(user_data.topic)
+        # Load users.json
+        import os, json
+        users_file = os.path.join(os.path.dirname(__file__), "users.json")
+        if os.path.exists(users_file):
+            with open(users_file, "r") as f:
+                users = json.load(f)
+        else:
+            users = []
+        # Check for duplicate (same email + sanitized topic)
+        for user in users:
+            if user["email"].lower() == user_data.email.lower() and user["main_topic"] == sanitized_topic:
+                print(f"[Submit] Duplicate found for email={user_data.email}, topic={sanitized_topic}")
+                return {
+                    "success": False,
+                    "message": "You already have a plan for this topic.",
+                    "email": user_data.email,
+                    "topic": sanitized_topic
+                }
         # Generate AI learning plan
-        learning_plan = generate_learning_plan(user_data.topic)
-        
+        print(f"[Submit] Generating learning plan for topic: {sanitized_topic}")
+        learning_plan = generate_learning_plan(sanitized_topic)
+        print(f"[Submit] Learning plan generated.")
         if learning_plan == "ERROR":
+            print(f"[Submit] OpenAI returned ERROR for topic: {sanitized_topic}")
             return {
                 "success": False,
                 "message": "Sorry, this topic is not suitable for learning or may be inappropriate. Please try a different topic.",
                 "email": user_data.email,
-                "topic": user_data.topic
+                "topic": sanitized_topic
             }
-        
-        # Get Mailgun configuration from environment
+        # Extract only topic titles
+        topic_titles = extract_topics_from_plan(learning_plan)
+        # Generate the initial learning plan HTML (no report links)
+        html_content = generate_learning_plan_html(
+            topic=sanitized_topic,
+            user_email=user_data.email,
+            topics=topic_titles
+        )
+        # Upload HTML report to GitHub and get public URL
+        public_url = upload_report(user_data.email, sanitized_topic, html_content)
+        # Add new user entry
+        user_entry = {
+            "email": user_data.email,
+            "main_topic": sanitized_topic,
+            "learning_plan": topic_titles,
+            "current_index": 0,
+            "plan_url": public_url,
+            "report_links": {}  # topic index to report URL
+        }
+        users.append(user_entry)
+        with open(users_file, "w") as f:
+            json.dump(users, f, indent=2)
+        print(f"[Submit] User entry added to users.json.")
+        # Delay email to allow GitHub Pages to deploy
+        print("[Submit] Waiting 5 minutes before sending email to allow GitHub Pages to deploy...")
+        time.sleep(300)
+        # Send email with the plan URL
+        subject = f"Your 30-Day Learning Plan for {sanitized_topic} - Bhai Jaan Academy"
+        html_email_content = f"""
+        <html>
+        <body>
+            <h2>Welcome to Bhai Jaan Academy! 🎓</h2>
+            <p>Thank you for signing up to learn about <strong>{sanitized_topic}</strong>!</p>
+            <p>We're excited to help you master this topic in just 30 days.</p>
+            <p>Your personalized learning plan is ready. <a href='{public_url}'>Click here to view your plan</a>.</p>
+            <br>
+            <p>remember, Rome wasn't built in a day!</p>
+            <p>— The Bhai Jaan Academy Team</p>
+        </body>
+        </html>
+        """
         mailgun_api_key = os.getenv("MAILGUN_API_KEY")
         mailgun_domain = os.getenv("MAILGUN_DOMAIN")
-        
         if not mailgun_api_key or not mailgun_domain:
-            # For development, just log the submission and plan
-            print(f"User submitted - Email: {user_data.email}, Topic: {user_data.topic}")
-            print(f"Generated learning plan preview: {learning_plan[:200]}...")
+            print(f"[Submit] Email service not configured.")
             return {
                 "success": True,
                 "message": "Submission received and learning plan generated! (Email service not configured)",
                 "email": user_data.email,
-                "topic": user_data.topic,
-                "plan_preview": learning_plan[:500] + "..." if len(learning_plan) > 500 else learning_plan
+                "topic": sanitized_topic,
+                "plan_url": public_url
             }
-        
-        # Create email content with the learning plan
-        subject = f"Your 30-Day Learning Plan for {user_data.topic} - Bhai Jaan Academy"
-        html_content = f"""
-        <html>
-        <body>
-            <h2>Welcome to Bhai Jaan Academy! 🎓</h2>
-            <p>Thank you for signing up to learn about <strong>{user_data.topic}</strong>!</p>
-            <p>We're excited to help you master this topic in just 30 days.</p>
-            <br>
-            <h3>Your Personalized 30-Day Learning Plan</h3>
-            <div style="white-space: pre-wrap; font-family: Arial, sans-serif; line-height: 1.6;">
-            {learning_plan}
-            </div>
-            <br>
-            <p>You'll receive daily emails with detailed lessons and progress tracking.</p>
-            <p>Best regards,</p>
-            <p>The Bhai Jaan Academy Team</p>
-        </body>
-        </html>
-        """
-        
-        # Send email using Mailgun
-        mailgun_url = f"https://api.mailgun.net/v3/{mailgun_domain}/messages"
-        
-        data = {
-            'from': f'Bhai Jaan Academy <noreply@{mailgun_domain}>',
-            'to': user_data.email,
-            'subject': subject,
-            'html': html_content
-        }
-        
+        import requests
+        print(f"[Submit] Sending email to {user_data.email}")
         response = requests.post(
-            mailgun_url,
+            f"https://api.mailgun.net/v3/{mailgun_domain}/messages",
             auth=("api", mailgun_api_key),
-            data=data
+            data={
+                "from": f"Bhai Jaan Academy <mailgun@{mailgun_domain}>",
+                "to": [user_data.email],
+                "subject": subject,
+                "html": html_email_content
+            }
         )
-        
+        print(f"[Submit] Mailgun response: {response.status_code} {response.text}")
         if response.status_code == 200:
+            print(f"[Submit] Email sent successfully.")
             return {
                 "success": True,
-                "message": "Welcome email with learning plan sent successfully!",
+                "message": "Welcome email with learning plan link sent successfully!",
                 "email": user_data.email,
-                "topic": user_data.topic,
-                "plan_preview": learning_plan[:200] + "..." if len(learning_plan) > 200 else learning_plan
+                "topic": sanitized_topic,
+                "plan_url": public_url
             }
         else:
-            print(f"Mailgun error: {response.status_code} - {response.text}")
-            raise HTTPException(status_code=500, detail="Failed to send email")
-            
+            print(f"[Submit] Failed to send email. Plan URL: {public_url}")
+            return {
+                "success": False,
+                "message": f"Failed to send email. Plan URL: {public_url}",
+                "email": user_data.email,
+                "topic": sanitized_topic,
+                "plan_url": public_url
+            }
     except Exception as e:
-        print(f"Error processing submission: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+        print(f"[Submit] Exception: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn

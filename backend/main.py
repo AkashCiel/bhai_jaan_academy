@@ -179,7 +179,7 @@ async def submit_user_data(user_data: UserSubmission):
                     report_content=report_content_html
                 )
                 # Upload the report HTML
-                report_url = upload_report(user_data.email, sanitized_topic + "/" + first_topic, report_html)
+                report_url = upload_report(user_data.email, sanitized_topic, report_html, filename=first_topic)
                 report_links[0] = report_url
                 last_report_time = datetime.datetime.now(datetime.timezone.utc).isoformat()
                 print(f"[Submit] First topic report uploaded: {report_url}")

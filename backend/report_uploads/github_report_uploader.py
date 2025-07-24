@@ -45,14 +45,19 @@ def get_file_sha(path: str) -> str:
         return r.json().get('sha')
     return None
 
-def upload_report(email: str, topic: str, html_content: str) -> str:
+def upload_report(email: str, topic: str, html_content: str, filename: str = None) -> str:
     """
     Uploads the HTML report to the GitHub repo in the correct directory structure and returns the public URL.
+    If filename is provided, use it as the file name (with .html extension).
     """
     user_dir = user_dir_from_email(email)
     topic_slug = slugify_topic(topic)
     dir_path = f"reports/{user_dir}/{topic_slug}"
-    file_name = f"{topic}.html"
+    if filename:
+        file_slug = slugify_topic(filename)
+        file_name = f"{file_slug}.html"
+    else:
+        file_name = f"{topic}.html"
     file_path = f"{dir_path}/{file_name}"
     # Check if file exists to get its SHA (for update vs create)
     sha = get_file_sha(file_path)

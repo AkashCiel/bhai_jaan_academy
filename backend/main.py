@@ -16,6 +16,7 @@ import hashlib
 import time
 import datetime
 import markdown
+from report_scheduler_utils import load_users, save_users, is_same_utc_day, get_next_report_topic, generate_report_content, send_report_email, process_user
 
 # Configure OpenAI client for v1.x
 client = openai.OpenAI(
@@ -277,7 +278,6 @@ async def submit_user_data(user_data: UserSubmission):
         traceback.print_exc()
         return HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
-SCHEDULER_TOKEN = os.getenv("SCHEDULER_TOKEN")
 USERS_FILE = os.path.join(os.path.dirname(__file__), "users.json")
 
 # --- Scheduler logic (refactored for reuse) ---
@@ -403,13 +403,16 @@ def process_user(user):
 from fastapi.responses import JSONResponse
 @app.post("/run-scheduler")
 async def run_scheduler(request: Request):
-    # For MVP: No token check, allow open access
-    users = load_users()
+    users = load_users(USERS_FILE)
     updated_users = []
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    mailgun_api_key = os.getenv("MAILGUN_API_KEY")
+    mailgun_domain = os.getenv("MAILGUN_DOMAIN")
+    client = openai.OpenAI(api_key=openai_api_key, timeout=120.0)
     for user in users:
-        updated_user = process_user(user)
+        updated_user = process_user(user, client, mailgun_api_key, mailgun_domain, USERS_FILE)
         updated_users.append(updated_user)
-    save_users(updated_users)
+    save_users(updated_users, USERS_FILE)
     return {"status": "ok", "message": "Scheduler run complete."}
 
 if __name__ == "__main__":

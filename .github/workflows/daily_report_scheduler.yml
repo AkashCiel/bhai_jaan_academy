@@ -2,7 +2,7 @@ name: Daily Report Scheduler
 
 on:
   schedule:
-    - cron: '0 8 * * *'  # Every day at 8:00 AM UTC
+    - cron: '0 14 * * *'  # Every day at 16:00 Amsterdam time (14:00 UTC, correct for summer)
   workflow_dispatch:
 
 jobs:

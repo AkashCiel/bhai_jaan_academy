@@ -281,10 +281,6 @@ async def submit_user_data(user_data: UserSubmission):
 USERS_FILE = os.path.join(os.path.dirname(__file__), "users.json")
 
 # --- Scheduler logic (refactored for reuse) ---
-def load_users():
-    with open(USERS_FILE, "r") as f:
-        return json.load(f)
-
 def save_users(users):
     with open(USERS_FILE, "w") as f:
         json.dump(users, f, indent=2)
@@ -403,16 +399,16 @@ def process_user(user):
 from fastapi.responses import JSONResponse
 @app.post("/run-scheduler")
 async def run_scheduler(request: Request):
-    users = load_users(USERS_FILE)
+    users = load_users()
     updated_users = []
     openai_api_key = os.getenv("OPENAI_API_KEY")
     mailgun_api_key = os.getenv("MAILGUN_API_KEY")
     mailgun_domain = os.getenv("MAILGUN_DOMAIN")
     client = openai.OpenAI(api_key=openai_api_key, timeout=120.0)
     for user in users:
-        updated_user = process_user(user, client, mailgun_api_key, mailgun_domain, USERS_FILE)
+        updated_user = process_user(user)
         updated_users.append(updated_user)
-    save_users(updated_users, USERS_FILE)
+    save_users(updated_users)
     return {"status": "ok", "message": "Scheduler run complete."}
 
 if __name__ == "__main__":

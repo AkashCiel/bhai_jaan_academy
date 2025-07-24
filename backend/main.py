@@ -202,7 +202,7 @@ async def submit_user_data(user_data: UserSubmission):
             "email": user_data.email,
             "main_topic": sanitized_topic,
             "learning_plan": topic_titles,
-            "current_index": 0,
+            "current_index": 1 if report_links else 0,
             "plan_url": updated_public_url,
             "report_links": report_links,  # topic index to report URL
             "last_report_time": last_report_time

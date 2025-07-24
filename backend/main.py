@@ -399,7 +399,7 @@ def process_user(user):
 from fastapi.responses import JSONResponse
 @app.post("/run-scheduler")
 async def run_scheduler(request: Request):
-    users = load_users()
+    users = load_users(USERS_FILE)
     updated_users = []
     openai_api_key = os.getenv("OPENAI_API_KEY")
     mailgun_api_key = os.getenv("MAILGUN_API_KEY")

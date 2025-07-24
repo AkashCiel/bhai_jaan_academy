@@ -100,9 +100,10 @@ def process_user(user, openai_client, mailgun_api_key, mailgun_domain, users_fil
         plan_topic = user["main_topic"]
         report_url = upload_report(user["email"], plan_topic, report_html, filename=topic)
         # Update report_links
-        report_links = user.get("report_links", {})
-        report_links[str(idx)] = report_url
+        report_links = {int(k): v for k, v in user.get("report_links", {}).items()}
+        report_links[idx] = report_url
         # Update learning plan HTML
+        print(f"[DEBUG] current_index={idx}, report_links={report_links}, should_have_links={idx in report_links}")
         updated_plan_html = update_learning_plan_html(
             topic=plan_topic,
             user_email=user["email"],
@@ -115,6 +116,9 @@ def process_user(user, openai_client, mailgun_api_key, mailgun_domain, users_fil
         user["last_report_time"] = now.isoformat()
         user["plan_url"] = plan_url
         user["report_links"] = report_links
+        # Add delay before sending email
+        import time
+        time.sleep(300)
         # Send email
         send_report_email(user, plan_url, report_url, topic, mailgun_api_key, mailgun_domain)
         print(f"[Scheduler] Report and email sent for {user['email']} on topic: {topic}")

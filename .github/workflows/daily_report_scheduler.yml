@@ -1,0 +1,14 @@
+name: Daily Report Scheduler
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Every day at 8:00 AM UTC
+  workflow_dispatch:
+
+jobs:
+  trigger-backend-scheduler:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger backend scheduler endpoint
+        run: |
+          curl -X POST "https://bhai-jaan-academy.onrender.com/run-scheduler" 

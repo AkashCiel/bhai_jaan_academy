@@ -10,8 +10,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger backend scheduler endpoint
-        env:
-          SCHEDULER_TOKEN: ${{ secrets.SCHEDULER_TOKEN }}
         run: |
-          curl -X POST "https://bhai-jaan-academy.onrender.com/run-scheduler" \
-            -H "X-Scheduler-Token: $SCHEDULER_TOKEN" 
+          curl -X POST "https://bhai-jaan-academy.onrender.com/run-scheduler" 

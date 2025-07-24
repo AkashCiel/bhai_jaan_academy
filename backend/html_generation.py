@@ -81,24 +81,34 @@ def update_learning_plan_html(
     </html>
     """
 
-if __name__ == "__main__":
-    # Dummy data
-    topic = "Machine Learning"
-    user_email = "test@example.com"
-    topics = [
-        "Introduction to ML",
-        "Supervised Learning",
-        "Unsupervised Learning",
-        "Neural Networks",
-        "Model Evaluation"
-    ]
-    report_links = {
-        1: "https://example.com/reports/supervised-learning.html",
-        3: "https://example.com/reports/neural-networks.html"
-    }
-
-    print("\n--- generate_learning_plan_html (no links) ---\n")
-    print(generate_learning_plan_html(topic, user_email, topics))
-
-    print("\n--- update_learning_plan_html (with links) ---\n")
-    print(update_learning_plan_html(topic, user_email, topics, report_links)) 
+def generate_topic_report_html(
+    topic: str,
+    user_email: str,
+    report_content: str
+) -> str:
+    """
+    Generates a minimal, well-styled HTML report for a topic using Tailwind CSS.
+    """
+    return f"""
+    <!DOCTYPE html>
+    <html lang=\"en\">
+    <head>
+      <meta charset=\"UTF-8\">
+      <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+      <title>Report: {topic}</title>
+      <link href=\"https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css\" rel=\"stylesheet\">
+    </head>
+    <body class=\"bg-gray-50 text-gray-900 p-4 sm:p-6\">
+      <div class=\"max-w-2xl w-full mx-auto bg-white rounded shadow p-4 sm:p-8\">
+        <h1 class=\"text-2xl font-bold mb-4\">{topic}</h1>
+        <p class=\"mb-6 text-gray-600\">Prepared for: {user_email}</p>
+        <article class=\"prose prose-lg\">
+          {report_content}
+        </article>
+        <footer class=\"mt-8 text-sm text-gray-500\">
+          <p>Bhai Jaan Academy &copy; 2024</p>
+        </footer>
+      </div>
+    </body>
+    </html>
+    """ 

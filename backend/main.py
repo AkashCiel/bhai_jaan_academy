@@ -10,10 +10,12 @@ import os
 import openai
 import json
 import re
-from html_generation import generate_learning_plan_html
+from html_generation import generate_learning_plan_html, update_learning_plan_html, generate_topic_report_html
 from report_uploads.github_report_uploader import upload_report
 import hashlib
 import time
+import datetime
+import markdown
 
 # Configure OpenAI client for v1.x
 client = openai.OpenAI(
@@ -150,14 +152,60 @@ async def submit_user_data(user_data: UserSubmission):
         )
         # Upload HTML report to GitHub and get public URL
         public_url = upload_report(user_data.email, sanitized_topic, html_content)
+
+        # --- New: Generate and upload first topic report ---
+        first_topic = topic_titles[0] if topic_titles else None
+        report_links = {}
+        last_report_time = None
+        if first_topic:
+            print(f"[Submit] Generating report for first topic: {first_topic}")
+            report_prompt = f"""Write a comprehensive, beginner-friendly educational report on the topic: \"{first_topic}\".\nThe report should include:\n- An introduction to the topic\n- Key concepts and definitions\n- Real-world applications or examples\n- Common misconceptions or pitfalls\n- Further reading/resources (if appropriate)\nThe tone should be clear, engaging, and accessible to someone new to the subject."""
+            try:
+                report_response = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[
+                        {"role": "system", "content": "You are an expert educator and science communicator."},
+                        {"role": "user", "content": report_prompt}
+                    ],
+                    max_tokens=1800,
+                    temperature=0.7
+                )
+                report_content = report_response.choices[0].message.content.strip()
+                # Convert markdown to HTML
+                report_content_html = markdown.markdown(report_content)
+                report_html = generate_topic_report_html(
+                    topic=first_topic,
+                    user_email=user_data.email,
+                    report_content=report_content_html
+                )
+                # Upload the report HTML
+                report_url = upload_report(user_data.email, sanitized_topic, report_html, filename=first_topic)
+                report_links[0] = report_url
+                last_report_time = datetime.datetime.now(datetime.timezone.utc).isoformat()
+                print(f"[Submit] First topic report uploaded: {report_url}")
+            except Exception as e:
+                print(f"[Submit] Error generating/uploading first topic report: {e}")
+        # --- End new ---
+
+        # Update the learning plan HTML to link the first topic
+        updated_html_content = update_learning_plan_html(
+            topic=sanitized_topic,
+            user_email=user_data.email,
+            topics=topic_titles,
+            report_links=report_links
+        )
+        # Upload the updated learning plan HTML (overwrite previous)
+        updated_public_url = upload_report(user_data.email, sanitized_topic, updated_html_content)
+
         # Add new user entry
         user_entry = {
             "email": user_data.email,
             "main_topic": sanitized_topic,
             "learning_plan": topic_titles,
             "current_index": 0,
-            "plan_url": public_url,
-            "report_links": {}  # topic index to report URL
+            "plan_url": updated_public_url,
+            "report_links": report_links,  # topic index to report URL
+            "last_report_time": last_report_time
         }
         users.append(user_entry)
         with open(users_file, "w") as f:
@@ -174,7 +222,7 @@ async def submit_user_data(user_data: UserSubmission):
             <h2>Welcome to Bhai Jaan Academy! 🎓</h2>
             <p>Thank you for signing up to learn about <strong>{sanitized_topic}</strong>!</p>
             <p>We're excited to help you master this topic in just 30 days.</p>
-            <p>Your personalized learning plan is ready. <a href='{public_url}'>Click here to view your plan</a>.</p>
+            <p>Your personalized learning plan is ready. <a href='{updated_public_url}'>Click here to view your plan</a>.</p>
             <br>
             <p>remember, Rome wasn't built in a day!</p>
             <p>— The Bhai Jaan Academy Team</p>
@@ -190,7 +238,7 @@ async def submit_user_data(user_data: UserSubmission):
                 "message": "Submission received and learning plan generated! (Email service not configured)",
                 "email": user_data.email,
                 "topic": sanitized_topic,
-                "plan_url": public_url
+                "plan_url": updated_public_url
             }
         import requests
         print(f"[Submit] Sending email to {user_data.email}")
@@ -212,16 +260,16 @@ async def submit_user_data(user_data: UserSubmission):
                 "message": "Welcome email with learning plan link sent successfully!",
                 "email": user_data.email,
                 "topic": sanitized_topic,
-                "plan_url": public_url
+                "plan_url": updated_public_url
             }
         else:
-            print(f"[Submit] Failed to send email. Plan URL: {public_url}")
+            print(f"[Submit] Failed to send email. Plan URL: {updated_public_url}")
             return {
                 "success": False,
-                "message": f"Failed to send email. Plan URL: {public_url}",
+                "message": f"Failed to send email. Plan URL: {updated_public_url}",
                 "email": user_data.email,
                 "topic": sanitized_topic,
-                "plan_url": public_url
+                "plan_url": updated_public_url
             }
     except Exception as e:
         print(f"[Submit] Exception: {str(e)}")

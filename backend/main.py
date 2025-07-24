@@ -15,6 +15,7 @@ from report_uploads.github_report_uploader import upload_report
 import hashlib
 import time
 import datetime
+import markdown
 
 # Configure OpenAI client for v1.x
 client = openai.OpenAI(
@@ -170,8 +171,8 @@ async def submit_user_data(user_data: UserSubmission):
                     temperature=0.7
                 )
                 report_content = report_response.choices[0].message.content.strip()
-                # Optionally, convert newlines to <br> or paragraphs for HTML
-                report_content_html = report_content.replace('\n', '<br>')
+                # Convert markdown to HTML
+                report_content_html = markdown.markdown(report_content)
                 report_html = generate_topic_report_html(
                     topic=first_topic,
                     user_email=user_data.email,

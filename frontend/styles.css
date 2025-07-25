@@ -1,5 +1,37 @@
 /* Custom styles for Bhai Jaan Academy */
 
+/* Background image for landing page */
+.landing-bg {
+    background-image: url('Bhai Jaan Academy.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Foreground elements with 50% opacity */
+.foreground-opacity-50 {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+    backdrop-filter: blur(5px);
+}
+
+/* Input fields with foreground opacity */
+.input-foreground {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(5px);
+}
+
+/* Foreground elements with 40% opacity */
+.foreground-opacity-40 {
+    background-color: rgba(255, 255, 255, 0.4) !important;
+    backdrop-filter: blur(5px);
+}
+
+/* Dark text for form box */
+.text-dark {
+    color: #22292f !important;
+}
+
 /* Smooth scrolling */
 html {
     scroll-behavior: smooth;
@@ -124,4 +156,10 @@ button, input, select, textarea {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
+}
+
+/* High-contrast text for dark backgrounds */
+.text-contrast {
+    color: #f8fafc !important; /* near-white for dark backgrounds */
+    text-shadow: 0 1px 4px rgba(0,0,0,0.7);
 } 

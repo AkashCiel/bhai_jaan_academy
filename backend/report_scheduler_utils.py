@@ -27,12 +27,54 @@ def get_next_report_topic(user):
     return None, None
 
 def generate_report_content(topic, openai_client):
-    prompt = f"""Write a comprehensive, beginner-friendly educational report on the topic: \"{topic}\".\nThe report should include:\n- An introduction to the topic\n- Key concepts and definitions\n- Real-world applications or examples\n- Common misconceptions or pitfalls\n- Further reading/resources (if appropriate)\nThe tone should be clear, engaging, and accessible to someone new to the subject."""
+    report_prompt = f"""Write a comprehensive, beginner-friendly educational report on the topic: "{topic}".
+
+The report should include:
+- An introduction to the topic
+- Key concepts and definitions
+- Real-world applications or examples
+- Common misconceptions or pitfalls
+- Further reading/resources (if appropriate)
+
+IMPORTANT: Format your response with clear structural markers:
+- Use "## Heading:" for main sections (e.g., "## Introduction:", "## Key Concepts:", "## Real-World Applications:")
+- Use "### Subheading:" for subsections
+- Use "**Bold text**" for emphasis and important terms
+- Use "- " for bullet points
+- Use "---" for section breaks
+- Use "**Link: [text](url)**" for any relevant links
+
+CRITICAL: Include relevant links throughout the report:
+- Link to official documentation, tutorials, or learning resources
+- Link to real-world examples or case studies
+- Link to tools, software, or platforms mentioned
+- Link to academic papers or research (if appropriate)
+- Link to YouTube videos, courses, or interactive content
+
+Example format:
+## Introduction:
+This is the introduction paragraph...
+
+## Key Concepts:
+### Basic Definition:
+**Term:** Definition here...
+
+- Point 1
+- Point 2
+
+## Real-World Applications:
+Examples of how this is used...
+
+**Link: [Official Documentation](https://example.com/docs)**
+**Link: [Interactive Tutorial](https://example.com/tutorial)**
+**Link: [YouTube Video](https://youtube.com/watch?v=example)**
+
+The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report."""
     response = openai_client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "You are an expert educator and science communicator."},
-            {"role": "user", "content": prompt}
+            {"role": "user", "content": report_prompt}
         ],
         max_tokens=1800,
         temperature=0.7

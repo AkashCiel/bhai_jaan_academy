@@ -18,20 +18,6 @@ const emailError = document.getElementById('emailError');
 const topicError = document.getElementById('topicError');
 
 // Utility functions
-function showLoading() {
-    submitBtn.disabled = true;
-    submitText.classList.add('hidden');
-    loadingText.classList.remove('hidden');
-    submitBtn.classList.add('loading');
-}
-
-function hideLoading() {
-    submitBtn.disabled = false;
-    submitText.classList.remove('hidden');
-    loadingText.classList.add('hidden');
-    submitBtn.classList.remove('loading');
-}
-
 function showMessage(type, message) {
     // Hide all messages first
     successMessage.classList.add('hidden');
@@ -139,24 +125,15 @@ async function handleSubmit(event) {
     
     const email = emailInput.value.trim();
     const topic = topicInput.value.trim();
-    
-    showLoading();
-    
-    try {
-        const result = await submitForm(email, topic);
-        
-        if (result.success) {
-            showMessage('success', result.data.message);
-            // Clear form on success
-            form.reset();
-        } else {
-            showMessage('error', result.error);
-        }
-    } catch (error) {
-        showMessage('error', 'An unexpected error occurred. Please try again.');
-    } finally {
-        hideLoading();
-    }
+
+    // Show success message immediately
+    showMessage('success', `We have successfully registered you for ${topic}. We will send you a learning plan when it's ready. You can close this page.`);
+    form.reset();
+    submitBtn.disabled = true;
+    // Optionally, hide the form or keep it disabled
+
+    // Send data to backend in the background
+    submitForm(email, topic);
 }
 
 // Event listeners

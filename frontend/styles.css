@@ -119,13 +119,35 @@ html {
         max-width: 98vw !important;
         font-size: 1rem !important;
     }
-    .registration-box-mobile, .foreground-opacity-50 {
-        position: static !important;
-        margin-bottom: 1.5rem !important;
-        width: 100% !important;
-        max-width: 100vw !important;
+    .registration-box-mobile {
+        position: fixed !important;
+        left: 50% !important;
+        bottom: 0 !important;
+        transform: translateX(-50%) !important;
+        width: 98vw !important;
+        max-width: 98vw !important;
+        min-width: 220px !important;
+        max-height: none !important;
+        min-height: 120px !important;
+        height: auto !important;
+        margin-bottom: 0 !important;
         padding: 1rem !important;
         box-sizing: border-box !important;
+        z-index: 1000 !important;
+        border-radius: 1rem 1rem 0 0 !important;
+        overflow-y: visible !important;
+    }
+    .registration-box-mobile,
+    .registration-box-mobile input,
+    .registration-box-mobile button,
+    .registration-box-mobile label,
+    .registration-box-mobile h2 {
+        font-size: 0.7rem !important;
+    }
+    .registration-box-mobile input,
+    .registration-box-mobile button {
+        min-height: 30px !important;
+        padding: 0.4rem 0.5rem !important;
     }
     .text-4xl, .text-2xl, .text-xl, .text-lg {
         font-size: 1.1rem !important;
@@ -139,6 +161,33 @@ html {
     }
     .mb-8 {
         margin-bottom: 1rem !important;
+    }
+    .registration-box-mobile form {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.3rem !important;
+    }
+    .registration-box-mobile .mb-6,
+    .registration-box-mobile .mb-8,
+    .registration-box-mobile .mb-2,
+    .registration-box-mobile .mt-6,
+    .registration-box-mobile .mt-1 {
+        margin-bottom: 0.3rem !important;
+        margin-top: 0.3rem !important;
+    }
+    .registration-box-mobile label,
+    .registration-box-mobile input,
+    .registration-box-mobile button,
+    .registration-box-mobile div {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    .registration-box-mobile #learningForm > div {
+      margin-bottom: 0.2rem !important;
+      margin-top: 0 !important;
+    }
+    .registration-box-mobile #learningForm > div:last-child {
+      margin-bottom: 0 !important;
     }
 }
 

@@ -34,7 +34,7 @@
       "Quantum Control Techniques",
       "Ethical Implications of Quantum Computing"
     ],
-    "current_index": 8,
+    "current_index": 12,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Quantum%20Computing.html",
     "report_links": {
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Introduction_to_Quantum_Computing.html",
@@ -44,8 +44,12 @@
       "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Qubits_and_Quantum_States.html",
       "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Measurement_in_Quantum_Computing.html",
       "6": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Quantum_Algorithms_Overview.html",
-      "7": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Quantum_Programming_Languages.html"
+      "7": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Quantum_Programming_Languages.html",
+      "8": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Quantum_Simulators.html",
+      "9": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Applications_of_Quantum_Computing.html",
+      "10": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Deep_Dive_into_Quantum_Gates.html",
+      "11": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Entanglement_and_Quantum_Teleportation.html"
     },
-    "last_report_time": "2025-07-24T23:39:27.077174+00:00"
+    "last_report_time": "2025-07-25T00:45:17.163841+00:00"
   }
 ]

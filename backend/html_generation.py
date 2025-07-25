@@ -41,16 +41,18 @@ def update_learning_plan_html(
     topic: str,
     user_email: str,
     topics: List[str],
-    report_links: Dict[int, str]
+    report_links: Dict[str, str]
 ) -> str:
     """
     Updates the homepage/learning plan HTML to include wide, clickable buttons for topics with report links, and non-clickable buttons otherwise.
     """
+    # Convert keys to int for internal use
+    report_links_int = {int(k): v for k, v in report_links.items()}
     html_topics = []
     for idx, t in enumerate(topics):
-        if idx in report_links and report_links[idx]:
+        if idx in report_links_int and report_links_int[idx]:
             html_topics.append(
-                f'<a href="{report_links[idx]}" target="_blank" rel="noopener noreferrer" class="w-full block py-3 px-4 mb-3 rounded bg-gray-700 text-white text-lg font-semibold shadow hover:bg-gray-800 focus:outline-none transition-colors text-center">{t}</a>'
+                f'<a href="{report_links_int[idx]}" target="_blank" rel="noopener noreferrer" class="w-full block py-3 px-4 mb-3 rounded bg-gray-700 text-white text-lg font-semibold shadow hover:bg-gray-800 focus:outline-none transition-colors text-center">{t}</a>'
             )
         else:
             html_topics.append(

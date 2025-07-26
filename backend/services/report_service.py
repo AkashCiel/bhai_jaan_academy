@@ -8,8 +8,7 @@ from services.ai_service import AIService
 from services.user_service import UserService
 from services.email_service import EmailService
 from html_generation import generate_learning_plan_html, update_learning_plan_html, generate_topic_report_html
-from report_uploads.github_report_uploader import upload_report
-from response_storage import save_ai_response
+from data import report_repository, response_repository
 
 class ReportService:
     def __init__(self):
@@ -37,11 +36,11 @@ class ReportService:
             
             # Save learning plan response for future context
             try:
-                save_ai_response(
+                response_repository.save_response(
                     user_email=email,
                     main_topic=topic,
                     response_type="learning_plan",
-                    raw_response=learning_plan
+                    response_data={"raw_response": learning_plan}
                 )
             except Exception as e:
                 print(f"[Report Service] Warning: Failed to save learning plan response: {e}")
@@ -57,7 +56,7 @@ class ReportService:
             )
             
             # Upload HTML report to GitHub
-            public_url = upload_report(email, topic, html_content)
+            public_url = report_repository.upload_report(email, topic, html_content)
             
             # Generate first topic report
             first_topic = topic_titles[0] if topic_titles else None
@@ -71,11 +70,11 @@ class ReportService:
                     
                     # Save report response for future context
                     try:
-                        save_ai_response(
+                        response_repository.save_response(
                             user_email=email,
                             main_topic=topic,
                             response_type="report",
-                            raw_response=report_content,
+                            response_data={"raw_response": report_content},
                             report_topic=first_topic
                         )
                     except Exception as e:
@@ -90,7 +89,7 @@ class ReportService:
                     )
                     
                     # Upload the report HTML
-                    report_url = upload_report(email, topic, report_html, filename=first_topic)
+                    report_url = report_repository.upload_report(email, topic, report_html, filename=first_topic)
                     report_links[0] = report_url
                     last_report_time = datetime.datetime.now(datetime.timezone.utc).isoformat()
                     print(f"[Report Service] First topic report uploaded: {report_url}")
@@ -107,7 +106,7 @@ class ReportService:
             )
             
             # Upload the updated learning plan HTML
-            updated_public_url = upload_report(email, topic, updated_html_content)
+            updated_public_url = report_repository.upload_report(email, topic, updated_html_content)
             
             # Add new user entry
             user_entry = self.user_service.add_user(
@@ -176,11 +175,11 @@ class ReportService:
             
             # Save report response for future context
             try:
-                save_ai_response(
+                response_repository.save_response(
                     user_email=user["email"],
                     main_topic=user["main_topic"],
                     response_type="report",
-                    raw_response=report_content_md,
+                    response_data={"raw_response": report_content_md},
                     report_topic=topic
                 )
             except Exception as e:
@@ -192,7 +191,7 @@ class ReportService:
             
             # Upload report
             plan_topic = user["main_topic"]
-            report_url = upload_report(user["email"], plan_topic, report_html, filename=topic)
+            report_url = report_repository.upload_report(user["email"], plan_topic, report_html, filename=topic)
             
             # Update user progress
             current_index = user.get("current_index", 0)
@@ -210,7 +209,7 @@ class ReportService:
                 report_links=updated_user["report_links"]
             )
             
-            plan_url = upload_report(user["email"], plan_topic, updated_plan_html)
+            plan_url = report_repository.upload_report(user["email"], plan_topic, updated_plan_html)
             updated_user["plan_url"] = plan_url
             
             # Add delay before sending email

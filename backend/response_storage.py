@@ -2,7 +2,10 @@
 """
 AI response storage utilities for saving and loading OpenAI responses.
 This module handles storing raw AI responses in GitHub repository for personalization and context.
+
+DEPRECATED: This module is deprecated. Use data.response_repository instead.
 """
+import warnings
 
 import json
 import re
@@ -27,6 +30,8 @@ def normalize_filename(text: str) -> str:
 def load_ai_response(user_email: str, main_topic: str, response_type: str, 
                       report_topic: Optional[str] = None) -> Optional[Dict[str, Any]]:
     """
+    DEPRECATED: Use data.response_repository.load_response() instead.
+    
     Load previous AI response from GitHub repository.
     
     Args:
@@ -38,6 +43,11 @@ def load_ai_response(user_email: str, main_topic: str, response_type: str,
     Returns:
         Response data dictionary or None if not found
     """
+    warnings.warn(
+        "load_ai_response is deprecated. Use data.response_repository.load_response() instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
     try:
         # Generate the expected filename
         if response_type == "learning_plan":
@@ -80,6 +90,8 @@ def load_ai_response(user_email: str, main_topic: str, response_type: str,
 def save_ai_response(user_email: str, main_topic: str, response_type: str, raw_response: str, 
                       report_topic: Optional[str] = None, metadata: Optional[Dict[str, Any]] = None) -> str:
     """
+    DEPRECATED: Use data.response_repository.save_response() instead.
+    
     Save raw OpenAI response to GitHub repository alongside HTML reports.
     
     Args:
@@ -93,6 +105,11 @@ def save_ai_response(user_email: str, main_topic: str, response_type: str, raw_r
     Returns:
         GitHub URL of the uploaded response file
     """
+    warnings.warn(
+        "save_ai_response is deprecated. Use data.response_repository.save_response() instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
     # Prepare response data
     response_data = {
         "user_email": user_email,

@@ -3,23 +3,16 @@ import os
 import re
 from typing import List, Dict, Any, Optional
 from config import settings
+from data import user_repository
 
 class UserService:
-    def __init__(self):
-        self.users_file = os.path.join(os.path.dirname(__file__), "..", settings.USERS_FILE)
-    
     def load_users(self) -> List[Dict[str, Any]]:
-        """Load users from JSON file"""
-        if os.path.exists(self.users_file):
-            with open(self.users_file, "r") as f:
-                return json.load(f)
-        else:
-            return []
+        """Load users using repository"""
+        return user_repository.find_all()
     
     def save_users(self, users: List[Dict[str, Any]]) -> None:
-        """Save users to JSON file"""
-        with open(self.users_file, "w") as f:
-            json.dump(users, f, indent=2)
+        """Save users using repository"""
+        user_repository.save_all(users)
     
     def sanitize_topic(self, raw_topic: str) -> str:
         """Sanitize topic input"""
@@ -39,17 +32,11 @@ class UserService:
     
     def find_user_by_email_and_topic(self, email: str, topic: str) -> Optional[Dict[str, Any]]:
         """Find existing user by email and topic"""
-        users = self.load_users()
-        for user in users:
-            if user["email"].lower() == email.lower() and user["main_topic"] == topic:
-                return user
-        return None
+        return user_repository.find_by_email_and_topic(email, topic)
     
     def add_user(self, email: str, topic: str, learning_plan: List[str], plan_url: str, 
                  report_links: Dict[int, str] = None, last_report_time: str = None) -> Dict[str, Any]:
         """Add new user to the system"""
-        users = self.load_users()
-        
         user_entry = {
             "email": email,
             "main_topic": topic,
@@ -60,9 +47,7 @@ class UserService:
             "last_report_time": last_report_time
         }
         
-        users.append(user_entry)
-        self.save_users(users)
-        return user_entry
+        return user_repository.save(user_entry)
     
     def update_user_progress(self, user: Dict[str, Any], report_url: str, topic: str, 
                            current_index: int, last_report_time: str) -> Dict[str, Any]:
@@ -72,19 +57,14 @@ class UserService:
         report_links[current_index] = report_url
         
         # Update user data
-        user["current_index"] = current_index + 1
-        user["last_report_time"] = last_report_time
-        user["report_links"] = report_links
+        updated_user = {
+            **user,
+            "current_index": current_index + 1,
+            "last_report_time": last_report_time,
+            "report_links": report_links
+        }
         
-        # Save updated users
-        users = self.load_users()
-        for i, u in enumerate(users):
-            if u["email"] == user["email"] and u["main_topic"] == user["main_topic"]:
-                users[i] = user
-                break
-        self.save_users(users)
-        
-        return user
+        return user_repository.update(user["email"], user["main_topic"], updated_user)
     
     def get_next_topic(self, user: Dict[str, Any]) -> Optional[tuple[int, str]]:
         """Get next topic for user"""

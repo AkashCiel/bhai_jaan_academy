@@ -1,5 +1,6 @@
 import os
 import requests
+import warnings
 from urllib.parse import quote
 from config import settings
 
@@ -48,6 +49,8 @@ def get_file_sha(path: str) -> str:
 
 def upload_report(email: str, topic: str, content: str, filename: str = None, content_type: str = "html") -> str:
     """
+    DEPRECATED: Use data.report_repository.upload_report() instead.
+    
     Uploads content to the GitHub repo in the correct directory structure and returns the public URL.
     Supports both HTML and JSON content types.
     
@@ -58,6 +61,11 @@ def upload_report(email: str, topic: str, content: str, filename: str = None, co
         filename: Optional filename (without extension)
         content_type: Type of content ("html" or "json")
     """
+    warnings.warn(
+        "upload_report is deprecated. Use data.report_repository.upload_report() instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
     user_dir = user_dir_from_email(email)
     topic_slug = slugify_topic(topic)
     dir_path = f"reports/{user_dir}/{topic_slug}"

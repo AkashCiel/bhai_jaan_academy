@@ -36,6 +36,7 @@ dependencies = [
     { name = "markdown" },
     { name = "openai" },
     { name = "pydantic" },
+    { name = "pydantic-settings" },
     { name = "python-dotenv" },
     { name = "python-multipart" },
     { name = "requests" },
@@ -51,6 +52,7 @@ requires-dist = [
     { name = "markdown" },
     { name = "openai", specifier = "==1.3.0" },
     { name = "pydantic", specifier = "==2.4.2" },
+    { name = "pydantic-settings", specifier = "==2.0.0" },
     { name = "python-dotenv", specifier = "==1.0.0" },
     { name = "python-multipart", specifier = "==0.0.6" },
     { name = "requests", specifier = "==2.31.0" },
@@ -451,6 +453,19 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/d5/de/dec5a958a906da5376b21743006e682e41b4a5725a06d1519b62bf9a8427/pydantic_core-2.10.1-pp310-pypy310_pp73-musllinux_1_1_aarch64.whl", hash = "sha256:c0877239307b7e69d025b73774e88e86ce82f6ba6adf98f41069d5b0b78bd1bf", size = 1987703, upload-time = "2023-09-26T11:28:09.759Z" },
     { url = "https://files.pythonhosted.org/packages/0e/50/d03292a5537a237a0ccce6613749fd9b88e56d98c6cc3a39e768002a5867/pydantic_core-2.10.1-pp310-pypy310_pp73-musllinux_1_1_x86_64.whl", hash = "sha256:53df009d1e1ba40f696f8995683e067e3967101d4bb4ea6f667931b7d4a01357", size = 2154533, upload-time = "2023-09-26T11:28:11.791Z" },
     { url = "https://files.pythonhosted.org/packages/e9/bf/0358af0fcbfcb2aa67057fbf5405947bd5eeefd7622d9718ae705f69f4b2/pydantic_core-2.10.1-pp310-pypy310_pp73-win_amd64.whl", hash = "sha256:a1254357f7e4c82e77c348dabf2d55f1d14d19d91ff025004775e70a6ef40ada", size = 1995960, upload-time = "2023-09-26T11:28:13.564Z" },
+]
+
+[[package]]
+name = "pydantic-settings"
+version = "2.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pydantic" },
+    { name = "python-dotenv" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/58/11/4f6c105e990f4fd89d70265a5dd8c3e8fd4806812cb9cf44fc3f51437431/pydantic_settings-2.0.0.tar.gz", hash = "sha256:0dc7b6c599fd2150583d2acce1f8d95cccde426ee31d1e0d2d374d58e74d37e4", size = 30689, upload-time = "2023-06-30T12:21:27.421Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/24/3e/a7733506319a483c04f88719b817c4b6f2c5c22be9ff2c27b1fa89d670de/pydantic_settings-2.0.0-py3-none-any.whl", hash = "sha256:11179e6f1837a129bd7854bcce21006cbcb7e8a988f8ae7239a09a28d2ad35fd", size = 11396, upload-time = "2023-06-30T12:21:26.088Z" },
 ]
 
 [[package]]

@@ -2,13 +2,17 @@
 """
 AI response storage utilities for saving and loading OpenAI responses.
 This module handles storing raw AI responses in GitHub repository for personalization and context.
+
+DEPRECATED: This module is deprecated. Use data.response_repository instead.
 """
+import warnings
 
 import json
 import re
 import requests
 from datetime import datetime
 from typing import Optional, Dict, Any
+from config import settings
 
 def normalize_filename(text: str) -> str:
     """
@@ -26,6 +30,8 @@ def normalize_filename(text: str) -> str:
 def load_ai_response(user_email: str, main_topic: str, response_type: str, 
                       report_topic: Optional[str] = None) -> Optional[Dict[str, Any]]:
     """
+    DEPRECATED: Use data.response_repository.load_response() instead.
+    
     Load previous AI response from GitHub repository.
     
     Args:
@@ -37,6 +43,11 @@ def load_ai_response(user_email: str, main_topic: str, response_type: str,
     Returns:
         Response data dictionary or None if not found
     """
+    warnings.warn(
+        "load_ai_response is deprecated. Use data.response_repository.load_response() instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
     try:
         # Generate the expected filename
         if response_type == "learning_plan":
@@ -79,6 +90,8 @@ def load_ai_response(user_email: str, main_topic: str, response_type: str,
 def save_ai_response(user_email: str, main_topic: str, response_type: str, raw_response: str, 
                       report_topic: Optional[str] = None, metadata: Optional[Dict[str, Any]] = None) -> str:
     """
+    DEPRECATED: Use data.response_repository.save_response() instead.
+    
     Save raw OpenAI response to GitHub repository alongside HTML reports.
     
     Args:
@@ -92,6 +105,11 @@ def save_ai_response(user_email: str, main_topic: str, response_type: str, raw_r
     Returns:
         GitHub URL of the uploaded response file
     """
+    warnings.warn(
+        "save_ai_response is deprecated. Use data.response_repository.save_response() instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
     # Prepare response data
     response_data = {
         "user_email": user_email,
@@ -106,17 +124,17 @@ def save_ai_response(user_email: str, main_topic: str, response_type: str, raw_r
     if response_type == "learning_plan":
         response_data["topics_extracted"] = extract_topics_from_plan(raw_response)
         response_data["metadata"]["word_count"] = len(raw_response.split())
-        response_data["metadata"]["model_used"] = "gpt-4o-mini"
-        response_data["metadata"]["temperature"] = 0.7
-        response_data["metadata"]["max_tokens"] = 2000
+        response_data["metadata"]["model_used"] = settings.OPENAI_MODEL
+        response_data["metadata"]["temperature"] = settings.OPENAI_TEMPERATURE
+        response_data["metadata"]["max_tokens"] = settings.OPENAI_MAX_TOKENS_PLAN
         filename = "learning_plan_response"
     
     elif response_type == "report":
         response_data["report_topic"] = report_topic
         response_data["metadata"]["word_count"] = len(raw_response.split())
-        response_data["metadata"]["model_used"] = "gpt-4o-mini"
-        response_data["metadata"]["temperature"] = 0.7
-        response_data["metadata"]["max_tokens"] = 1800
+        response_data["metadata"]["model_used"] = settings.OPENAI_MODEL
+        response_data["metadata"]["temperature"] = settings.OPENAI_TEMPERATURE
+        response_data["metadata"]["max_tokens"] = settings.OPENAI_MAX_TOKENS_REPORT
         response_data["metadata"]["links_found"] = count_links_in_response(raw_response)
         filename = f"{normalize_filename(report_topic)}_response"
     

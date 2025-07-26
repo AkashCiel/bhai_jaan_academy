@@ -1,12 +1,14 @@
 import os
 import requests
+import warnings
 from urllib.parse import quote
+from config import settings
 
 GITHUB_API_URL = "https://api.github.com"
-REPO_OWNER = "AkashCiel"
-REPO_NAME = "bhai_jaan_academy_reports"
-BRANCH = "main"
-GITHUB_TOKEN = os.getenv("REPORTS_GITHUB_TOKEN")
+REPO_OWNER = settings.GITHUB_REPO_OWNER
+REPO_NAME = settings.GITHUB_REPO_NAME
+BRANCH = settings.GITHUB_BRANCH
+GITHUB_TOKEN = settings.REPORTS_GITHUB_TOKEN
 
 assert GITHUB_TOKEN, "REPORTS_GITHUB_TOKEN environment variable must be set."
 
@@ -47,6 +49,8 @@ def get_file_sha(path: str) -> str:
 
 def upload_report(email: str, topic: str, content: str, filename: str = None, content_type: str = "html") -> str:
     """
+    DEPRECATED: Use data.report_repository.upload_report() instead.
+    
     Uploads content to the GitHub repo in the correct directory structure and returns the public URL.
     Supports both HTML and JSON content types.
     
@@ -57,6 +61,11 @@ def upload_report(email: str, topic: str, content: str, filename: str = None, co
         filename: Optional filename (without extension)
         content_type: Type of content ("html" or "json")
     """
+    warnings.warn(
+        "upload_report is deprecated. Use data.report_repository.upload_report() instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
     user_dir = user_dir_from_email(email)
     topic_slug = slugify_topic(topic)
     dir_path = f"reports/{user_dir}/{topic_slug}"

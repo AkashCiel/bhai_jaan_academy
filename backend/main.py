@@ -12,6 +12,7 @@ import json
 import re
 from html_generation import generate_learning_plan_html, update_learning_plan_html, generate_topic_report_html
 from report_uploads.github_report_uploader import upload_report
+from response_storage import save_ai_response
 import hashlib
 import time
 import datetime
@@ -143,6 +144,18 @@ async def submit_user_data(user_data: UserSubmission):
                 "email": user_data.email,
                 "topic": sanitized_topic
             }
+        
+        # Save learning plan response for future context
+        try:
+            save_ai_response(
+                user_email=user_data.email,
+                main_topic=sanitized_topic,
+                response_type="learning_plan",
+                raw_response=learning_plan
+            )
+        except Exception as e:
+            print(f"[Submit] Warning: Failed to save learning plan response: {e}")
+        
         # Extract only topic titles
         topic_titles = extract_topics_from_plan(learning_plan)
         # Generate the initial learning plan HTML (no report links)
@@ -172,6 +185,19 @@ async def submit_user_data(user_data: UserSubmission):
                     temperature=0.7
                 )
                 report_content = report_response.choices[0].message.content.strip()
+                
+                # Save report response for future context
+                try:
+                    save_ai_response(
+                        user_email=user_data.email,
+                        main_topic=sanitized_topic,
+                        response_type="report",
+                        raw_response=report_content,
+                        report_topic=first_topic
+                    )
+                except Exception as e:
+                    print(f"[Submit] Warning: Failed to save report response: {e}")
+                
                 # Convert markdown to HTML
                 report_content_html = markdown.markdown(report_content)
                 report_html = generate_topic_report_html(

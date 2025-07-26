@@ -45,26 +45,37 @@ def get_file_sha(path: str) -> str:
         return r.json().get('sha')
     return None
 
-def upload_report(email: str, topic: str, html_content: str, filename: str = None) -> str:
+def upload_report(email: str, topic: str, content: str, filename: str = None, content_type: str = "html") -> str:
     """
-    Uploads the HTML report to the GitHub repo in the correct directory structure and returns the public URL.
-    If filename is provided, use it as the file name (with .html extension).
+    Uploads content to the GitHub repo in the correct directory structure and returns the public URL.
+    Supports both HTML and JSON content types.
+    
+    Args:
+        email: User's email address
+        topic: Main learning topic
+        content: Content to upload (HTML or JSON string)
+        filename: Optional filename (without extension)
+        content_type: Type of content ("html" or "json")
     """
     user_dir = user_dir_from_email(email)
     topic_slug = slugify_topic(topic)
     dir_path = f"reports/{user_dir}/{topic_slug}"
+    
     if filename:
         file_slug = slugify_topic(filename)
-        file_name = f"{file_slug}.html"
+        file_name = f"{file_slug}.{content_type}"
     else:
-        file_name = f"{topic}.html"
+        file_name = f"{topic}.{content_type}"
+    
     file_path = f"{dir_path}/{file_name}"
+    
     # Check if file exists to get its SHA (for update vs create)
     sha = get_file_sha(file_path)
+    
     # Prepare commit payload
     import base64
-    content_b64 = base64.b64encode(html_content.encode("utf-8")).decode("utf-8")
-    commit_msg = f"Add report for {email} - {topic}"
+    content_b64 = base64.b64encode(content.encode("utf-8")).decode("utf-8")
+    commit_msg = f"Add {content_type} file for {email} - {topic}"
     payload = {
         "message": commit_msg,
         "content": content_b64,
@@ -72,10 +83,12 @@ def upload_report(email: str, topic: str, html_content: str, filename: str = Non
     }
     if sha:
         payload["sha"] = sha
+    
     url = f"{GITHUB_API_URL}/repos/{REPO_OWNER}/{REPO_NAME}/contents/{quote(file_path)}"
     r = requests.put(url, headers=get_github_headers(), json=payload)
     if r.status_code not in (200, 201):
-        raise Exception(f"Failed to upload report: {r.status_code} {r.text}")
+        raise Exception(f"Failed to upload {content_type} file: {r.status_code} {r.text}")
+    
     # Construct the public GitHub Pages URL
     public_url = f"https://{REPO_OWNER.lower()}.github.io/{REPO_NAME}/{dir_path}/{quote(file_name)}"
     return public_url 

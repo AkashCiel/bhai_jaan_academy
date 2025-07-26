@@ -9,8 +9,8 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = Field(..., validation_alias='OPENAI_API_KEY')
     OPENAI_MODEL: str = Field(default=AI_MODELS['DEFAULT'], validation_alias='OPENAI_MODEL')
     OPENAI_TEMPERATURE: float = Field(default=AI_MODELS['TEMPERATURE'], validation_alias='OPENAI_TEMPERATURE')
-    OPENAI_MAX_TOKENS_REPORT: int = Field(default=1800, validation_alias='OPENAI_MAX_TOKENS_REPORT')
-    OPENAI_MAX_TOKENS_PLAN: int = Field(default=2000, validation_alias='OPENAI_MAX_TOKENS_PLAN')
+    OPENAI_MAX_TOKENS_REPORT: int = Field(default=4000, validation_alias='OPENAI_MAX_TOKENS_REPORT')
+    OPENAI_MAX_TOKENS_PLAN: int = Field(default=3000, validation_alias='OPENAI_MAX_TOKENS_PLAN')
     OPENAI_TIMEOUT: int = Field(default=AI_MODELS['TIMEOUT'], validation_alias='OPENAI_TIMEOUT')
     
     # Email Configuration

@@ -208,20 +208,29 @@ def generate_topic_report_html(
           font-weight: 600; 
         }}
         .report-content .link-external {{ 
-          color: #2563eb; 
-          text-decoration: underline; 
-          transition: all 0.2s ease;
+          color: #dc2626; 
+          background-color: #fef2f2;
+          border: 2px solid #fecaca;
+          border-radius: 6px;
+          padding: 0.5rem 0.75rem;
+          text-decoration: none;
+          font-weight: 600;
+          transition: all 0.3s ease;
           display: inline-block;
-          margin: 0.25rem 0;
+          margin: 0.5rem 0.25rem;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }}
         .report-content .link-external:hover {{ 
-          color: #1d4ed8; 
-          text-decoration: none;
-          transform: translateY(-1px);
+          color: #991b1b; 
+          background-color: #fee2e2;
+          border-color: #fca5a5;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }}
         .report-content .link-external:before {{
           content: "🔗 ";
-          margin-right: 0.25rem;
+          margin-right: 0.5rem;
+          font-size: 1.1em;
         }}
         
         /* Mobile responsiveness */

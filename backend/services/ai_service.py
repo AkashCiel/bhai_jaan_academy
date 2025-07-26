@@ -82,7 +82,7 @@ This is the introduction paragraph...
 ## Real-World Applications:
 Examples of how this is used...
 
-The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report."""
+The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report. IMPORTANT: Only include links to real, working websites and resources. Verify that all URLs are valid and accessible."""
         
         response = self.client.chat.completions.create(
             model=settings.OPENAI_MODEL,
@@ -129,7 +129,7 @@ IMPORTANT: Format your response with clear structural markers:
 - Use "---" for section breaks
 - Use "**Link: [text](url)**" for any relevant links
 
-The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report."""
+The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report. IMPORTANT: Only include links to real, working websites and resources. Verify that all URLs are valid and accessible."""
         
         response = self.client.chat.completions.create(
             model=settings.OPENAI_MODEL,

@@ -2,7 +2,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 import os
@@ -106,7 +106,7 @@ async def run_scheduler(request: Request):
             updated_users.append(updated_user)
         
         # Save updated users using service
-        user_service.save_users(updated_users)
+        user_service.save_users([user for user in updated_users if user is not None])
         
         return {"status": "ok", "message": "Scheduler run complete.", "users_processed": len(users)}
     except Exception as e:

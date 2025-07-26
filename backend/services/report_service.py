@@ -1,7 +1,7 @@
 import datetime
 import time
 import traceback
-import markdown
+import markdown  # type: ignore
 from typing import Dict, Any, List, Optional
 from config import settings
 from services.ai_service import AIService

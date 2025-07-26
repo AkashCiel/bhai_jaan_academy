@@ -35,7 +35,7 @@ class UserService:
         return user_repository.find_by_email_and_topic(email, topic)
     
     def add_user(self, email: str, topic: str, learning_plan: List[str], plan_url: str, 
-                 report_links: Dict[int, str] = None, last_report_time: str = None) -> Dict[str, Any]:
+                 report_links: Optional[Dict[int, str]] = None, last_report_time: Optional[str] = None) -> Dict[str, Any]:
         """Add new user to the system"""
         user_entry = {
             "email": email,
@@ -50,7 +50,7 @@ class UserService:
         return user_repository.save(user_entry)
     
     def update_user_progress(self, user: Dict[str, Any], report_url: str, topic: str, 
-                           current_index: int, last_report_time: str) -> Dict[str, Any]:
+                           current_index: int, last_report_time: str) -> Optional[Dict[str, Any]]:
         """Update user's learning progress"""
         # Update report_links
         report_links = user.get("report_links", {})
@@ -71,8 +71,8 @@ class UserService:
         idx = user.get("current_index", 0)
         topics = user.get("learning_plan", [])
         if idx < len(topics):
-            return idx, topics[idx]
-        return None, None
+            return (idx, topics[idx])
+        return None
     
     def should_generate_report(self, user: Dict[str, Any]) -> bool:
         """Determine if a report should be generated for user"""

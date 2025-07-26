@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "email": "akash.adroit.singh@gmail.com",
+    "main_topic": "Quantum Computing",
+    "learning_plan": [
+      "Introduction to Quantum Computing",
+      "Basic Quantum Mechanics Concepts",
+      "Quantum Bits (Qubits)",
+      "Quantum Gates and Circuits",
+      "Measurement in Quantum Computing",
+      "Quantum Algorithms Overview",
+      "Applications of Quantum Computing",
+      "Introduction to Quantum Programming Languages",
+      "Basic Quantum Error Correction",
+      "Current State of Quantum Computing Technology",
+      "Quantum Entanglement in Depth",
+      "Quantum Teleportation",
+      "Quantum Superposition and Interference",
+      "Specific Quantum Algorithms",
+      "Quantum Complexity Theory",
+      "Quantum Cryptography",
+      "Quantum Hardware Technologies",
+      "Quantum Communication",
+      "Quantum Machine Learning",
+      "Quantum Simulation",
+      "Advanced Quantum Algorithms",
+      "Quantum Error Correction Codes",
+      "Quantum Network Protocols",
+      "Topological Quantum Computing",
+      "Quantum Hardware Engineering",
+      "Quantum Information Theory",
+      "Entanglement-Based Quantum Computing",
+      "Quantum Supremacy",
+      "Future Trends in Quantum Computing",
+      "Capstone Project"
+    ],
+    "current_index": 1,
+    "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Quantum%20Computing.html",
+    "report_links": {
+      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Introduction_to_Quantum_Computing.html"
+    },
+    "last_report_time": "2025-07-26T14:23:16.451774+00:00"
+  }
+]

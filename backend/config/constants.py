@@ -20,8 +20,7 @@ AI_MODELS = {
 
 # Time delays (in seconds)
 DELAYS = {
-    'EMAIL_DEPLOYMENT': 300,  # 5 minutes
-    'GITHUB_PAGES': 300       # 5 minutes
+    'EMAIL_DEPLOYMENT': 1,  # TESTING: Set to 1 second. REMEMBER TO REVERT TO 300 SECONDS AFTER TESTING!
 }
 
 # GitHub configuration

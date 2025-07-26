@@ -54,15 +54,18 @@ class ContextRepository:
         """Load context summary from GitHub repository."""
         try:
             # Construct GitHub API URL
-            user_dir = user_email.replace('@', '').replace('.', '')
-            topic_dir = self._normalize_filename(main_topic)
+            user_dir = self._user_dir_from_email(user_email)
+            topic_dir = self._slugify_topic(main_topic)
             file_path = f"reports/{user_dir}/{topic_dir}/context_summary.json"
             
             url = f"{self.github_api_url}/repos/{self.repo_owner}/{self.repo_name}/contents/{quote(file_path)}"
+            print(f"[Context Repository] Attempting to load from URL: {url}")
             response = requests.get(url, headers=self._get_headers())
             
+            print(f"[Context Repository] Response status: {response.status_code}")
             if response.status_code != 200:
                 print(f"[Context Repository] Context summary not found on GitHub: {response.status_code}")
+                print(f"[Context Repository] Response text: {response.text[:200]}...")
                 return None
             
             # Decode content from GitHub
@@ -106,6 +109,25 @@ class ContextRepository:
             print(f"[Context Repository] Error updating context summary: {e}")
             # Return empty context if update fails
             return ""
+    
+    def _user_dir_from_email(self, email: str) -> str:
+        """
+        Extracts the username from the email (before @) and removes all special characters.
+        Matches the method used in ReportRepository.
+        """
+        username = email.split('@')[0]
+        username = re.sub(r'[^a-zA-Z0-9]', '', username)
+        return username
+    
+    def _slugify_topic(self, value: str) -> str:
+        """
+        Converts a string to a slug suitable for directory or file names (for topic).
+        Matches the method used in ReportRepository.
+        """
+        value = value.strip()
+        value = re.sub(r'[^a-zA-Z0-9\-_ ]', '', value)
+        value = re.sub(r'\s+', '_', value)
+        return value
     
     def _normalize_filename(self, text: str) -> str:
         """Convert text to a safe filename by removing/replacing special characters."""

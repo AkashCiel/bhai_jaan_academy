@@ -20,8 +20,9 @@ import markdown
 from report_scheduler_utils import load_users, save_users, is_same_utc_day, get_next_report_topic, generate_report_content, send_report_email, process_user
 from config import settings
 from utils.email_utils import load_email_template
+from services import user_service, report_service, email_service
 
-# Configure OpenAI client for v1.x
+# Configure OpenAI client for v1.x (keeping for backward compatibility)
 client = openai.OpenAI(
     api_key=settings.OPENAI_API_KEY,
     timeout=settings.OPENAI_TIMEOUT
@@ -115,182 +116,35 @@ async def health_check():
 async def submit_user_data(user_data: UserSubmission):
     try:
         print(f"[Submit] Received submission: email={user_data.email}, topic={user_data.topic}")
-        sanitized_topic = sanitize_topic(user_data.topic)
-        # Load users.json
-        import os, json
-        users_file = os.path.join(os.path.dirname(__file__), settings.USERS_FILE)
-        if os.path.exists(users_file):
-            with open(users_file, "r") as f:
-                users = json.load(f)
-        else:
-            users = []
-        # Check for duplicate (same email + sanitized topic)
-        for user in users:
-            if user["email"].lower() == user_data.email.lower() and user["main_topic"] == sanitized_topic:
-                print(f"[Submit] Duplicate found for email={user_data.email}, topic={sanitized_topic}")
-                return {
-                    "success": False,
-                    "message": "You already have a plan for this topic.",
-                    "email": user_data.email,
-                    "topic": sanitized_topic
-                }
-        # Generate AI learning plan
-        print(f"[Submit] Generating learning plan for topic: {sanitized_topic}")
-        learning_plan = generate_learning_plan(sanitized_topic)
-        print(f"[Submit] Learning plan generated.")
-        if learning_plan == "ERROR":
-            print(f"[Submit] OpenAI returned ERROR for topic: {sanitized_topic}")
+        
+        # Use service layer for all operations
+        sanitized_topic = user_service.sanitize_topic(user_data.topic)
+        
+        # Check for duplicate using service
+        existing_user = user_service.find_user_by_email_and_topic(user_data.email, sanitized_topic)
+        if existing_user:
+            print(f"[Submit] Duplicate found for email={user_data.email}, topic={sanitized_topic}")
             return {
                 "success": False,
-                "message": "Sorry, this topic is not suitable for learning or may be inappropriate. Please try a different topic.",
+                "message": "You already have a plan for this topic.",
                 "email": user_data.email,
                 "topic": sanitized_topic
             }
         
-        # Save learning plan response for future context
-        try:
-            save_ai_response(
-                user_email=user_data.email,
-                main_topic=sanitized_topic,
-                response_type="learning_plan",
-                raw_response=learning_plan
-            )
-        except Exception as e:
-            print(f"[Submit] Warning: Failed to save learning plan response: {e}")
+        # Generate initial learning plan using service
+        result = report_service.generate_initial_learning_plan(user_data.email, sanitized_topic)
+        return result
         
-        # Extract only topic titles
-        topic_titles = extract_topics_from_plan(learning_plan)
-        # Generate the initial learning plan HTML (no report links)
-        html_content = generate_learning_plan_html(
-            topic=sanitized_topic,
-            user_email=user_data.email,
-            topics=topic_titles
-        )
-        # Upload HTML report to GitHub and get public URL
-        public_url = upload_report(user_data.email, sanitized_topic, html_content)
-
-        # --- New: Generate and upload first topic report ---
-        first_topic = topic_titles[0] if topic_titles else None
-        report_links = {}
-        last_report_time = None
-        if first_topic:
-            print(f"[Submit] Generating report for first topic: {first_topic}")
-            report_prompt = f"""Write a comprehensive, beginner-friendly educational report on the topic: \"{first_topic}\".\nThe report should include:\n- An introduction to the topic\n- Key concepts and definitions\n- Real-world applications or examples\n- Common misconceptions or pitfalls\n- Further reading/resources (if appropriate)\nThe tone should be clear, engaging, and accessible to someone new to the subject."""
-            try:
-                report_response = client.chat.completions.create(
-                    model=settings.OPENAI_MODEL,
-                    messages=[
-                        {"role": "system", "content": "You are an expert educator and science communicator."},
-                        {"role": "user", "content": report_prompt}
-                    ],
-                    max_tokens=settings.OPENAI_MAX_TOKENS_REPORT,
-                    temperature=settings.OPENAI_TEMPERATURE
-                )
-                report_content = report_response.choices[0].message.content.strip()
-                
-                # Save report response for future context
-                try:
-                    save_ai_response(
-                        user_email=user_data.email,
-                        main_topic=sanitized_topic,
-                        response_type="report",
-                        raw_response=report_content,
-                        report_topic=first_topic
-                    )
-                except Exception as e:
-                    print(f"[Submit] Warning: Failed to save report response: {e}")
-                
-                # Convert markdown to HTML
-                report_content_html = markdown.markdown(report_content)
-                report_html = generate_topic_report_html(
-                    topic=first_topic,
-                    user_email=user_data.email,
-                    report_content=report_content_html
-                )
-                # Upload the report HTML
-                report_url = upload_report(user_data.email, sanitized_topic, report_html, filename=first_topic)
-                report_links[0] = report_url
-                last_report_time = datetime.datetime.now(datetime.timezone.utc).isoformat()
-                print(f"[Submit] First topic report uploaded: {report_url}")
-            except Exception as e:
-                print(f"[Submit] Error generating/uploading first topic report: {e}")
-        # --- End new ---
-
-        # Update the learning plan HTML to link the first topic
-        updated_html_content = update_learning_plan_html(
-            topic=sanitized_topic,
-            user_email=user_data.email,
-            topics=topic_titles,
-            report_links=report_links
-        )
-        # Upload the updated learning plan HTML (overwrite previous)
-        updated_public_url = upload_report(user_data.email, sanitized_topic, updated_html_content)
-
-        # Add new user entry
-        user_entry = {
+    except Exception as e:
+        print(f"[Submit] Error: {e}")
+        import traceback
+        traceback.print_exc()
+        return {
+            "success": False,
+            "message": f"Error processing submission: {str(e)}",
             "email": user_data.email,
-            "main_topic": sanitized_topic,
-            "learning_plan": topic_titles,
-            "current_index": 1 if report_links else 0,
-            "plan_url": updated_public_url,
-            "report_links": report_links,  # topic index to report URL
-            "last_report_time": last_report_time
+            "topic": user_data.topic
         }
-        users.append(user_entry)
-        with open(users_file, "w") as f:
-            json.dump(users, f, indent=2)
-        print(f"[Submit] User entry added to users.json.")
-        # Delay email to allow GitHub Pages to deploy
-        print(f"[Submit] Waiting {settings.REPORT_DELAY_SECONDS} seconds before sending email to allow GitHub Pages to deploy...")
-        time.sleep(settings.REPORT_DELAY_SECONDS)
-        # Send email with the plan URL
-        subject = f"Your 30-Day Learning Plan for {sanitized_topic} - Bhai Jaan Academy"
-        html_email_content = load_email_template('welcome', {
-            'topic': sanitized_topic,
-            'plan_url': updated_public_url
-        })
-        mailgun_api_key = settings.MAILGUN_API_KEY
-        mailgun_domain = settings.MAILGUN_DOMAIN
-        if not mailgun_api_key or not mailgun_domain:
-            print(f"[Submit] Email service not configured.")
-            return {
-                "success": True,
-                "message": "Submission received and learning plan generated! (Email service not configured)",
-                "email": user_data.email,
-                "topic": sanitized_topic,
-                "plan_url": updated_public_url
-            }
-        import requests
-        print(f"[Submit] Sending email to {user_data.email}")
-        response = requests.post(
-            f"https://api.mailgun.net/v3/{mailgun_domain}/messages",
-            auth=("api", mailgun_api_key),
-            data={
-                "from": f"Bhai Jaan Academy <mailgun@{mailgun_domain}>",
-                "to": [user_data.email],
-                "subject": subject,
-                "html": html_email_content
-            }
-        )
-        print(f"[Submit] Mailgun response: {response.status_code} {response.text}")
-        if response.status_code == 200:
-            print(f"[Submit] Email sent successfully.")
-            return {
-                "success": True,
-                "message": "Welcome email with learning plan link sent successfully!",
-                "email": user_data.email,
-                "topic": sanitized_topic,
-                "plan_url": updated_public_url
-            }
-        else:
-            print(f"[Submit] Failed to send email. Plan URL: {updated_public_url}")
-            return {
-                "success": False,
-                "message": f"Failed to send email. Plan URL: {updated_public_url}",
-                "email": user_data.email,
-                "topic": sanitized_topic,
-                "plan_url": updated_public_url
-            }
     except Exception as e:
         print(f"[Submit] Exception: {str(e)}")
         import traceback
@@ -418,17 +272,25 @@ USERS_FILE = os.path.join(os.path.dirname(__file__), "users.json")
 from fastapi.responses import JSONResponse
 @app.post("/run-scheduler")
 async def run_scheduler(request: Request):
-    users = load_users(USERS_FILE)
-    updated_users = []
-    openai_api_key = os.getenv("OPENAI_API_KEY")
-    mailgun_api_key = os.getenv("MAILGUN_API_KEY")
-    mailgun_domain = os.getenv("MAILGUN_DOMAIN")
-    client = openai.OpenAI(api_key=openai_api_key, timeout=120.0)
-    for user in users:
-        updated_user = process_user(user, client, mailgun_api_key, mailgun_domain, USERS_FILE)
-        updated_users.append(updated_user)
-    save_users(updated_users, USERS_FILE)
-    return {"status": "ok", "message": "Scheduler run complete."}
+    try:
+        # Use service layer for scheduler operations
+        users = user_service.load_users()
+        updated_users = []
+        
+        # Process each user using service
+        for user in users:
+            updated_user = report_service.generate_next_report(user)
+            updated_users.append(updated_user)
+        
+        # Save updated users using service
+        user_service.save_users(updated_users)
+        
+        return {"status": "ok", "message": "Scheduler run complete.", "users_processed": len(users)}
+    except Exception as e:
+        print(f"Error in scheduler: {e}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn

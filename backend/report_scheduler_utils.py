@@ -10,6 +10,7 @@ from report_uploads.github_report_uploader import upload_report
 from response_storage import save_ai_response
 from config import settings
 from utils.email_utils import load_email_template
+from services import user_service, report_service, email_service
 
 def load_users(users_file):
     with open(users_file, "r") as f:
@@ -108,68 +109,5 @@ def send_report_email(user, plan_url, report_url, topic, mailgun_api_key, mailgu
     print(f"[Scheduler] Email sent to {user['email']}: {response.status_code}")
 
 def process_user(user, openai_client, mailgun_api_key, mailgun_domain, users_file):
-    now = datetime.datetime.now(datetime.timezone.utc)
-    last_report_time = user.get("last_report_time")
-    current_index = user.get("current_index", 0)
-    # If current_index == 1 and last_report_time is today, skip
-    if last_report_time:
-        try:
-            last_dt = datetime.datetime.fromisoformat(last_report_time)
-        except Exception:
-            last_dt = None
-    else:
-        last_dt = None
-    if current_index == 1 and last_dt and is_same_utc_day(now, last_dt):
-        print(f"[Scheduler] Skipping {user['email']} (already sent today)")
-        return user  # No changes
-    idx, topic = get_next_report_topic(user)
-    if topic is None:
-        print(f"[Scheduler] No more topics for {user['email']}")
-        return user
-    print(f"[Scheduler] Generating report for {user['email']} on topic: {topic}")
-    try:
-        report_content_md = generate_report_content(topic, openai_client)
-        
-        # Save report response for future context
-        try:
-            save_ai_response(
-                user_email=user["email"],
-                main_topic=user["main_topic"],
-                response_type="report",
-                raw_response=report_content_md,
-                report_topic=topic
-            )
-        except Exception as e:
-            print(f"[Scheduler] Warning: Failed to save report response: {e}")
-        
-        report_content_html = markdown.markdown(report_content_md)
-        report_html = generate_topic_report_html(topic, user["email"], report_content_html)
-        # Upload report
-        plan_topic = user["main_topic"]
-        report_url = upload_report(user["email"], plan_topic, report_html, filename=topic)
-        # Update report_links
-        report_links = user.get("report_links", {})
-        report_links[idx] = report_url
-        # Update learning plan HTML
-        updated_plan_html = update_learning_plan_html(
-            topic=plan_topic,
-            user_email=user["email"],
-            topics=user["learning_plan"],
-            report_links=report_links
-        )
-        plan_url = upload_report(user["email"], plan_topic, updated_plan_html)
-        # Update user progress
-        user["current_index"] = current_index + 1
-        user["last_report_time"] = now.isoformat()
-        user["plan_url"] = plan_url
-        user["report_links"] = report_links
-        # Add delay before sending email
-        import time
-        time.sleep(settings.REPORT_DELAY_SECONDS)
-        # Send email
-        send_report_email(user, plan_url, report_url, topic, mailgun_api_key, mailgun_domain)
-        print(f"[Scheduler] Report and email sent for {user['email']} on topic: {topic}")
-    except Exception as e:
-        print(f"[Scheduler] Error for {user['email']} on topic {topic}: {e}")
-        traceback.print_exc()
-    return user 
+    # Use service layer for processing user
+    return report_service.generate_next_report(user) 

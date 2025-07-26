@@ -3,18 +3,20 @@ import re
 
 def extract_and_style_links(content: str) -> str:
     """
-    Extract all URLs from content and convert them to styled links.
-    Returns content with URLs replaced by styled <a> tags.
+    Extract links in format **Link: [text](url)** and convert to styled links.
+    Returns content with links replaced by styled <a> tags.
     """
-    # Debug: Count URLs before processing
-    url_pattern = r'https?://[^\s<>"{}|\\^`\[\]]+'
-    urls_found = re.findall(url_pattern, content)
-    print(f"[DEBUG] Found {len(urls_found)} URLs: {urls_found}")
+    # Single pattern for the exact format we want
+    link_pattern = r'\*\*Link: \[([^\]]+)\]\(([^)]+)\)\*\*'
     
-    # Replace URLs with styled links
+    # Debug: Count links before processing
+    links_found = re.findall(link_pattern, content)
+    print(f"[DEBUG] Found {len(links_found)} links: {links_found}")
+    
+    # Replace with styled links
     processed_content = re.sub(
-        url_pattern, 
-        r'<a href="\0" target="_blank" rel="noopener noreferrer" class="link-external">\0</a>', 
+        link_pattern,
+        r'<a href="\2" target="_blank" rel="noopener noreferrer" class="link-external">\1</a>',
         content
     )
     

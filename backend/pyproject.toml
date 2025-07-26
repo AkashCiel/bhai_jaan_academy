@@ -20,3 +20,9 @@ dependencies = [
     "markdown",
 ]
 requires-python = ">=3.10,<3.13" 
+
+[dependency-groups]
+dev = [
+    "mypy>=1.17.0",
+    "types-requests>=2.32.4.20250611",
+]

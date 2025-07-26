@@ -1,6 +1,6 @@
 import openai
 import re
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Tuple
 from config import settings
 
 class AIService:
@@ -68,13 +68,6 @@ IMPORTANT: Format your response with clear structural markers:
 - Use "---" for section breaks
 - Use "**Link: [text](url)**" for any relevant links
 
-CRITICAL: Include relevant links throughout the report:
-- Link to official documentation, tutorials, or learning resources
-- Link to real-world examples or case studies
-- Link to tools, software, or platforms mentioned
-- Link to academic papers or research (if appropriate)
-- Link to YouTube videos, courses, or interactive content
-
 Example format:
 ## Introduction:
 This is the introduction paragraph...
@@ -89,10 +82,6 @@ This is the introduction paragraph...
 ## Real-World Applications:
 Examples of how this is used...
 
-**Link: [Official Documentation](https://example.com/docs)**
-**Link: [Interactive Tutorial](https://example.com/tutorial)**
-**Link: [YouTube Video](https://youtube.com/watch?v=example)**
-
 The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report."""
         
         response = self.client.chat.completions.create(
@@ -105,6 +94,143 @@ The tone should be clear, engaging, and accessible to someone new to the subject
             temperature=settings.OPENAI_TEMPERATURE
         )
         return response.choices[0].message.content.strip()
+
+    def generate_report_content_with_context(self, topic: str, context: str, learning_plan: list) -> Tuple[str, int]:
+        """
+        Generate educational report content using OpenAI with user context
+        """
+        context_prompt = f"""Write a comprehensive, beginner-friendly educational report on the topic: "{topic}".
+
+IMPORTANT CONTEXT - Previous Learning Summary:
+{context}
+
+Learning Plan Structure:
+{chr(10).join([f"- {topic}" for topic in learning_plan])}
+
+The report should:
+- Build upon the user's previous learning (referenced in the context above)
+- Maintain consistency with previously covered topics
+- Create a coherent narrative that fits into the overall learning journey
+- Include references to previously learned concepts where relevant
+- Continue the progressive learning structure
+
+The report should include:
+- An introduction that connects to previous learning
+- Key concepts and definitions
+- Real-world applications or examples
+- Common misconceptions or pitfalls
+- Further reading/resources (if appropriate)
+
+IMPORTANT: Format your response with clear structural markers:
+- Use "## Heading:" for main sections (e.g., "## Introduction:", "## Key Concepts:", "## Real-World Applications:")
+- Use "### Subheading:" for subsections
+- Use "**Bold text**" for emphasis and important terms
+- Use "- " for bullet points
+- Use "---" for section breaks
+- Use "**Link: [text](url)**" for any relevant links
+
+The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report."""
+        
+        response = self.client.chat.completions.create(
+            model=settings.OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": "You are an expert educator and science communicator who creates coherent, progressive learning experiences."},
+                {"role": "user", "content": context_prompt}
+            ],
+            max_tokens=settings.OPENAI_MAX_TOKENS_REPORT,
+            temperature=settings.OPENAI_TEMPERATURE
+        )
+        content = response.choices[0].message.content.strip()
+        token_usage = response.usage.total_tokens if hasattr(response, 'usage') and response.usage else 0
+        return content, token_usage
+
+    def summarize_content_for_context(self, existing_summary: str, new_report_content: str, 
+                                    new_topic: str, learning_plan: list) -> Tuple[str, int]:
+        """
+        Generate a concise summary for context storage using OpenAI
+        """
+        summary_prompt = f"""Create a concise, coherent summary that combines the existing learning context with new content.
+
+EXISTING LEARNING SUMMARY:
+{existing_summary if existing_summary else "No previous learning context available."}
+
+NEW REPORT CONTENT (Topic: {new_topic}):
+{new_report_content}
+
+COMPLETE LEARNING PLAN:
+{chr(10).join([f"- {topic}" for topic in learning_plan])}
+
+Your task is to create a comprehensive summary that:
+1. Integrates the new content seamlessly with existing learning
+2. Maintains the narrative flow and learning progression
+3. Highlights key concepts and connections between topics
+4. Provides a coherent overview of the user's learning journey so far
+5. Keeps the summary concise but comprehensive (aim for 300-500 words)
+
+Focus on:
+- How the new topic fits into the broader learning plan
+- Connections between previously learned concepts and the new topic
+- The user's learning progression and depth of understanding
+- Key insights and takeaways from the learning journey so far
+
+Write the summary in a clear, educational tone that would help generate future reports that build upon this foundation."""
+        
+        response = self.client.chat.completions.create(
+            model=settings.OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": "You are an expert educational content curator who creates coherent learning summaries."},
+                {"role": "user", "content": summary_prompt}
+            ],
+            max_tokens=1000,  # Generous token limit for high-quality summary
+            temperature=0.5  # Lower temperature for more consistent summaries
+        )
+        content = response.choices[0].message.content.strip()
+        token_usage = response.usage.total_tokens if hasattr(response, 'usage') and response.usage else 0
+        return content, token_usage
+
+    def generate_initial_context_summary(self, main_topic: str, learning_plan: list, 
+                                       first_report_content: str, first_topic: str) -> Tuple[str, int]:
+        """
+        Generate initial context summary for new user
+        """
+        initial_prompt = f"""Create an initial learning context summary for a new user starting their learning journey.
+
+MAIN TOPIC: {main_topic}
+FIRST TOPIC COVERED: {first_topic}
+COMPLETE LEARNING PLAN:
+{chr(10).join([f"- {topic}" for topic in learning_plan])}
+
+FIRST REPORT CONTENT:
+{first_report_content}
+
+Your task is to create an initial context summary that:
+1. Establishes the foundation for the learning journey
+2. Captures the key insights from the first report
+3. Sets up the framework for future learning progression
+4. Provides context for generating subsequent reports
+5. Maintains a coherent narrative structure
+
+The summary should:
+- Introduce the main learning topic and its scope
+- Highlight key concepts from the first report
+- Establish the learning progression framework
+- Set expectations for the learning journey ahead
+- Be concise but comprehensive (aim for 200-300 words)
+
+Write in a clear, educational tone that will help generate future reports that build upon this foundation."""
+        
+        response = self.client.chat.completions.create(
+            model=settings.OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": "You are an expert educational content curator who creates foundational learning summaries."},
+                {"role": "user", "content": initial_prompt}
+            ],
+            max_tokens=800,
+            temperature=0.5
+        )
+        content = response.choices[0].message.content.strip()
+        token_usage = response.usage.total_tokens if hasattr(response, 'usage') and response.usage else 0
+        return content, token_usage
 
     def extract_topics_from_plan(self, plan: str) -> list:
         """Extract only the topic titles from the OpenAI learning plan response."""

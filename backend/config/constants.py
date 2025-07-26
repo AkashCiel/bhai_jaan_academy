@@ -20,8 +20,7 @@ AI_MODELS = {
 
 # Time delays (in seconds)
 DELAYS = {
-    'EMAIL_DEPLOYMENT': 300,  # 5 minutes
-    'GITHUB_PAGES': 300       # 5 minutes
+    'EMAIL_DEPLOYMENT': 300,  # Production delay: 5 minutes between reports
 }
 
 # GitHub configuration

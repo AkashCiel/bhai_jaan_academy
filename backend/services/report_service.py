@@ -1,12 +1,13 @@
 import datetime
 import time
 import traceback
-import markdown
+import markdown  # type: ignore
 from typing import Dict, Any, List, Optional
 from config import settings
 from services.ai_service import AIService
 from services.user_service import UserService
 from services.email_service import EmailService
+from services.context_service import ContextService
 from html_generation import generate_learning_plan_html, update_learning_plan_html, generate_topic_report_html
 from data import report_repository, response_repository
 
@@ -15,6 +16,7 @@ class ReportService:
         self.ai_service = AIService()
         self.user_service = UserService()
         self.email_service = EmailService()
+        self.context_service = ContextService()
     
     def generate_initial_learning_plan(self, email: str, topic: str) -> Dict[str, Any]:
         """Generate initial learning plan for new user"""
@@ -68,6 +70,18 @@ class ReportService:
                 try:
                     report_content = self.ai_service.generate_report_content(first_topic)
                     
+                    # Create initial context summary
+                    try:
+                        self.context_service.create_initial_context(
+                            user_email=email,
+                            main_topic=topic,
+                            learning_plan=topic_titles,
+                            first_report_content=report_content,
+                            first_topic=first_topic
+                        )
+                    except Exception as e:
+                        print(f"[Report Service] Warning: Failed to create initial context: {e}")
+                    
                     # Save report response for future context
                     try:
                         response_repository.save_response(
@@ -120,9 +134,7 @@ class ReportService:
             
             print(f"[Report Service] User entry added to users.json.")
             
-            # Delay email to allow GitHub Pages to deploy
-            print(f"[Report Service] Waiting {settings.REPORT_DELAY_SECONDS} seconds before sending email...")
-            time.sleep(settings.REPORT_DELAY_SECONDS)
+            self._wait_before_email()
             
             # Send welcome email
             email_sent = self.email_service.send_welcome_email(email, topic, updated_public_url)
@@ -170,8 +182,31 @@ class ReportService:
             
             print(f"[Report Service] Generating report for {user['email']} on topic: {topic}")
             
-            # Generate report content
-            report_content_md = self.ai_service.generate_report_content(topic)
+            # Get user context for context-aware report generation
+            user_context = self.context_service.get_user_context(user["email"], user["main_topic"])
+            
+            # Generate report content with context
+            if user_context:
+                print(f"[Report Service] Using context for {user['email']} on topic: {topic}")
+                report_content_md, token_count = self.ai_service.generate_report_content_with_context(
+                    topic, user_context, user["learning_plan"]
+                )
+            else:
+                print(f"[Report Service] No context available for {user['email']}, generating without context")
+                report_content_md = self.ai_service.generate_report_content(topic)
+                token_count = None
+            
+            # Update context summary with new report content
+            try:
+                self.context_service.update_context_with_new_report(
+                    user_email=user["email"],
+                    main_topic=user["main_topic"],
+                    new_report_content=report_content_md,
+                    new_topic=topic,
+                    learning_plan=user["learning_plan"]
+                )
+            except Exception as e:
+                print(f"[Report Service] Warning: Failed to update context: {e}")
             
             # Save report response for future context
             try:
@@ -180,7 +215,8 @@ class ReportService:
                     main_topic=user["main_topic"],
                     response_type="report",
                     response_data={"raw_response": report_content_md},
-                    report_topic=topic
+                    report_topic=topic,
+                    token_count=token_count
                 )
             except Exception as e:
                 print(f"[Report Service] Warning: Failed to save report response: {e}")
@@ -212,8 +248,7 @@ class ReportService:
             plan_url = report_repository.upload_report(user["email"], plan_topic, updated_plan_html)
             updated_user["plan_url"] = plan_url
             
-            # Add delay before sending email
-            time.sleep(settings.REPORT_DELAY_SECONDS)
+            self._wait_before_email()
             
             # Send email
             self.email_service.send_report_email(updated_user, topic, plan_url, report_url)
@@ -225,3 +260,8 @@ class ReportService:
             print(f"[Report Service] Error for {user['email']} on topic {topic}: {e}")
             traceback.print_exc()
             return user 
+
+    def _wait_before_email(self):
+        """Wait for the configured delay before sending an email, with logging."""
+        print(f"[Report Service] Waiting {settings.REPORT_DELAY_SECONDS} seconds before sending email...")
+        time.sleep(settings.REPORT_DELAY_SECONDS) 

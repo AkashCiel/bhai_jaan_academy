@@ -134,9 +134,7 @@ class ReportService:
             
             print(f"[Report Service] User entry added to users.json.")
             
-            # Delay email to allow GitHub Pages to deploy
-            print(f"[Report Service] Waiting {settings.REPORT_DELAY_SECONDS} seconds before sending email...")
-            time.sleep(settings.REPORT_DELAY_SECONDS)
+            self._wait_before_email()
             
             # Send welcome email
             email_sent = self.email_service.send_welcome_email(email, topic, updated_public_url)
@@ -250,8 +248,7 @@ class ReportService:
             plan_url = report_repository.upload_report(user["email"], plan_topic, updated_plan_html)
             updated_user["plan_url"] = plan_url
             
-            # Add delay before sending email
-            time.sleep(settings.REPORT_DELAY_SECONDS)
+            self._wait_before_email()
             
             # Send email
             self.email_service.send_report_email(updated_user, topic, plan_url, report_url)
@@ -263,3 +260,8 @@ class ReportService:
             print(f"[Report Service] Error for {user['email']} on topic {topic}: {e}")
             traceback.print_exc()
             return user 
+
+    def _wait_before_email(self):
+        """Wait for the configured delay before sending an email, with logging."""
+        print(f"[Report Service] Waiting {settings.REPORT_DELAY_SECONDS} seconds before sending email...")
+        time.sleep(settings.REPORT_DELAY_SECONDS) 

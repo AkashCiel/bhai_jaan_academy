@@ -23,7 +23,8 @@ class ResponseRepository:
         }
     
     def save_response(self, user_email: str, main_topic: str, response_type: str, 
-                     response_data: Dict[str, Any], report_topic: Optional[str] = None) -> str:
+                     response_data: Dict[str, Any], report_topic: Optional[str] = None, 
+                     token_count: Optional[int] = None) -> str:
         """Save AI response to GitHub repository alongside HTML reports."""
         # Prepare response data
         response_data = {
@@ -42,6 +43,8 @@ class ResponseRepository:
             response_data["metadata"]["model_used"] = settings.OPENAI_MODEL
             response_data["metadata"]["temperature"] = settings.OPENAI_TEMPERATURE
             response_data["metadata"]["max_tokens"] = settings.OPENAI_MAX_TOKENS_PLAN
+            if token_count:
+                response_data["metadata"]["actual_tokens_used"] = token_count
             filename = "learning_plan_response"
         
         elif response_type == "report":
@@ -51,6 +54,8 @@ class ResponseRepository:
             response_data["metadata"]["temperature"] = settings.OPENAI_TEMPERATURE
             response_data["metadata"]["max_tokens"] = settings.OPENAI_MAX_TOKENS_REPORT
             response_data["metadata"]["links_found"] = self._count_links_in_response(response_data["raw_response"])
+            if token_count:
+                response_data["metadata"]["actual_tokens_used"] = token_count
             filename = f"{self._normalize_filename(report_topic)}_response"
         
         else:

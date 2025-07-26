@@ -18,11 +18,13 @@ import time
 import datetime
 import markdown
 from report_scheduler_utils import load_users, save_users, is_same_utc_day, get_next_report_topic, generate_report_content, send_report_email, process_user
+from config import settings
+from utils.email_utils import load_email_template
 
 # Configure OpenAI client for v1.x
 client = openai.OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),
-    timeout=120.0  # 2 minutes timeout
+    api_key=settings.OPENAI_API_KEY,
+    timeout=settings.OPENAI_TIMEOUT
 )
 
 app = FastAPI(title="Bhai Jaan Academy API", version="1.0.0")
@@ -73,13 +75,13 @@ The plan should include:
 If the topic is not suitable for learning or is inappropriate, respond with "ERROR"."""
 
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=settings.OPENAI_MODEL,
             messages=[
                 {"role": "system", "content": "You are an expert educational content creator specializing in creating structured learning plans."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=2000,
-            temperature=0.7
+            max_tokens=settings.OPENAI_MAX_TOKENS_PLAN,
+            temperature=settings.OPENAI_TEMPERATURE
         )
         plan = response.choices[0].message.content.strip()
         print(f"OpenAI API raw response: {plan}")
@@ -116,7 +118,7 @@ async def submit_user_data(user_data: UserSubmission):
         sanitized_topic = sanitize_topic(user_data.topic)
         # Load users.json
         import os, json
-        users_file = os.path.join(os.path.dirname(__file__), "users.json")
+        users_file = os.path.join(os.path.dirname(__file__), settings.USERS_FILE)
         if os.path.exists(users_file):
             with open(users_file, "r") as f:
                 users = json.load(f)
@@ -176,13 +178,13 @@ async def submit_user_data(user_data: UserSubmission):
             report_prompt = f"""Write a comprehensive, beginner-friendly educational report on the topic: \"{first_topic}\".\nThe report should include:\n- An introduction to the topic\n- Key concepts and definitions\n- Real-world applications or examples\n- Common misconceptions or pitfalls\n- Further reading/resources (if appropriate)\nThe tone should be clear, engaging, and accessible to someone new to the subject."""
             try:
                 report_response = client.chat.completions.create(
-                    model="gpt-4o-mini",
+                    model=settings.OPENAI_MODEL,
                     messages=[
                         {"role": "system", "content": "You are an expert educator and science communicator."},
                         {"role": "user", "content": report_prompt}
                     ],
-                    max_tokens=1800,
-                    temperature=0.7
+                    max_tokens=settings.OPENAI_MAX_TOKENS_REPORT,
+                    temperature=settings.OPENAI_TEMPERATURE
                 )
                 report_content = report_response.choices[0].message.content.strip()
                 
@@ -239,25 +241,16 @@ async def submit_user_data(user_data: UserSubmission):
             json.dump(users, f, indent=2)
         print(f"[Submit] User entry added to users.json.")
         # Delay email to allow GitHub Pages to deploy
-        print("[Submit] Waiting 5 minutes before sending email to allow GitHub Pages to deploy...")
-        time.sleep(300)
+        print(f"[Submit] Waiting {settings.REPORT_DELAY_SECONDS} seconds before sending email to allow GitHub Pages to deploy...")
+        time.sleep(settings.REPORT_DELAY_SECONDS)
         # Send email with the plan URL
         subject = f"Your 30-Day Learning Plan for {sanitized_topic} - Bhai Jaan Academy"
-        html_email_content = f"""
-        <html>
-        <body>
-            <h2>Welcome to Bhai Jaan Academy! 🎓</h2>
-            <p>Thank you for signing up to learn about <strong>{sanitized_topic}</strong>!</p>
-            <p>We're excited to help you master this topic in just 30 days.</p>
-            <p>Your personalized learning plan is ready. <a href='{updated_public_url}'>Click here to view your plan</a>.</p>
-            <br>
-            <p>remember, Rome wasn't built in a day!</p>
-            <p>— The Bhai Jaan Academy Team</p>
-        </body>
-        </html>
-        """
-        mailgun_api_key = os.getenv("MAILGUN_API_KEY")
-        mailgun_domain = os.getenv("MAILGUN_DOMAIN")
+        html_email_content = load_email_template('welcome', {
+            'topic': sanitized_topic,
+            'plan_url': updated_public_url
+        })
+        mailgun_api_key = settings.MAILGUN_API_KEY
+        mailgun_domain = settings.MAILGUN_DOMAIN
         if not mailgun_api_key or not mailgun_domain:
             print(f"[Submit] Email service not configured.")
             return {

@@ -9,6 +9,7 @@ import re
 import requests
 from datetime import datetime
 from typing import Optional, Dict, Any
+from config import settings
 
 def normalize_filename(text: str) -> str:
     """
@@ -106,17 +107,17 @@ def save_ai_response(user_email: str, main_topic: str, response_type: str, raw_r
     if response_type == "learning_plan":
         response_data["topics_extracted"] = extract_topics_from_plan(raw_response)
         response_data["metadata"]["word_count"] = len(raw_response.split())
-        response_data["metadata"]["model_used"] = "gpt-4o-mini"
-        response_data["metadata"]["temperature"] = 0.7
-        response_data["metadata"]["max_tokens"] = 2000
+        response_data["metadata"]["model_used"] = settings.OPENAI_MODEL
+        response_data["metadata"]["temperature"] = settings.OPENAI_TEMPERATURE
+        response_data["metadata"]["max_tokens"] = settings.OPENAI_MAX_TOKENS_PLAN
         filename = "learning_plan_response"
     
     elif response_type == "report":
         response_data["report_topic"] = report_topic
         response_data["metadata"]["word_count"] = len(raw_response.split())
-        response_data["metadata"]["model_used"] = "gpt-4o-mini"
-        response_data["metadata"]["temperature"] = 0.7
-        response_data["metadata"]["max_tokens"] = 1800
+        response_data["metadata"]["model_used"] = settings.OPENAI_MODEL
+        response_data["metadata"]["temperature"] = settings.OPENAI_TEMPERATURE
+        response_data["metadata"]["max_tokens"] = settings.OPENAI_MAX_TOKENS_REPORT
         response_data["metadata"]["links_found"] = count_links_in_response(raw_response)
         filename = f"{normalize_filename(report_topic)}_response"
     

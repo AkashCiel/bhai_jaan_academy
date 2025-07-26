@@ -1,12 +1,13 @@
 import os
 import requests
 from urllib.parse import quote
+from config import settings
 
 GITHUB_API_URL = "https://api.github.com"
-REPO_OWNER = "AkashCiel"
-REPO_NAME = "bhai_jaan_academy_reports"
-BRANCH = "main"
-GITHUB_TOKEN = os.getenv("REPORTS_GITHUB_TOKEN")
+REPO_OWNER = settings.GITHUB_REPO_OWNER
+REPO_NAME = settings.GITHUB_REPO_NAME
+BRANCH = settings.GITHUB_BRANCH
+GITHUB_TOKEN = settings.REPORTS_GITHUB_TOKEN
 
 assert GITHUB_TOKEN, "REPORTS_GITHUB_TOKEN environment variable must be set."
 

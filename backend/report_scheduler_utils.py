@@ -8,6 +8,8 @@ import requests
 from html_generation import update_learning_plan_html, generate_topic_report_html
 from report_uploads.github_report_uploader import upload_report
 from response_storage import save_ai_response
+from config import settings
+from utils.email_utils import load_email_template
 
 def load_users(users_file):
     with open(users_file, "r") as f:
@@ -72,13 +74,13 @@ Examples of how this is used...
 
 The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report."""
     response = openai_client.chat.completions.create(
-        model="gpt-4o-mini",
+        model=settings.OPENAI_MODEL,
         messages=[
             {"role": "system", "content": "You are an expert educator and science communicator."},
             {"role": "user", "content": report_prompt}
         ],
-        max_tokens=1800,
-        temperature=0.7
+        max_tokens=settings.OPENAI_MAX_TOKENS_REPORT,
+        temperature=settings.OPENAI_TEMPERATURE
     )
     return response.choices[0].message.content.strip()
 
@@ -87,22 +89,12 @@ def send_report_email(user, plan_url, report_url, topic, mailgun_api_key, mailgu
         print(f"[Scheduler] Email service not configured. Skipping email for {user['email']}")
         return
     subject = f"Your new learning report on {topic} is ready! - Bhai Jaan Academy"
-    html_email_content = f"""
-    <html>
-    <body>
-        <h2>Your new report is ready! 🎓</h2>
-        <p>Hi {user['email']},</p>
-        <p>Your next learning report on <strong>{topic}</strong> is now available.</p>
-        <ul>
-            <li><a href='{plan_url}'>View your full learning plan</a></li>
-            <li><a href='{report_url}'>Read your new report: {topic}</a></li>
-        </ul>
-        <br>
-        <p>Keep up the great work!</p>
-        <p>— The Bhai Jaan Academy Team</p>
-    </body>
-    </html>
-    """
+    html_email_content = load_email_template('report', {
+        'email': user['email'],
+        'topic': topic,
+        'plan_url': plan_url,
+        'report_url': report_url
+    })
     response = requests.post(
         f"https://api.mailgun.net/v3/{mailgun_domain}/messages",
         auth=("api", mailgun_api_key),
@@ -173,7 +165,7 @@ def process_user(user, openai_client, mailgun_api_key, mailgun_domain, users_fil
         user["report_links"] = report_links
         # Add delay before sending email
         import time
-        time.sleep(300)
+        time.sleep(settings.REPORT_DELAY_SECONDS)
         # Send email
         send_report_email(user, plan_url, report_url, topic, mailgun_api_key, mailgun_domain)
         print(f"[Scheduler] Report and email sent for {user['email']} on topic: {topic}")

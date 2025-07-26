@@ -82,7 +82,17 @@ This is the introduction paragraph...
 ## Real-World Applications:
 Examples of how this is used...
 
-The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report."""
+The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report. 
+
+IMPORTANT: For links, use this exact format: **Link: [Resource Name](URL)**
+Example: **Link: [IBM Quantum Experience](https://quantum-computing.ibm.com/)**
+Only include links to real, working websites and resources. Verify that all URLs are valid and accessible.
+
+For mathematical formulas, use proper LaTeX syntax:
+- Inline math: $formula$ or \\(formula\\)
+- Display math: $$formula$$ or \\[formula\\]
+- Examples: $|\psi\rangle = \alpha |0\rangle + \beta |1\rangle$ for quantum states
+- Use proper notation for quantum computing: $|0\rangle$, $|1\rangle$, $\langle\psi|$, etc."""
         
         response = self.client.chat.completions.create(
             model=settings.OPENAI_MODEL,
@@ -129,7 +139,17 @@ IMPORTANT: Format your response with clear structural markers:
 - Use "---" for section breaks
 - Use "**Link: [text](url)**" for any relevant links
 
-The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report."""
+The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report. 
+
+IMPORTANT: For links, use this exact format: **Link: [Resource Name](URL)**
+Example: **Link: [IBM Quantum Experience](https://quantum-computing.ibm.com/)**
+Only include links to real, working websites and resources. Verify that all URLs are valid and accessible.
+
+For mathematical formulas, use proper LaTeX syntax:
+- Inline math: $formula$ or \\(formula\\)
+- Display math: $$formula$$ or \\[formula\\]
+- Examples: $|\psi\rangle = \alpha |0\rangle + \beta |1\rangle$ for quantum states
+- Use proper notation for quantum computing: $|0\rangle$, $|1\rangle$, $\langle\psi|$, etc."""
         
         response = self.client.chat.completions.create(
             model=settings.OPENAI_MODEL,

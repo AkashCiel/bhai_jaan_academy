@@ -7,6 +7,7 @@ import markdown
 import requests
 from html_generation import update_learning_plan_html, generate_topic_report_html
 from report_uploads.github_report_uploader import upload_report
+from response_storage import save_ai_response
 
 def load_users(users_file):
     with open(users_file, "r") as f:
@@ -136,6 +137,19 @@ def process_user(user, openai_client, mailgun_api_key, mailgun_domain, users_fil
     print(f"[Scheduler] Generating report for {user['email']} on topic: {topic}")
     try:
         report_content_md = generate_report_content(topic, openai_client)
+        
+        # Save report response for future context
+        try:
+            save_ai_response(
+                user_email=user["email"],
+                main_topic=user["main_topic"],
+                response_type="report",
+                raw_response=report_content_md,
+                report_topic=topic
+            )
+        except Exception as e:
+            print(f"[Scheduler] Warning: Failed to save report response: {e}")
+        
         report_content_html = markdown.markdown(report_content_md)
         report_html = generate_topic_report_html(topic, user["email"], report_content_html)
         # Upload report

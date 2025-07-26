@@ -68,13 +68,6 @@ IMPORTANT: Format your response with clear structural markers:
 - Use "---" for section breaks
 - Use "**Link: [text](url)**" for any relevant links
 
-CRITICAL: Include relevant links throughout the report:
-- Link to official documentation, tutorials, or learning resources
-- Link to real-world examples or case studies
-- Link to tools, software, or platforms mentioned
-- Link to academic papers or research (if appropriate)
-- Link to YouTube videos, courses, or interactive content
-
 Example format:
 ## Introduction:
 This is the introduction paragraph...
@@ -88,10 +81,6 @@ This is the introduction paragraph...
 
 ## Real-World Applications:
 Examples of how this is used...
-
-**Link: [Official Documentation](https://example.com/docs)**
-**Link: [Interactive Tutorial](https://example.com/tutorial)**
-**Link: [YouTube Video](https://youtube.com/watch?v=example)**
 
 The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report."""
         

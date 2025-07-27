@@ -2,7 +2,7 @@ import os
 from typing import Optional
 from pydantic_settings import BaseSettings
 from pydantic import Field
-from .constants import AI_MODELS, GITHUB_CONFIG, FILE_EXTENSIONS, EMAIL_TEMPLATES, DELAYS
+from .constants import AI_MODELS, GITHUB_CONFIG, MAIN_REPO_CONFIG, FILE_EXTENSIONS, EMAIL_TEMPLATES, DELAYS
 
 class Settings(BaseSettings):
     # OpenAI Configuration
@@ -17,11 +17,17 @@ class Settings(BaseSettings):
     MAILGUN_API_KEY: Optional[str] = Field(default=None, validation_alias='MAILGUN_API_KEY')
     MAILGUN_DOMAIN: Optional[str] = Field(default=None, validation_alias='MAILGUN_DOMAIN')
     
-    # GitHub Configuration
+    # GitHub Configuration for Reports Repository
     REPORTS_GITHUB_TOKEN: Optional[str] = Field(default=None, validation_alias='REPORTS_GITHUB_TOKEN')
     GITHUB_REPO_OWNER: str = Field(default=GITHUB_CONFIG['REPO_OWNER'], validation_alias='GITHUB_REPO_OWNER')
     GITHUB_REPO_NAME: str = Field(default=GITHUB_CONFIG['REPO_NAME'], validation_alias='GITHUB_REPO_NAME')
     GITHUB_BRANCH: str = Field(default=GITHUB_CONFIG['BRANCH'], validation_alias='GITHUB_BRANCH')
+    
+    # GitHub Configuration for Main Repository (users.json sync)
+    MAIN_GITHUB_TOKEN: Optional[str] = Field(default=None, validation_alias='MAIN_GITHUB_TOKEN')
+    MAIN_REPO_OWNER: str = Field(default=MAIN_REPO_CONFIG['REPO_OWNER'], validation_alias='MAIN_REPO_OWNER')
+    MAIN_REPO_NAME: str = Field(default=MAIN_REPO_CONFIG['REPO_NAME'], validation_alias='MAIN_REPO_NAME')
+    MAIN_REPO_BRANCH: str = Field(default=MAIN_REPO_CONFIG['BRANCH'], validation_alias='MAIN_REPO_BRANCH')
     
     # File Configuration
     USERS_FILE: str = Field(default=FILE_EXTENSIONS['USERS_FILE'], validation_alias='USERS_FILE')

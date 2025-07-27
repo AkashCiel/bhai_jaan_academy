@@ -20,12 +20,19 @@ AI_MODELS = {
 
 # Time delays (in seconds)
 DELAYS = {
-    'EMAIL_DEPLOYMENT': 1,  # Testing delay: 1 second between reports
+    'EMAIL_DEPLOYMENT': 300,  # Testing delay: 1 second between reports
 }
 
-# GitHub configuration
+# GitHub configuration for reports repository
 GITHUB_CONFIG = {
     'REPO_OWNER': 'AkashCiel',
     'REPO_NAME': 'bhai_jaan_academy_reports',
+    'BRANCH': 'main'
+}
+
+# GitHub configuration for main repository (for users.json sync)
+MAIN_REPO_CONFIG = {
+    'REPO_OWNER': 'AkashCiel',
+    'REPO_NAME': 'bhai_jaan_academy',
     'BRANCH': 'main'
 } 

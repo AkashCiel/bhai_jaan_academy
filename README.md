@@ -13,6 +13,7 @@ bhai_jaan_academy/
 ├── backend/           # FastAPI server (deploys to Render)
 │   ├── main.py        # API endpoints
 │   ├── requirements.txt # Python dependencies
+│   ├── users.json     # User data (auto-synced to GitHub)
 │   └── .env          # Environment variables
 └── README.md         # This file
 ```
@@ -24,6 +25,7 @@ bhai_jaan_academy/
 - **Database**: Supabase (PostgreSQL)
 - **Email**: SendGrid
 - **Hosting**: Netlify (frontend), Render (backend)
+- **Data Sync**: GitHub API (auto-syncs users.json)
 
 ## 🚀 Quick Start
 
@@ -106,12 +108,35 @@ NETLIFY_SITE_ID=your_netlify_site_id
 
 # Frontend URL (for CORS)
 FRONTEND_URL=https://your-app.netlify.app
+
+# GitHub Configuration for Reports Repository
+REPORTS_GITHUB_TOKEN=your_github_token_for_reports_repo
+
+# GitHub Configuration for Main Repository (users.json sync)
+MAIN_GITHUB_TOKEN=your_github_token_for_main_repo
 ```
 
 ### Frontend (Netlify Environment Variables)
 ```bash
 BACKEND_URL=https://your-api.onrender.com
 ```
+
+## 🔄 GitHub Sync Feature
+
+The system automatically syncs `users.json` changes from Render back to GitHub. This ensures that:
+
+- ✅ New user registrations are committed to the main branch
+- ✅ User updates are reflected in the repository
+- ✅ Data consistency between deployment and source code
+
+### Setup GitHub Sync
+
+See [backend/GITHUB_SYNC_SETUP.md](backend/GITHUB_SYNC_SETUP.md) for detailed setup instructions.
+
+**Quick Setup:**
+1. Create a GitHub Personal Access Token with `repo` scope
+2. Add `MAIN_GITHUB_TOKEN=your_token` to your environment variables
+3. Test with: `cd backend && python test_github_sync.py`
 
 ## 🔧 Development
 
@@ -127,12 +152,13 @@ BACKEND_URL=https://your-api.onrender.com
 
 ## 📝 TODO
 
-- [ ] Set up Supabase database
-- [ ] Configure SendGrid email service
-- [ ] Implement AI content generation
-- [ ] Add daily scheduling system
-- [ ] Create HTML report generation
-- [ ] Add user progress tracking
+- [x] Set up Supabase database
+- [x] Configure SendGrid email service
+- [x] Implement AI content generation
+- [x] Add daily scheduling system
+- [x] Create HTML report generation
+- [x] Add user progress tracking
+- [x] Auto-sync users.json to GitHub
 
 ## 🤝 Contributing
 

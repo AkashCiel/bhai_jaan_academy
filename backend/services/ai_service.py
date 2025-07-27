@@ -57,7 +57,7 @@ The report should include:
 - An introduction to the topic
 - Key concepts and definitions
 - Real-world applications or examples
-- Common misconceptions or pitfalls
+- Common misconceptions or pitfalls, if applicable
 - Further reading/resources (if appropriate)
 
 IMPORTANT: Format your response with clear structural markers:
@@ -66,7 +66,7 @@ IMPORTANT: Format your response with clear structural markers:
 - Use "**Bold text**" for emphasis and important terms
 - Use "- " for bullet points
 - Use "---" for section breaks
-- Use "**Link: [text](url)**" for any relevant links
+- Use "**Link: [text](url)**" for any relevant links. IMPORTANT: Only include links to real, working websites and resources. Verify that all URLs are valid and accessible.
 
 Example format:
 ## Introduction:
@@ -82,7 +82,8 @@ This is the introduction paragraph...
 ## Real-World Applications:
 Examples of how this is used...
 
-The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report. 
+The tone should be clear, engaging, and accessible to someone new to the subject. If there are domain specific terms, define them. 
+Include at least 3-5 relevant links, but more if applicable. 
 
 IMPORTANT: For links, use this exact format: **Link: [Resource Name](URL)**
 Example: **Link: [IBM Quantum Experience](https://quantum-computing.ibm.com/)**
@@ -120,6 +121,7 @@ Learning Plan Structure:
 The report should:
 - Build upon the user's previous learning (referenced in the context above)
 - Maintain consistency with previously covered topics
+- SHhould not repeat concepts or ideas already covered
 - Create a coherent narrative that fits into the overall learning journey
 - Include references to previously learned concepts where relevant
 - Continue the progressive learning structure
@@ -184,8 +186,9 @@ Your task is to create a comprehensive summary that:
 1. Integrates the new content seamlessly with existing learning
 2. Maintains the narrative flow and learning progression
 3. Highlights key concepts and connections between topics
-4. Provides a coherent overview of the user's learning journey so far
-5. Keeps the summary concise but comprehensive (aim for 300-500 words)
+4. Summarises all the concepts and ideas covered so far
+5. Provides a coherent overview of the user's learning journey so far
+6. Keeps the summary concise but comprehensive (aim for upto 1000 words)
 
 Focus on:
 - How the new topic fits into the broader learning plan

@@ -20,7 +20,7 @@ AI_MODELS = {
 
 # Time delays (in seconds)
 DELAYS = {
-    'EMAIL_DEPLOYMENT': 300,  # Testing delay: 1 second between reports
+    'EMAIL_DEPLOYMENT': 5,  # Reduced from 300 to 5 seconds
 }
 
 # GitHub configuration for reports repository

@@ -38,6 +38,7 @@ def get_fallback_template(template_name: str, variables: Dict[str, Any]) -> str:
             <p>Thank you for signing up to learn about <strong>{variables.get('topic', '')}</strong>!</p>
             <p>We're excited to help you master this topic in just 30 days.</p>
             <p>Your personalized learning plan is ready. <a href='{variables.get('plan_url', '')}'>Click here to view your plan</a>.</p>
+            <p><em>If you cannot find the page, please come back in a few minutes.</em></p>
             <br>
             <p>Remember, Rome wasn't built in a day!</p>
             <p>— The Bhai Jaan Academy Team</p>
@@ -55,6 +56,7 @@ def get_fallback_template(template_name: str, variables: Dict[str, Any]) -> str:
                 <li><a href='{variables.get('plan_url', '')}'>View your full learning plan</a></li>
                 <li><a href='{variables.get('report_url', '')}'>Read your new report: {variables.get('topic', '')}</a></li>
             </ul>
+            <p><em>If you cannot find the page, please come back in a few minutes.</em></p>
             <br>
             <p>Keep up the great work!</p>
             <p>— The Bhai Jaan Academy Team</p>

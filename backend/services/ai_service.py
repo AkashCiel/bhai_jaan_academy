@@ -2,6 +2,7 @@ import openai
 import re
 from typing import Optional, Dict, Any, Tuple
 from config import settings
+from config.constants import AI_PROMPTS
 
 class AIService:
     def __init__(self):
@@ -10,6 +11,99 @@ class AIService:
             timeout=settings.OPENAI_TIMEOUT
         )
     
+    def _build_report_prompt(self, topic: str) -> str:
+        """Build a complete report prompt from modular components"""
+        return f"""Write a comprehensive educational report on the topic: "{topic}".
+
+{AI_PROMPTS['REPORT_STRUCTURE']}
+
+{AI_PROMPTS['CONTENT_GUIDELINES']}
+
+{AI_PROMPTS['FORMATTING_INSTRUCTIONS']}
+
+Example format:
+## Introduction:
+This is the introduction paragraph...
+
+## Key Concepts:
+### Basic Definition:
+**Term:** Definition here...
+
+- Point 1
+- Point 2
+
+## Real-World Applications:
+Examples of how this is used...
+
+{AI_PROMPTS['TONE_STYLE']}
+
+{AI_PROMPTS['LINK_FORMATTING']}
+
+{AI_PROMPTS['MATH_FORMATTING']}"""
+    
+    def _build_context_prompt(self, topic: str, context: str, learning_plan: list) -> str:
+        """Build a context-aware report prompt"""
+        return f"""Write a comprehensive, beginner-friendly educational report on the topic: "{topic}".
+
+IMPORTANT CONTEXT - Previous Learning Summary:
+{context}
+
+Learning Plan Structure:
+{chr(10).join([f"- {topic}" for topic in learning_plan])}
+
+{AI_PROMPTS['CONTEXT_HANDLING']}
+
+{AI_PROMPTS['REPORT_STRUCTURE'].replace('introduction to the topic', 'introduction that connects to previous learning')}
+
+{AI_PROMPTS['CONTENT_GUIDELINES']}
+
+{AI_PROMPTS['FORMATTING_INSTRUCTIONS']}
+
+{AI_PROMPTS['CONTEXT_TONE_STYLE']}
+
+{AI_PROMPTS['LINK_FORMATTING']}
+
+{AI_PROMPTS['MATH_FORMATTING']}"""
+
+    def _build_summary_prompt(self, existing_summary: str, new_report_content: str, 
+                             new_topic: str, learning_plan: list) -> str:
+        """Build a summary prompt from modular components"""
+        return f"""Create a concise, coherent summary that combines the existing learning context with new content.
+
+EXISTING LEARNING SUMMARY:
+{existing_summary if existing_summary else "No previous learning context available."}
+
+NEW REPORT CONTENT (Topic: {new_topic}):
+{new_report_content}
+
+COMPLETE LEARNING PLAN:
+{chr(10).join([f"- {topic}" for topic in learning_plan])}
+
+{AI_PROMPTS['SUMMARY_TASK']}
+
+{AI_PROMPTS['SUMMARY_FOCUS']}
+
+{AI_PROMPTS['SUMMARY_TONE']}"""
+    
+    def _build_initial_summary_prompt(self, main_topic: str, learning_plan: list, 
+                                     first_report_content: str, first_topic: str) -> str:
+        """Build an initial summary prompt from modular components"""
+        return f"""Create an initial learning context summary for a new user starting their learning journey.
+
+MAIN TOPIC: {main_topic}
+FIRST TOPIC COVERED: {first_topic}
+COMPLETE LEARNING PLAN:
+{chr(10).join([f"- {topic}" for topic in learning_plan])}
+
+FIRST REPORT CONTENT:
+{first_report_content}
+
+{AI_PROMPTS['INITIAL_SUMMARY_TASK']}
+
+{AI_PROMPTS['INITIAL_SUMMARY_REQUIREMENTS']}
+
+{AI_PROMPTS['INITIAL_SUMMARY_TONE']}"""
+
     def generate_learning_plan(self, topic: str) -> str:
         """
         Generate a 30-day learning plan using OpenAI GPT-4
@@ -51,61 +145,12 @@ If the topic is not suitable for learning or is inappropriate, respond with "ERR
         """
         Generate educational report content using OpenAI
         """
-        report_prompt = f"""Write a comprehensive educational report on the topic: "{topic}".
-
-The report should include:
-- An introduction to the topic
-- Key concepts and definitions
-- Real-world applications or examples
-- A rich narrative that connects the concepts to each other and to real-world applications. Its best if this narrative is presented as one or multiple stories.
-- A conclusion that summarizes the key takeaways and provides a call to action for the user to explore the topic further.
-
-IMPORTANT: Carefully follow these instructions while composing the report:
-- The report should not assume any prior knowledge on part of the user. 
-- At the same time, it should be comprehensive and self-sufficient as a reading resource for the user.
-- Provide standard definitions of the terms but also expand on them with example if they are too abstract.
-- Provide metaphors, famous anecdotes, historical facts, and other interesting details to keep the reader engaged. However, do not overdo it.
-- Include relevant links, whenever applicable, to allow the reader to explore the topic further.
-
-FORMATTING: Format your response with clear structural markers:
-- Use "## Heading:" for main sections (e.g., "## Introduction:", "## Key Concepts:", "## Real-World Applications:")
-- Use "### Subheading:" for subsections
-- Use "**Bold text**" for emphasis and important terms
-- Use "- " for bullet points
-- Use "---" for section breaks
-- Use "**Link: [text](url)**" for any relevant links. IMPORTANT: Only include links to real, working websites and resources. Verify that all URLs are valid and accessible.
-
-Example format:
-## Introduction:
-This is the introduction paragraph...
-
-## Key Concepts:
-### Basic Definition:
-**Term:** Definition here...
-
-- Point 1
-- Point 2
-
-## Real-World Applications:
-Examples of how this is used...
-
-The tone should be clear, engaging, and accessible to someone new to the subject. If there are domain specific terms, define them. 
-Include relevant links, whenever applicable, to allow the reader to explore the topic further.
-
-IMPORTANT: For links, use this exact format: **Link: [Resource Name](URL)**
-Example: **Link: [IBM Quantum Experience](https://quantum-computing.ibm.com/)**
-Only include links to real, working websites and resources. Verify that all URLs are valid and accessible.
-
-For mathematical formulas, use proper LaTeX syntax:
-- Inline math: $formula$ or \\(formula\\)
-- Display math: $$formula$$ or \\[formula\\]
-- Examples: $|\psi\rangle = \alpha |0\rangle + \beta |1\rangle$ for quantum states
-- Use proper notation for quantum computing: $|0\rangle$, $|1\rangle$, $\langle\psi|$, etc."""
+        report_prompt = self._build_report_prompt(topic)
         
         response = self.client.chat.completions.create(
             model=settings.OPENAI_MODEL,
             messages=[
-                {"role": "system", "content": "You are an expert educator and science communicator."},
+                {"role": "system", "content": AI_PROMPTS['SYSTEM_MESSAGES']['REPORT_GENERATOR']},
                 {"role": "user", "content": report_prompt}
             ],
             max_tokens=settings.OPENAI_MAX_TOKENS_REPORT,
@@ -117,59 +162,12 @@ For mathematical formulas, use proper LaTeX syntax:
         """
         Generate educational report content using OpenAI with user context
         """
-        context_prompt = f"""Write a comprehensive, beginner-friendly educational report on the topic: "{topic}".
-
-IMPORTANT CONTEXT - Previous Learning Summary:
-{context}
-
-Learning Plan Structure:
-{chr(10).join([f"- {topic}" for topic in learning_plan])}
-
-How to use the context referenced above:
-- Build upon the user's previous learning
-- When referring to a concept previously covered, briefly remind the user of its core idea.
-- Take care to not repeat concepts or ideas already covered.
-- Introduce new concepts, relevant to the current topic, that build upon one or more of the previously learned concepts.
-- Include references to previously learned concepts where relevant
-- Continue the progressive learning structure
-
-The report should include:
-- An introduction that connects to previous learning
-- Key concepts and definitions relevant to the current topic
-- A rich narrative that connects the concepts to each other and to real-world applications. Its best if this narrative is presented as one or multiple stories.
-- A conclusion that summarizes the key takeaways and provides a call to action for the user to explore the topic further.
-
-IMPORTANT: Carefully follow these instructions while composing the report:
-- The report should not assume any prior knowledge on part of the user. 
-- At the same time, it should be comprehensive and self-sufficient as a reading resource for the user.
-- Provide standard definitions of the terms but also expand on them with example if they are too abstract.
-- Provide metaphors, famous anecdotes, historical facts, and other interesting details to keep the reader engaged. However, do not overdo it.
-- Include relevant links, whenever applicable, to allow the reader to explore the topic further.
-
-IMPORTANT: Format your response with clear structural markers:
-- Use "## Heading:" for main sections (e.g., "## Introduction:", "## Key Concepts:", "## Real-World Applications:")
-- Use "### Subheading:" for subsections
-- Use "**Bold text**" for emphasis and important terms
-- Use "- " for bullet points
-- Use "---" for section breaks
-- Use "**Link: [text](url)**" for any relevant links
-
-The tone should be clear, engaging, and accessible to someone new to the subject. Include at least 3-5 relevant links throughout the report. 
-
-IMPORTANT: For links, use this exact format: **Link: [Resource Name](URL)**
-Example: **Link: [IBM Quantum Experience](https://quantum-computing.ibm.com/)**
-Only include links to real, working websites and resources. Verify that all URLs are valid and accessible.
-
-For mathematical formulas, use proper LaTeX syntax:
-- Inline math: $formula$ or \\(formula\\)
-- Display math: $$formula$$ or \\[formula\\]
-- Examples: $|\psi\rangle = \alpha |0\rangle + \beta |1\rangle$ for quantum states
-- Use proper notation for quantum computing: $|0\rangle$, $|1\rangle$, $\langle\psi|$, etc."""
+        context_prompt = self._build_context_prompt(topic, context, learning_plan)
         
         response = self.client.chat.completions.create(
             model=settings.OPENAI_MODEL,
             messages=[
-                {"role": "system", "content": "You are an expert educator and science communicator who creates coherent, progressive learning experiences."},
+                {"role": "system", "content": AI_PROMPTS['SYSTEM_MESSAGES']['CONTEXT_AWARE_GENERATOR']},
                 {"role": "user", "content": context_prompt}
             ],
             max_tokens=settings.OPENAI_MAX_TOKENS_REPORT,
@@ -184,37 +182,12 @@ For mathematical formulas, use proper LaTeX syntax:
         """
         Generate a concise summary for context storage using OpenAI
         """
-        summary_prompt = f"""Create a concise, coherent summary that combines the existing learning context with new content.
-
-EXISTING LEARNING SUMMARY:
-{existing_summary if existing_summary else "No previous learning context available."}
-
-NEW REPORT CONTENT (Topic: {new_topic}):
-{new_report_content}
-
-COMPLETE LEARNING PLAN:
-{chr(10).join([f"- {topic}" for topic in learning_plan])}
-
-Your task is to create a comprehensive summary that:
-1. Integrates the new content seamlessly with existing learning
-2. Maintains the narrative flow and learning progression
-3. Highlights key concepts and connections between topics
-4. Summarises all the concepts and ideas covered so far
-5. Provides a coherent overview of the user's learning journey so far
-6. Keeps the summary concise but comprehensive (aim for upto 1000 words)
-
-Focus on:
-- How the new topic fits into the broader learning plan
-- Connections between previously learned concepts and the new topic
-- The user's learning progression and depth of understanding
-- Key insights and takeaways from the learning journey so far
-
-Write the summary in a clear, educational tone that would help generate future reports that build upon this foundation."""
+        summary_prompt = self._build_summary_prompt(existing_summary, new_report_content, new_topic, learning_plan)
         
         response = self.client.chat.completions.create(
             model=settings.OPENAI_MODEL,
             messages=[
-                {"role": "system", "content": "You are an expert educational content curator who creates coherent learning summaries."},
+                {"role": "system", "content": AI_PROMPTS['SYSTEM_MESSAGES']['SUMMARY_GENERATOR']},
                 {"role": "user", "content": summary_prompt}
             ],
             max_tokens=1000,  # Generous token limit for high-quality summary
@@ -229,36 +202,12 @@ Write the summary in a clear, educational tone that would help generate future r
         """
         Generate initial context summary for new user
         """
-        initial_prompt = f"""Create an initial learning context summary for a new user starting their learning journey.
-
-MAIN TOPIC: {main_topic}
-FIRST TOPIC COVERED: {first_topic}
-COMPLETE LEARNING PLAN:
-{chr(10).join([f"- {topic}" for topic in learning_plan])}
-
-FIRST REPORT CONTENT:
-{first_report_content}
-
-Your task is to create an initial context summary that:
-1. Establishes the foundation for the learning journey
-2. Captures the key insights from the first report
-3. Sets up the framework for future learning progression
-4. Provides context for generating subsequent reports
-5. Maintains a coherent narrative structure
-
-The summary should:
-- Introduce the main learning topic and its scope
-- Highlight key concepts from the first report
-- Establish the learning progression framework
-- Set expectations for the learning journey ahead
-- Be concise but comprehensive (aim for 1000 words)
-
-Write in a clear, educational tone that will help generate future reports that build upon this foundation."""
+        initial_prompt = self._build_initial_summary_prompt(main_topic, learning_plan, first_report_content, first_topic)
         
         response = self.client.chat.completions.create(
             model=settings.OPENAI_MODEL,
             messages=[
-                {"role": "system", "content": "You are an expert educational content curator who creates foundational learning summaries."},
+                {"role": "system", "content": AI_PROMPTS['SYSTEM_MESSAGES']['INITIAL_SUMMARY_GENERATOR']},
                 {"role": "user", "content": initial_prompt}
             ],
             max_tokens=800,

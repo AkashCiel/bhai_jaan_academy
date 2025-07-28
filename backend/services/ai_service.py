@@ -51,16 +51,23 @@ If the topic is not suitable for learning or is inappropriate, respond with "ERR
         """
         Generate educational report content using OpenAI
         """
-        report_prompt = f"""Write a comprehensive, beginner-friendly educational report on the topic: "{topic}".
+        report_prompt = f"""Write a comprehensive educational report on the topic: "{topic}".
 
 The report should include:
 - An introduction to the topic
 - Key concepts and definitions
 - Real-world applications or examples
-- Common misconceptions or pitfalls, if applicable
-- Further reading/resources (if appropriate)
+- A rich narrative that connects the concepts to each other and to real-world applications. Its best if this narrative is presented as one or multiple stories.
+- A conclusion that summarizes the key takeaways and provides a call to action for the user to explore the topic further.
 
-IMPORTANT: Format your response with clear structural markers:
+IMPORTANT: Carefully follow these instructions while composing the report:
+- The report should not assume any prior knowledge on part of the user. 
+- At the same time, it should be comprehensive and self-sufficient as a reading resource for the user.
+- Provide standard definitions of the terms but also expand on them with example if they are too abstract.
+- Provide metaphors, famous anecdotes, historical facts, and other interesting details to keep the reader engaged. However, do not overdo it.
+- Include relevant links, whenever applicable, to allow the reader to explore the topic further.
+
+FORMATTING: Format your response with clear structural markers:
 - Use "## Heading:" for main sections (e.g., "## Introduction:", "## Key Concepts:", "## Real-World Applications:")
 - Use "### Subheading:" for subsections
 - Use "**Bold text**" for emphasis and important terms
@@ -83,7 +90,7 @@ This is the introduction paragraph...
 Examples of how this is used...
 
 The tone should be clear, engaging, and accessible to someone new to the subject. If there are domain specific terms, define them. 
-Include at least 3-5 relevant links, but more if applicable. 
+Include relevant links, whenever applicable, to allow the reader to explore the topic further.
 
 IMPORTANT: For links, use this exact format: **Link: [Resource Name](URL)**
 Example: **Link: [IBM Quantum Experience](https://quantum-computing.ibm.com/)**
@@ -118,20 +125,26 @@ IMPORTANT CONTEXT - Previous Learning Summary:
 Learning Plan Structure:
 {chr(10).join([f"- {topic}" for topic in learning_plan])}
 
-The report should:
-- Build upon the user's previous learning (referenced in the context above)
-- Maintain consistency with previously covered topics
-- SHhould not repeat concepts or ideas already covered
-- Create a coherent narrative that fits into the overall learning journey
+How to use the context referenced above:
+- Build upon the user's previous learning
+- When referring to a concept previously covered, briefly remind the user of its core idea.
+- Take care to not repeat concepts or ideas already covered.
+- Introduce new concepts, relevant to the current topic, that build upon one or more of the previously learned concepts.
 - Include references to previously learned concepts where relevant
 - Continue the progressive learning structure
 
 The report should include:
 - An introduction that connects to previous learning
-- Key concepts and definitions
-- Real-world applications or examples
-- Common misconceptions or pitfalls
-- Further reading/resources (if appropriate)
+- Key concepts and definitions relevant to the current topic
+- A rich narrative that connects the concepts to each other and to real-world applications. Its best if this narrative is presented as one or multiple stories.
+- A conclusion that summarizes the key takeaways and provides a call to action for the user to explore the topic further.
+
+IMPORTANT: Carefully follow these instructions while composing the report:
+- The report should not assume any prior knowledge on part of the user. 
+- At the same time, it should be comprehensive and self-sufficient as a reading resource for the user.
+- Provide standard definitions of the terms but also expand on them with example if they are too abstract.
+- Provide metaphors, famous anecdotes, historical facts, and other interesting details to keep the reader engaged. However, do not overdo it.
+- Include relevant links, whenever applicable, to allow the reader to explore the topic further.
 
 IMPORTANT: Format your response with clear structural markers:
 - Use "## Heading:" for main sections (e.g., "## Introduction:", "## Key Concepts:", "## Real-World Applications:")
@@ -238,7 +251,7 @@ The summary should:
 - Highlight key concepts from the first report
 - Establish the learning progression framework
 - Set expectations for the learning journey ahead
-- Be concise but comprehensive (aim for 200-300 words)
+- Be concise but comprehensive (aim for 1000 words)
 
 Write in a clear, educational tone that will help generate future reports that build upon this foundation."""
         

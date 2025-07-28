@@ -15,9 +15,21 @@ class AIService:
         """Build a complete report prompt from modular components"""
         return f"""Write a comprehensive educational report on the topic: "{topic}".
 
+{AI_PROMPTS['CONTENT_EXPANSION']}
+
 {AI_PROMPTS['REPORT_STRUCTURE']}
 
+{AI_PROMPTS['ADVANCED_CONTENT']}
+
 {AI_PROMPTS['CONTENT_GUIDELINES']}
+
+{AI_PROMPTS['ENHANCED_CONCEPTS']}
+
+{AI_PROMPTS['ANALOGIES_METAPHORS']}
+
+{AI_PROMPTS['CONCEPT_CONNECTIONS']}
+
+{AI_PROMPTS['INTERACTIVE_ELEMENTS']}
 
 {AI_PROMPTS['FORMATTING_INSTRUCTIONS']}
 
@@ -35,6 +47,12 @@ This is the introduction paragraph...
 ## Real-World Applications:
 Examples of how this is used...
 
+## Advanced Applications and Research Frontiers:
+Cutting-edge developments and future implications...
+
+## Think About This:
+[Thought-provoking questions for key concepts]
+
 {AI_PROMPTS['TONE_STYLE']}
 
 {AI_PROMPTS['LINK_FORMATTING']}
@@ -45,6 +63,8 @@ Examples of how this is used...
         """Build a context-aware report prompt"""
         return f"""Write a comprehensive, beginner-friendly educational report on the topic: "{topic}".
 
+{AI_PROMPTS['CONTENT_EXPANSION']}
+
 IMPORTANT CONTEXT - Previous Learning Summary:
 {context}
 
@@ -53,9 +73,21 @@ Learning Plan Structure:
 
 {AI_PROMPTS['CONTEXT_HANDLING']}
 
+{AI_PROMPTS['LEARNING_JOURNEY_INTEGRATION']}
+
 {AI_PROMPTS['REPORT_STRUCTURE'].replace('introduction to the topic', 'introduction that connects to previous learning')}
 
+{AI_PROMPTS['ADVANCED_CONTENT']}
+
 {AI_PROMPTS['CONTENT_GUIDELINES']}
+
+{AI_PROMPTS['ENHANCED_CONCEPTS']}
+
+{AI_PROMPTS['ANALOGIES_METAPHORS']}
+
+{AI_PROMPTS['CONCEPT_CONNECTIONS']}
+
+{AI_PROMPTS['INTERACTIVE_ELEMENTS']}
 
 {AI_PROMPTS['FORMATTING_INSTRUCTIONS']}
 

@@ -159,5 +159,78 @@ The summary should:
     
     'INITIAL_SUMMARY_TONE': """
 Write in a clear, educational tone that will help generate future reports that build upon this foundation.
+""",
+    
+    # Content expansion guidelines
+    'CONTENT_EXPANSION': """
+IMPORTANT: The report should be comprehensive and detailed:
+- Aim for 5,000-8,000 words of content
+- Provide extensive coverage of each concept
+- Include detailed explanations and multiple perspectives
+- Offer comprehensive real-world applications
+- Include both theoretical foundations and practical implications
+- Address both current state and future directions
+""",
+    
+    # Advanced content requirements
+    'ADVANCED_CONTENT': """
+The report should also include:
+- Advanced applications and current research frontiers
+- Emerging technologies and future implications
+- Cutting-edge developments in the field
+- Research challenges and opportunities
+- Industry trends and market dynamics
+- Equal emphasis on both research frontiers and practical applications
+""",
+    
+    # Enhanced concept coverage
+    'ENHANCED_CONCEPTS': """
+For each concept covered:
+- Provide multiple examples and use cases
+- Include step-by-step explanations where applicable
+- Offer different perspectives and approaches
+- Show practical implementation considerations
+- Address common misconceptions and clarifications
+""",
+    
+    # Analogies and metaphors
+    'ANALOGIES_METAPHORS': """
+Enhance understanding through:
+- Multiple real-world analogies for each concept
+- Creative metaphors that make abstract ideas concrete
+- Historical anecdotes and famous examples
+- Everyday scenarios that illustrate the concepts
+- Visual and sensory analogies where helpful
+""",
+    
+    # Concept connections
+    'CONCEPT_CONNECTIONS': """
+Emphasize connections by:
+- Explicitly linking each concept to previously learned topics
+- Showing how concepts build upon each other
+- Highlighting interdisciplinary connections
+- Demonstrating the progression of understanding
+- Creating a coherent narrative thread throughout
+""",
+    
+    # Interactive elements
+    'INTERACTIVE_ELEMENTS': """
+Include interactive elements for key concepts:
+- "Think About This" sections with thought-provoking questions
+- "Practice Problems" with detailed solutions
+- "Common Misconceptions" sections with clarifications
+- "Further Exploration" prompts for deeper learning
+- "Self-Assessment" questions for key concepts
+- "Key Takeaways" summaries at the end of each section
+""",
+    
+    # Learning journey integration
+    'LEARNING_JOURNEY_INTEGRATION': """
+Integrate the learning journey by:
+- Explicitly referencing the most relevant previously covered topics
+- Showing how current topic fits into the broader learning plan
+- Creating bridges between past and present concepts
+- Maintaining the narrative flow of the user's learning progression
+- Highlighting the user's growing expertise and understanding
 """
 } 

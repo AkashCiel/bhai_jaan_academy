@@ -186,5 +186,47 @@
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/About_Yog/Introduction_to_Yoga_-_Understanding_the_origins_and_philosophy.html"
     },
     "last_report_time": "2025-07-29T01:14:35.595285+00:00"
+  },
+  {
+    "email": "akash.singh.0762@gmail.com",
+    "main_topic": "Ai Alignment Research",
+    "learning_plan": [
+      "Introduction to AI",
+      "Understanding Machine Learning",
+      "Basics of Alignment",
+      "Ethics in AI",
+      "The Problem of Value Alignment",
+      "Introduction to Decision Theory",
+      "AI Safety Overview",
+      "Common Misconceptions in AI Alignment",
+      "Key Figures in AI Alignment",
+      "Resources for Further Learning",
+      "Formal Models of AI Alignment",
+      "Inverse Reinforcement Learning",
+      "Scalable Oversight",
+      "Robustness and Uncertainty in AI",
+      "Multi-agent Systems",
+      "Value Learning",
+      "Reward Hacking",
+      "Safe Exploration",
+      "Human-AI Collaboration",
+      "Current Trends in AI Alignment Research",
+      "Theoretical Foundations of AI Alignment",
+      "Complexity and Computation in AI Safety",
+      "Specification Gaming",
+      "The Role of Interpretability in AI Alignment",
+      "Formal Verification of AI Systems",
+      "Causal Inference in AI Alignment",
+      "Long-term AI Risks",
+      "Aligning Superintelligent AI",
+      "Philosophical Underpinnings of AI Values",
+      "Future Directions in AI Alignment Research"
+    ],
+    "current_index": 1,
+    "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Ai%20Alignment%20Research.html",
+    "report_links": {
+      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Introduction_to_AI.html"
+    },
+    "last_report_time": "2025-07-29T19:45:46.187082+00:00"
   }
 ]

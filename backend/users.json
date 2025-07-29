@@ -228,5 +228,47 @@
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Introduction_to_AI.html"
     },
     "last_report_time": "2025-07-29T19:45:46.187082+00:00"
+  },
+  {
+    "email": "gsingh6991@gmail.com",
+    "main_topic": "Dpp Solving",
+    "learning_plan": [
+      "Introduction to Probability",
+      "Sample Spaces and Events",
+      "Basic Counting Principles",
+      "Addition and Multiplication Rules",
+      "Conditional Probability",
+      "Independent and Dependent Events",
+      "Bayes’ Theorem",
+      "Expected Value",
+      "Basic Distributions",
+      "Simple Problems and Applications",
+      "Joint Probability Distributions",
+      "Marginal and Conditional Distributions",
+      "Variance and Standard Deviation",
+      "Binomial Distribution Applications",
+      "Normal Distribution Basics",
+      "Central Limit Theorem",
+      "Poisson Distribution",
+      "Expectation in Joint Distributions",
+      "Law of Large Numbers",
+      "Introduction to Simulation Techniques",
+      "Advanced Probability Theorems",
+      "Markov Chains",
+      "Random Variables",
+      "Moment Generating Functions",
+      "Statistical Inference Basics",
+      "Advanced Distributions",
+      "Non-parametric Statistics",
+      "Advanced Simulation Techniques",
+      "Game Theory Basics",
+      "Real-World Applications of DPP"
+    ],
+    "current_index": 1,
+    "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/gsingh6991/Dpp_Solving/Dpp%20Solving.html",
+    "report_links": {
+      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/gsingh6991/Dpp_Solving/Introduction_to_Probability.html"
+    },
+    "last_report_time": "2025-07-29T19:52:09.507850+00:00"
   }
 ]

@@ -34,7 +34,7 @@
       "Current Research Trends in Quantum Computing",
       "Ethics and Implications of Quantum Computing"
     ],
-    "current_index": 27,
+    "current_index": 28,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Quantum%20Computing.html",
     "report_links": {
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Introduction_to_Quantum_Computing.html",
@@ -63,9 +63,10 @@
       "23": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Quantum_Machine_Learning.html",
       "24": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Quantum_Networks_and_Communication.html",
       "25": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Quantum_Simulations.html",
-      "26": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Adiabatic_Quantum_Computing.html"
+      "26": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Adiabatic_Quantum_Computing.html",
+      "27": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashadroitsingh/Quantum_Computing/Fault-Tolerant_Quantum_Computation.html"
     },
-    "last_report_time": "2025-08-10T18:26:38.203559+00:00"
+    "last_report_time": "2025-08-11T18:30:50.482592+00:00"
   },
   {
     "email": "kunalbhaijain@gmail.com",

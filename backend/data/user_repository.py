@@ -77,9 +77,9 @@ class UserRepository(BaseRepository):
             if self.github_sync.is_configured():
                 success = self.github_sync.sync_users_json(users)
                 if success:
-                    print("[User Repository] Successfully synced users.json to GitHub")
+                    print("[User Repository] Successfully synced users.json to reports repository")
                 else:
-                    print("[User Repository] Failed to sync users.json to GitHub")
+                    print("[User Repository] Failed to sync users.json to reports repository")
             else:
                 print("[User Repository] GitHub sync not configured, skipping sync")
         except Exception as e:

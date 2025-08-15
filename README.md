@@ -13,7 +13,7 @@ bhai_jaan_academy/
 ├── backend/           # FastAPI server (deploys to Render)
 │   ├── main.py        # API endpoints
 │   ├── requirements.txt # Python dependencies
-│   ├── users.json     # User data (auto-synced to GitHub)
+│   ├── users.json     # User data (auto-synced to reports repository)
 │   └── .env          # Environment variables
 └── README.md         # This file
 ```
@@ -25,7 +25,7 @@ bhai_jaan_academy/
 - **Database**: Supabase (PostgreSQL)
 - **Email**: SendGrid
 - **Hosting**: Netlify (frontend), Render (backend)
-- **Data Sync**: GitHub API (auto-syncs users.json)
+- **Data Sync**: GitHub API (auto-syncs users.json to reports repository)
 
 ## 🚀 Quick Start
 
@@ -123,7 +123,7 @@ BACKEND_URL=https://your-api.onrender.com
 
 ## 🔄 GitHub Sync Feature
 
-The system automatically syncs `users.json` changes from Render back to GitHub. This ensures that:
+The system automatically syncs `users.json` changes from Render back to the reports repository. This ensures that:
 
 - ✅ New user registrations are committed to the main branch
 - ✅ User updates are reflected in the repository
@@ -158,7 +158,7 @@ See [backend/GITHUB_SYNC_SETUP.md](backend/GITHUB_SYNC_SETUP.md) for detailed se
 - [x] Add daily scheduling system
 - [x] Create HTML report generation
 - [x] Add user progress tracking
-- [x] Auto-sync users.json to GitHub
+- [x] Auto-sync users.json to reports repository
 
 ## 🤝 Contributing
 

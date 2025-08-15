@@ -1,10 +1,10 @@
 # GitHub Sync Setup Guide
 
-This guide explains how to set up automatic synchronization of `users.json` from your Render deployment back to the GitHub repository.
+This guide explains how to set up automatic synchronization of `users.json` from your Render deployment back to the reports repository.
 
 ## Overview
 
-The system now automatically syncs changes to `users.json` to GitHub whenever:
+The system now automatically syncs changes to `users.json` to the reports repository whenever:
 - A new user registers
 - An existing user's data is updated
 - Users are deleted
@@ -32,8 +32,8 @@ The system now automatically syncs changes to `users.json` to GitHub whenever:
 Add the token to your `backend/.env` file:
 
 ```bash
-# GitHub Configuration for Main Repository (users.json sync)
-MAIN_GITHUB_TOKEN=your_github_token_here
+# GitHub Configuration for Reports Repository (users.json sync)
+REPORTS_GITHUB_TOKEN=your_github_token_here
 ```
 
 ### For Render Deployment
@@ -42,7 +42,7 @@ MAIN_GITHUB_TOKEN=your_github_token_here
 2. Select your backend service
 3. Go to "Environment" tab
 4. Add the environment variable:
-   - **Key**: `MAIN_GITHUB_TOKEN`
+   - **Key**: `REPORTS_GITHUB_TOKEN`
    - **Value**: Your GitHub token from Step 1
 5. Click "Save Changes"
 6. Redeploy your service
@@ -51,7 +51,7 @@ MAIN_GITHUB_TOKEN=your_github_token_here
 
 The system will automatically check if GitHub sync is configured. You'll see these log messages:
 
-- ✅ **Configured**: `[User Repository] Successfully synced users.json to GitHub`
+- ✅ **Configured**: `[User Repository] Successfully synced users.json to reports repository`
 - ❌ **Not Configured**: `[User Repository] GitHub sync not configured, skipping sync`
 
 ## Step 4: Test the Setup
@@ -68,17 +68,17 @@ Expected output:
 === GitHub Sync Test ===
 Testing GitHub Sync Service...
 GitHub Sync configured: True
-Repository: AkashCiel/bhai_jaan_academy
+Repository: AkashCiel/bhai_jaan_academy_reports
 Branch: main
 Token configured: Yes
 
 Testing sync with sample data...
-[GitHub Sync] Successfully committed backend/users.json to GitHub
+[GitHub Sync] Successfully committed users.json to reports repository
 ✅ GitHub sync test successful!
 
 Testing User Repository with GitHub Sync...
 Adding test user...
-[User Repository] Successfully synced users.json to GitHub
+[User Repository] Successfully synced users.json to reports repository
 ✅ User repository test successful!
 
 🎉 All tests passed! GitHub sync is working correctly.
@@ -113,7 +113,7 @@ Auto-sync users.json - 2024-01-15 14:30:25 UTC
 ### Common Issues
 
 1. **"GitHub sync not configured"**
-   - Check that `MAIN_GITHUB_TOKEN` is set in your environment
+   - Check that `REPORTS_GITHUB_TOKEN` is set in your environment
    - Verify the token has the correct permissions
 
 2. **"Error committing file: 401"**

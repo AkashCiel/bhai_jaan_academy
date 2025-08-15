@@ -10,10 +10,10 @@ class GitHubSyncService:
     
     def __init__(self):
         self.github_api_url = "https://api.github.com"
-        self.repo_owner = settings.MAIN_REPO_OWNER
-        self.repo_name = settings.MAIN_REPO_NAME
-        self.branch = settings.MAIN_REPO_BRANCH
-        self.token = settings.MAIN_GITHUB_TOKEN
+        self.repo_owner = settings.GITHUB_REPO_OWNER
+        self.repo_name = settings.GITHUB_REPO_NAME
+        self.branch = settings.GITHUB_BRANCH
+        self.token = settings.REPORTS_GITHUB_TOKEN
     
     def _get_headers(self) -> Dict[str, str]:
         """Get headers for GitHub API requests"""
@@ -109,7 +109,7 @@ class GitHubSyncService:
             commit_message = f"Auto-sync users.json - {timestamp}"
             
             # Commit to GitHub
-            return self.commit_file("backend/users.json", content, commit_message)
+            return self.commit_file("users.json", content, commit_message)
             
         except Exception as e:
             print(f"[GitHub Sync] Exception syncing users.json: {e}")

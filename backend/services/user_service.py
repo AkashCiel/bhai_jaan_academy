@@ -66,13 +66,13 @@ class UserService:
         
         return user_repository.update(user["email"], user["main_topic"], updated_user)
     
-    def get_next_topic(self, user: Dict[str, Any]) -> Optional[tuple[int, str]]:
+    def get_next_topic(self, user: Dict[str, Any]) -> tuple[int | None, str | None]:
         """Get next topic for user"""
         idx = user.get("current_index", 0)
         topics = user.get("learning_plan", [])
         if idx < len(topics):
             return (idx, topics[idx])
-        return None
+        return None, None
     
     def should_generate_report(self, user: Dict[str, Any]) -> bool:
         """Determine if a report should be generated for user"""

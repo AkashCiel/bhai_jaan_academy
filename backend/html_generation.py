@@ -11,7 +11,6 @@ def extract_and_style_links(content: str) -> str:
     
     # Debug: Count links before processing
     links_found = re.findall(link_pattern, content)
-    print(f"[DEBUG] Found {len(links_found)} links: {links_found}")
     
     # Replace with styled links
     processed_content = re.sub(
@@ -22,7 +21,6 @@ def extract_and_style_links(content: str) -> str:
     
     # Debug: Count styled links after processing
     styled_links = re.findall(r'<a href="([^"]+)"[^>]*class="link-external"[^>]*>([^<]+)</a>', processed_content)
-    print(f"[DEBUG] Created {len(styled_links)} styled links")
     
     return processed_content
 
@@ -31,8 +29,6 @@ def parse_ai_response_to_html(content):
     Parse AI response with structural markers and convert to HTML
     """
     # Debug: Print original content to see what we're working with
-    print(f"[DEBUG] Original content length: {len(content)}")
-    print(f"[DEBUG] Content preview: {content[:200]}...")
     # Convert markdown-style headings to HTML
     content = re.sub(r'^## (.+):$', r'<h2>\1</h2>', content, flags=re.MULTILINE)
     content = re.sub(r'^### (.+):$', r'<h3>\1</h3>', content, flags=re.MULTILINE)

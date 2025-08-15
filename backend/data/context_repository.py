@@ -65,7 +65,6 @@ class ContextRepository:
             print(f"[Context Repository] Response status: {response.status_code}")
             if response.status_code != 200:
                 print(f"[Context Repository] Context summary not found on GitHub: {response.status_code}")
-                print(f"[Context Repository] Response text: {response.text[:200]}...")
                 return None
             
             # Decode content from GitHub

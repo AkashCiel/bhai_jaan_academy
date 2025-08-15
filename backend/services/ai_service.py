@@ -162,7 +162,6 @@ If the topic is not suitable for learning or is inappropriate, respond with "ERR
                 temperature=settings.OPENAI_TEMPERATURE
             )
             plan = response.choices[0].message.content.strip()
-            print(f"OpenAI API raw response: {plan}")
             # Only treat as error if the response is exactly 'ERROR' or starts with 'ERROR'
             if plan.strip().upper() == "ERROR" or plan.strip().upper().startswith("ERROR"):
                 return "ERROR"

@@ -99,17 +99,42 @@ async def run_scheduler(request: Request):
         # Use service layer for scheduler operations
         users = user_service.load_users()
         updated_users = []
+        success_count = 0
+        errors = []
         
         # Process each user using service
         for user in users:
-            updated_user = report_service.generate_next_report(user)
-            updated_users.append(updated_user)
+            try:
+                updated_user = report_service.generate_next_report(user)
+                if updated_user:
+                    updated_users.append(updated_user)
+                    success_count += 1
+            except Exception as e:
+                error_msg = f"User {user.get('email', 'Unknown')}: {str(e)}"
+                errors.append(error_msg)
+                print(f"[Scheduler] Error processing user: {error_msg}")
         
         # Save updated users using service
         user_service.save_users([user for user in updated_users if user is not None])
         
+        # Send daily report notification
+        try:
+            from services.notification_service import NotificationService
+            notification_service = NotificationService()
+            notification_service.send_daily_report(len(users), success_count, errors)
+        except Exception as notification_error:
+            print(f"[Scheduler] Failed to send daily report: {notification_error}")
+        
         return {"status": "ok", "message": "Scheduler run complete.", "users_processed": len(users)}
     except Exception as e:
+        # Send error alert notification
+        try:
+            from services.notification_service import NotificationService
+            notification_service = NotificationService()
+            notification_service.send_error_alert("Scheduler Failure", str(e))
+        except Exception as notification_error:
+            print(f"[Scheduler] Failed to send error alert: {notification_error}")
+        
         print(f"Error in scheduler: {e}")
         import traceback
         traceback.print_exc()

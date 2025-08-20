@@ -37,6 +37,9 @@ class Settings(BaseSettings):
     WELCOME_EMAIL_TEMPLATE: str = Field(default=EMAIL_TEMPLATES['WELCOME'], validation_alias='WELCOME_EMAIL_TEMPLATE')
     REPORT_EMAIL_TEMPLATE: str = Field(default=EMAIL_TEMPLATES['REPORT'], validation_alias='REPORT_EMAIL_TEMPLATE')
     
+    # Discord Configuration
+    DISCORD_WEBHOOK_URL: Optional[str] = Field(default=None, validation_alias='DISCORD_WEBHOOK_URL')
+    
     class Config:
         env_file = ".env"
         case_sensitive = False

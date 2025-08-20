@@ -24,8 +24,18 @@ class UserRepository(BaseRepository):
         except Exception as e:
             print(f"[User Repository] Error reading from GitHub: {e}")
         
-        # Fall back to local file
-        return self._load_data()
+        # Send Discord notification instead of falling back
+        try:
+            from services.notification_service import NotificationService
+            notification_service = NotificationService()
+            notification_service.send_error_alert(
+                "GitHub Repository Access Failure",
+                "Unable to read users.json from bhai_jaan_academy_reports repository"
+            )
+        except Exception as notification_error:
+            print(f"[User Repository] Failed to send notification: {notification_error}")
+        
+        raise Exception("Failed to load users from GitHub repository")
     
     def find_by_email_and_topic(self, email: str, topic: str) -> Optional[Dict[str, Any]]:
         """Find user by email and topic"""

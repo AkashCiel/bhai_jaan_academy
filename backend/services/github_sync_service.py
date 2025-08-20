@@ -115,6 +115,25 @@ class GitHubSyncService:
             print(f"[GitHub Sync] Exception syncing users.json: {e}")
             return False
     
+    def get_file_content(self, file_path: str) -> Optional[str]:
+        """Get file content from GitHub repository"""
+        try:
+            url = f"{self.github_api_url}/repos/{self.repo_owner}/{self.repo_name}/contents/{file_path}"
+            params = {"ref": self.branch}
+            
+            response = requests.get(url, headers=self._get_headers(), params=params)
+            
+            if response.status_code == 200:
+                content_b64 = response.json()["content"]
+                return base64.b64decode(content_b64).decode("utf-8")
+            else:
+                print(f"[GitHub Sync] Error getting file: {response.status_code}")
+                return None
+                
+        except Exception as e:
+            print(f"[GitHub Sync] Exception getting file: {e}")
+            return None
+    
     def is_configured(self) -> bool:
         """Check if GitHub sync is properly configured"""
         return bool(self.token and self.repo_owner and self.repo_name) 

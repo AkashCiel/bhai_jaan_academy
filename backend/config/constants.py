@@ -37,6 +37,11 @@ MAIN_REPO_CONFIG = {
     'BRANCH': 'main'
 }
 
+# Discord configuration
+DISCORD_CONFIG = {
+    'WEBHOOK_URL': 'DISCORD_WEBHOOK_URL'  # Will be set via environment variable
+}
+
 # AI Prompt components for modular prompt construction
 AI_PROMPTS = {
     # Core report structure

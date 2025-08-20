@@ -15,6 +15,16 @@ class UserRepository(BaseRepository):
     
     def find_all(self) -> List[Dict[str, Any]]:
         """Get all users"""
+        # Try to read from GitHub first, fall back to local file
+        try:
+            if self.github_sync.is_configured():
+                content = self.github_sync.get_file_content("users.json")
+                if content:
+                    return json.loads(content)
+        except Exception as e:
+            print(f"[User Repository] Error reading from GitHub: {e}")
+        
+        # Fall back to local file
         return self._load_data()
     
     def find_by_email_and_topic(self, email: str, topic: str) -> Optional[Dict[str, Any]]:

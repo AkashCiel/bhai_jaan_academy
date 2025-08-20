@@ -1,5 +1,6 @@
 from typing import List, Dict, Any, Optional
 import os
+import json
 from .base_repository import BaseRepository
 from config import settings
 from services.github_sync_service import GitHubSyncService

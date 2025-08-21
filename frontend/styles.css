@@ -31,6 +31,11 @@
     border-radius: 0 0 1rem 1rem;
 }
 
+/* Higher z-index when expanded to ensure it's topmost */
+.header-expandable.expanded {
+    z-index: 1500;
+}
+
 /* Demo button styles */
 .demo-button-container {
     position: absolute;

@@ -40,6 +40,10 @@ class Settings(BaseSettings):
     # Discord Configuration
     DISCORD_WEBHOOK_URL: Optional[str] = Field(default=None, validation_alias='DISCORD_WEBHOOK_URL')
     
+    # PayPal Configuration
+    PAYPAL_CLIENT_ID: Optional[str] = Field(default=None, validation_alias='PAYPAL_CLIENT_ID')
+    PAYPAL_CLIENT_SECRET: Optional[str] = Field(default=None, validation_alias='PAYPAL_CLIENT_SECRET')
+    
     class Config:
         env_file = ".env"
         case_sensitive = False

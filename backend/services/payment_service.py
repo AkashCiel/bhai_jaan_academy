@@ -10,7 +10,8 @@ logger = logging.getLogger(__name__)
 class PayPalService:
     def __init__(self):
         """Initialize PayPal service with sandbox configuration"""
-        self.paypal = paypalrestsdk.Api({
+        # Configure PayPal SDK globally
+        paypalrestsdk.configure({
             'mode': 'sandbox',  # Use sandbox for testing
             'client_id': os.getenv('PAYPAL_CLIENT_ID'),
             'client_secret': os.getenv('PAYPAL_CLIENT_SECRET')
@@ -66,8 +67,8 @@ class PayPalService:
                 }]
             }
             
-            # Create payment
-            payment = self.paypal.Payment(payment_data)
+            # Create payment using correct SDK pattern
+            payment = paypalrestsdk.Payment(payment_data)
             
             if payment.create():
                 logger.info(f"Payment created successfully for {email} - {topic}")
@@ -99,8 +100,8 @@ class PayPalService:
             Tuple of (success, message, email)
         """
         try:
-            # Execute payment
-            payment = self.paypal.Payment.find(payment_id)
+            # Execute payment using correct SDK pattern
+            payment = paypalrestsdk.Payment.find(payment_id)
             
             if payment.execute({"payer_id": payer_id}):
                 logger.info(f"Payment {payment_id} executed successfully")
@@ -132,7 +133,7 @@ class PayPalService:
             Payment details dictionary or None
         """
         try:
-            payment = self.paypal.Payment.find(payment_id)
+            payment = paypalrestsdk.Payment.find(payment_id)
             return {
                 "id": payment.id,
                 "state": payment.state,

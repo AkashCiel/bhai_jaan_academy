@@ -10,7 +10,7 @@
 <body class="landing-bg min-h-screen">
     <div class="container mx-auto px-4 py-8">
         <!-- Header -->
-        <div class="text-center foreground-opacity-50 rounded-2xl p-4 max-w-2xl mx-auto mt-4 mb-4 top-box-mobile">
+        <div class="text-center foreground-opacity-50 rounded-2xl p-4 max-w-2xl mx-auto mt-2 mb-4 top-box-mobile header-expandable">
             <h1 class="text-4xl md:text-6xl font-bold text-dark mb-2">
                 Bhai Jaan Academy
             </h1>
@@ -18,9 +18,19 @@
                 You name it. We teach it. 30 days.
             </p>
             <div class="max-w-2xl mx-auto">
-                <p class="text-lg text-dark leading-relaxed m-0 italic">
+                <p class="text-xl md:text-2xl text-dark leading-relaxed m-0 italic">
                     . . . curiosity should not be modest
                 </p>
+            </div>
+            
+            <!-- Hint text - always visible -->
+            <p class="text-xl md:text-2xl text-dark hint-text italic">(hover / click for more details)</p>
+            
+            <!-- Expandable About Content -->
+            <div class="about-content-expanded">
+                <div class="border-t border-gray-300 my-4 pt-4">
+                    <p class="text-dark leading-relaxed text-base" id="aboutText"></p>
+                </div>
             </div>
         </div>
 
@@ -106,6 +116,7 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="constants.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html> 

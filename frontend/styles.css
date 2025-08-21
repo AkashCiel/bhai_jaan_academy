@@ -15,6 +15,42 @@
     backdrop-filter: blur(5px);
 }
 
+/* Header expansion styles */
+.header-expandable {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.55) !important;
+    width: 100%;
+    max-width: 42rem;
+    margin: 0;
+    border-radius: 0 0 1rem 1rem;
+}
+
+.about-content-expanded {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header-expandable:hover .about-content-expanded {
+    max-height: 300px;
+    opacity: 1;
+}
+
+.hint-text {
+    font-style: italic;
+    color: rgba(34, 41, 47, 0.7);
+    font-size: 1.0rem;
+    margin-top: 0.5rem;
+    /* Always visible - no opacity transitions */
+}
+
 /* Input fields with foreground opacity */
 .input-foreground {
     background-color: rgba(255, 255, 255, 0.7) !important;
@@ -112,6 +148,11 @@ html {
         background-size: cover;
         background-attachment: scroll;
     }
+    .header-expandable {
+        max-width: 98vw;
+        padding: 0.75rem;
+        border-radius: 0 0 0.75rem 0.75rem;
+    }
     .top-box-mobile, .foreground-opacity-50 {
         margin-top: 0.5rem !important;
         margin-bottom: 0.5rem !important;
@@ -188,6 +229,33 @@ html {
     }
     .registration-box-mobile #learningForm > div:last-child {
       margin-bottom: 0 !important;
+    }
+    .about-box {
+        bottom: 10px;
+        right: 10px;
+        width: 100px;
+    }
+    
+    .about-header {
+        padding: 0.75rem 1rem;
+        min-width: 100px;
+    }
+    
+    .about-box.expanded {
+        transform: translate(-50%, -50%) scale(3.5);
+    }
+    
+    .about-box.expanded .about-header {
+        padding: 0.75rem 1rem;
+    }
+    
+    .about-box.expanded .about-content {
+        padding: 0.75rem 1rem;
+    }
+    
+    .about-box.expanded .about-content p {
+        font-size: 0.9rem;
+        line-height: 1.5;
     }
 }
 

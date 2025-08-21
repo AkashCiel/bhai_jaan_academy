@@ -314,14 +314,14 @@ headerElement.addEventListener('touchend', toggleHeader);
 function handlePaymentReturn() {
     const urlParams = new URLSearchParams(window.location.search);
     const paymentStatus = urlParams.get('payment');
-    const paymentId = urlParams.get('PayerID');
-    const token = urlParams.get('token');
+    const paymentId = urlParams.get('token');      // token is the payment ID
+    const payerId = urlParams.get('PayerID');     // PayerID is the payer ID
     
-    if (paymentStatus === 'success' && paymentId && token) {
+    if (paymentStatus === 'success' && paymentId && payerId) {
         // Payment was successful, verify it
-        showMessage('success', 'Payment successful! Verifying payment and creating your learning plan...');
+        showMessage('success', 'Payment successful! Processing payment, please DO NOT close this window...');
         
-        verifyPayment(token, paymentId).then(result => {
+        verifyPayment(paymentId, payerId).then(result => {
             if (result.success && result.data.success) {
                 showMessage('success', `We have successfully registered you! We will send you a learning plan when it's ready. You can close this page.`);
                 learningForm.reset();

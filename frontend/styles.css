@@ -156,7 +156,8 @@
     
     /* Ensure expanded content is fully visible on mobile */
     .header-expandable.expanded .about-content-expanded {
-        max-height: 80vh; /* 80% of viewport height for mobile */
+        max-height: 60vh; /* 60% of viewport height for mobile */
+        overflow-y: auto; /* Add scroll if content is too long */
     }
 }
 

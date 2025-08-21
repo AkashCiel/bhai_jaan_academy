@@ -19,7 +19,7 @@ class PayPalService:
         
         # Payment configuration
         self.amount = "99.00"
-        self.currency = "INR"
+        self.currency = "USD"  # Using USD for sandbox testing (INR not supported in sandbox)
         self.description = "Bhai Jaan Academy Learning Plan"
         
         # Redirect URLs

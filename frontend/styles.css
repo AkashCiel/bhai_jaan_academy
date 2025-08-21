@@ -31,6 +31,125 @@
     border-radius: 0 0 1rem 1rem;
 }
 
+/* Demo button styles */
+.demo-button-container {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 1rem;
+    z-index: 999;
+}
+
+.demo-button {
+    transition: all 0.2s ease-in-out;
+    width: 200px;
+}
+
+.demo-button:hover {
+    transform: translateY(-2px);
+}
+
+/* Video modal styles */
+.video-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.video-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    position: relative;
+    width: 70%;
+    height: 70%;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    z-index: 2001;
+}
+
+.close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 2002;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-button:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1);
+}
+
+.youtube-container {
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.youtube-container iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 640px) {
+    .modal-content {
+        width: 95%;
+        height: 60%;
+    }
+    
+    .close-button {
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 2rem;
+        height: 2rem;
+        font-size: 1.25rem;
+    }
+    
+    .youtube-container {
+        padding: 0.5rem;
+    }
+}
+
 .about-content-expanded {
     max-height: 0;
     opacity: 0;
@@ -152,6 +271,14 @@ html {
         max-width: 98vw;
         padding: 0.75rem;
         border-radius: 0 0 0.75rem 0.75rem;
+    }
+    .demo-button-container {
+        width: 180px;
+        margin-bottom: 0.75rem;
+    }
+    .demo-button {
+        width: 180px;
+        padding: 0.75rem;
     }
     .top-box-mobile, .foreground-opacity-50 {
         margin-top: 0.5rem !important;

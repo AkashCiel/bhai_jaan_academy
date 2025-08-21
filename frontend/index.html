@@ -36,6 +36,18 @@
 
         <!-- Main Form -->
         <div class="max-w-md mx-auto absolute bottom-0 left-0 right-0 mb-8 registration-box-mobile">
+            <!-- Demo Button - Positioned Above Form -->
+            <div class="demo-button-container">
+                <div class="demo-button foreground-opacity-50 rounded-2xl shadow-xl p-4 cursor-pointer transition-all duration-200 hover:shadow-2xl">
+                    <button id="demoButton" class="text-lg font-semibold text-dark flex items-center justify-center w-full">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        Watch Demo
+                    </button>
+                </div>
+            </div>
+            
             <div class="foreground-opacity-50 rounded-2xl shadow-xl p-8">
                 <h2 class="text-2xl font-semibold text-dark mb-6 text-center">
                     Start Your Learning Journey
@@ -112,6 +124,17 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="video-modal hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button id="closeModal" class="close-button">×</button>
+            <div class="youtube-container">
+                <iframe src="https://www.youtube.com/embed/IKyHq9nSBWc?si=N7z-HSKqgOh0IADK" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
     </div>

@@ -6,6 +6,47 @@ import { ABOUT_TEXT } from './constants.js';
 // Set about text content
 document.getElementById('aboutText').textContent = ABOUT_TEXT;
 
+// Video modal functionality
+const demoButton = document.getElementById('demoButton');
+const videoModal = document.getElementById('videoModal');
+const closeModal = document.getElementById('closeModal');
+
+// Show video modal
+function showVideoModal() {
+    videoModal.classList.remove('hidden');
+    // Small delay to ensure DOM is ready for transition
+    setTimeout(() => {
+        videoModal.classList.add('show');
+    }, 10);
+}
+
+// Hide video modal
+function hideVideoModal() {
+    videoModal.classList.remove('show');
+    // Wait for transition to complete before hiding
+    setTimeout(() => {
+        videoModal.classList.add('hidden');
+    }, 300);
+}
+
+// Event listeners
+demoButton.addEventListener('click', showVideoModal);
+closeModal.addEventListener('click', hideVideoModal);
+
+// Close modal when clicking backdrop
+videoModal.addEventListener('click', (e) => {
+    if (e.target === videoModal) {
+        hideVideoModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !videoModal.classList.contains('hidden')) {
+        hideVideoModal();
+    }
+});
+
 // Configuration
 const API_BASE_URL = 'https://bhai-jaan-academy.onrender.com'; // Production backend URL
 

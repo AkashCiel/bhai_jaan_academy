@@ -236,6 +236,39 @@ window.addEventListener('load', async () => {
     }
 });
 
+// Header expansion/collapse functionality
+let isExpanded = false;
+const headerElement = document.querySelector('.header-expandable');
+
+function expandHeader() {
+    if (!isExpanded) {
+        headerElement.classList.add('expanded');
+        isExpanded = true;
+    }
+}
+
+function collapseHeader() {
+    if (isExpanded) {
+        headerElement.classList.remove('expanded');
+        isExpanded = false;
+    }
+}
+
+function toggleHeader(event) {
+    event.preventDefault();
+    if (isExpanded) {
+        collapseHeader();  // Collapse on click/touch if already expanded
+    } else {
+        expandHeader();    // Expand on click/touch if collapsed
+    }
+}
+
+// Universal event handling for all interaction methods
+headerElement.addEventListener('mouseenter', expandHeader);
+headerElement.addEventListener('mouseleave', collapseHeader);
+headerElement.addEventListener('click', toggleHeader);
+headerElement.addEventListener('touchend', toggleHeader);
+
 // Add some nice animations on page load
 document.addEventListener('DOMContentLoaded', () => {
     // Animate form elements

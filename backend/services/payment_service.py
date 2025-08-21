@@ -40,7 +40,7 @@ class PayPalService:
         try:
             # Create payment data
             payment_data = {
-                "intent": "CAPTURE",
+                "intent": "SALE",
                 "payer": {
                     "payment_method": "paypal"
                 },

@@ -114,6 +114,10 @@ REPORTS_GITHUB_TOKEN=your_github_token_for_reports_repo
 
 # GitHub Configuration for Main Repository (users.json sync)
 MAIN_GITHUB_TOKEN=your_github_token_for_main_repo
+
+# PayPal Configuration (Sandbox)
+PAYPAL_CLIENT_ID=your_paypal_sandbox_client_id
+PAYPAL_CLIENT_SECRET=your_paypal_sandbox_client_secret
 ```
 
 ### Frontend (Netlify Environment Variables)
@@ -142,11 +146,14 @@ See [backend/GITHUB_SYNC_SETUP.md](backend/GITHUB_SYNC_SETUP.md) for detailed se
 
 ### Backend API Endpoints
 - `GET /` - Health check
-- `POST /submit` - Submit user email and topic
+- `POST /create-payment` - Create PayPal payment for learning plan
+- `POST /verify-payment` - Verify payment and register user
 
 ### Frontend Features
 - Email and topic input form
 - Form validation
+- PayPal payment integration
+- Payment success/cancel handling
 - API communication
 - Success/error messaging
 

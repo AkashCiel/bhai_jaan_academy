@@ -135,10 +135,10 @@ function validateForm() {
     return isValid;
 }
 
-// API communication
-async function submitForm(email, topic) {
+// API communication for payment creation
+async function createPayment(email, topic) {
     try {
-        const response = await fetch(`${API_BASE_URL}/submit`, {
+        const response = await fetch(`${API_BASE_URL}/create-payment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -146,6 +146,33 @@ async function submitForm(email, topic) {
             body: JSON.stringify({
                 email: email,
                 topic: topic
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            return { success: true, data };
+        } else {
+            return { success: false, error: data.detail || 'An error occurred' };
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+        return { success: false, error: 'Network error. Please check your connection.' };
+    }
+}
+
+// API communication for payment verification
+async function verifyPayment(paymentId, payerId) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/verify-payment`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                payment_id: paymentId,
+                payer_id: payerId
             })
         });
         
@@ -173,14 +200,28 @@ async function handleSubmit(event) {
     const email = emailInput.value.trim();
     const topic = topicInput.value.trim();
 
-    // Show success message immediately
-    showMessage('success', `We have successfully registered you for ${topic}. We will send you a learning plan when it's ready. You can close this page.`);
-    learningForm.reset();
+    // Show loading state
     submitBtn.disabled = true;
-    // Optionally, hide the form or keep it disabled
+    submitText.classList.add('hidden');
+    loadingText.classList.remove('hidden');
+    showMessage('success', 'Creating payment... Please wait.');
 
-    // Send data to backend in the background
-    submitForm(email, topic);
+    // Create payment
+    const paymentResult = await createPayment(email, topic);
+    
+    if (paymentResult.success && paymentResult.data.success) {
+        // Redirect to PayPal
+        window.location.href = paymentResult.data.approval_url;
+    } else {
+        // Show error message
+        const errorMessage = paymentResult.error || paymentResult.data.message || 'Payment creation failed. Please try again.';
+        showMessage('error', errorMessage);
+        
+        // Reset form state
+        submitBtn.disabled = false;
+        submitText.classList.remove('hidden');
+        loadingText.classList.add('hidden');
+    }
 }
 
 // Event listeners
@@ -269,8 +310,46 @@ headerElement.addEventListener('mouseleave', collapseHeader);
 headerElement.addEventListener('click', toggleHeader);
 headerElement.addEventListener('touchend', toggleHeader);
 
+// Handle payment success/cancel from URL parameters
+function handlePaymentReturn() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentStatus = urlParams.get('payment');
+    const paymentId = urlParams.get('PayerID');
+    const token = urlParams.get('token');
+    
+    if (paymentStatus === 'success' && paymentId && token) {
+        // Payment was successful, verify it
+        showMessage('success', 'Payment successful! Verifying payment and creating your learning plan...');
+        
+        verifyPayment(token, paymentId).then(result => {
+            if (result.success && result.data.success) {
+                showMessage('success', `We have successfully registered you! We will send you a learning plan when it's ready. You can close this page.`);
+                learningForm.reset();
+                submitBtn.disabled = true;
+            } else {
+                const errorMessage = result.error || result.data.message || 'Payment verification failed. Please try registering again.';
+                showMessage('error', errorMessage);
+            }
+        }).catch(error => {
+            showMessage('error', 'Payment verification failed. Please try registering again.');
+        });
+        
+        // Clean up URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (paymentStatus === 'cancel') {
+        // Payment was cancelled
+        showMessage('error', 'Payment was cancelled. Please try registering again.');
+        
+        // Clean up URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+}
+
 // Add some nice animations on page load
 document.addEventListener('DOMContentLoaded', () => {
+    // Handle payment return
+    handlePaymentReturn();
+    
     // Animate form elements
     const formElements = document.querySelectorAll('#learningForm > div');
     formElements.forEach((element, index) => {

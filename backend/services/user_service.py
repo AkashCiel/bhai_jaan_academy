@@ -98,3 +98,22 @@ class UserService:
     def _is_same_utc_day(self, dt1, dt2):
         """Check if two datetime objects are on the same UTC day"""
         return dt1.date() == dt2.date() 
+
+    def check_duplicate_user(self, email: str, topic: str) -> tuple[bool, str, str]:
+        """
+        Check if user already has a plan for the given topic
+        
+        Args:
+            email: User's email address
+            topic: Learning topic
+            
+        Returns:
+            Tuple of (is_duplicate, sanitized_topic, message)
+        """
+        sanitized_topic = self.sanitize_topic(topic)
+        existing_user = self.find_user_by_email_and_topic(email, sanitized_topic)
+        
+        if existing_user:
+            return True, sanitized_topic, "You already have a plan for this topic."
+        
+        return False, sanitized_topic, "" 

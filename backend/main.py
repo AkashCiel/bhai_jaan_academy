@@ -8,6 +8,7 @@ from pydantic import BaseModel, EmailStr
 import os
 from config import settings
 from services import user_service, report_service, email_service
+from services.payment_service import PayPalService
 
 
 
@@ -22,10 +23,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Pydantic model for request validation
+# Pydantic models for request validation
 class UserSubmission(BaseModel):
     email: EmailStr
     topic: str
+
+class PaymentVerification(BaseModel):
+    payment_id: str
+    payer_id: str
 
 
 
@@ -34,44 +39,110 @@ async def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "message": "Bhai Jaan Academy API is running"}
 
-@app.post("/submit")
-async def submit_user_data(user_data: UserSubmission):
+
+
+# Initialize PayPal service
+paypal_service = PayPalService()
+
+@app.post("/create-payment")
+async def create_payment(user_data: UserSubmission):
+    """Create a PayPal payment for the learning plan"""
     try:
-        print(f"[Submit] Received submission: email={user_data.email}, topic={user_data.topic}")
+        print(f"[Payment] Creating payment for: email={user_data.email}, topic={user_data.topic}")
         
-        # Use service layer for all operations
-        sanitized_topic = user_service.sanitize_topic(user_data.topic)
-        
-        # Check for duplicate using service
-        existing_user = user_service.find_user_by_email_and_topic(user_data.email, sanitized_topic)
-        if existing_user:
-            print(f"[Submit] Duplicate found for email={user_data.email}, topic={sanitized_topic}")
+        # Check for duplicate using shared service
+        is_duplicate, sanitized_topic, message = user_service.check_duplicate_user(user_data.email, user_data.topic)
+        if is_duplicate:
+            print(f"[Payment] Duplicate found for email={user_data.email}, topic={sanitized_topic}")
             return {
                 "success": False,
-                "message": "You already have a plan for this topic.",
+                "message": message,
                 "email": user_data.email,
                 "topic": sanitized_topic
             }
         
-        # Generate initial learning plan using service
-        result = report_service.generate_initial_learning_plan(user_data.email, sanitized_topic)
-        return result
+        # Create PayPal payment
+        success, message, approval_url = paypal_service.create_payment(user_data.email, sanitized_topic)
         
+        if success:
+            return {
+                "success": True,
+                "message": message,
+                "approval_url": approval_url,
+                "email": user_data.email,
+                "topic": sanitized_topic
+            }
+        else:
+            return {
+                "success": False,
+                "message": f"Payment creation failed: {message}",
+                "email": user_data.email,
+                "topic": sanitized_topic
+            }
+            
     except Exception as e:
-        print(f"[Submit] Error: {e}")
+        print(f"[Payment] Error creating payment: {e}")
         import traceback
         traceback.print_exc()
         return {
             "success": False,
-            "message": f"Error processing submission: {str(e)}",
+            "message": f"Error creating payment: {str(e)}",
             "email": user_data.email,
             "topic": user_data.topic
         }
+
+@app.post("/verify-payment")
+async def verify_payment(payment_data: PaymentVerification):
+    """Verify and process payment, then register user"""
+    try:
+        print(f"[Payment] Verifying payment: payment_id={payment_data.payment_id}")
+        
+        # Verify payment with PayPal
+        success, message, email = paypal_service.verify_payment(payment_data.payment_id, payment_data.payer_id)
+        
+        if not success:
+            return {
+                "success": False,
+                "message": f"Payment verification failed: {message}"
+            }
+        
+        if not email:
+            return {
+                "success": False,
+                "message": "Payment verified but email not found"
+            }
+        
+        # Get payment details to extract topic
+        payment_details = paypal_service.get_payment_details(payment_data.payment_id)
+        if not payment_details:
+            return {
+                "success": False,
+                "message": "Could not retrieve payment details"
+            }
+        
+        # Extract topic from payment description
+        description = payment_details.get('description', '')
+        topic = description.replace('Bhai Jaan Academy Learning Plan for ', '') if 'Bhai Jaan Academy Learning Plan for ' in description else 'Unknown Topic'
+        
+        print(f"[Payment] Payment verified successfully for: email={email}, topic={topic}")
+        
+        # Generate learning plan using existing service
+        result = report_service.generate_initial_learning_plan(email, topic)
+        
+        # Add payment information to result
+        result['payment_id'] = payment_data.payment_id
+        result['payment_verified'] = True
+        
+        return result
+        
     except Exception as e:
-        print(f"[Submit] Exception: {str(e)}")
+        print(f"[Payment] Error verifying payment: {e}")
         import traceback
         traceback.print_exc()
-        return HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+        return {
+            "success": False,
+            "message": f"Error verifying payment: {str(e)}"
+        }
 
 USERS_FILE = os.path.join(os.path.dirname(__file__), "users.json")
 

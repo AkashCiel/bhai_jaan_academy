@@ -32,6 +32,9 @@ class PaymentVerification(BaseModel):
     payment_id: str
     payer_id: str
 
+class PayPalWebhookData(BaseModel):
+    event_type: str
+    resource: dict
 
 
 @app.get("/")
@@ -91,6 +94,53 @@ async def create_payment(user_data: UserSubmission):
             "topic": user_data.topic
         }
 
+@app.post("/configure-hosted-payment")
+async def configure_hosted_payment(user_data: UserSubmission):
+    """Configure hosted button payment with user data"""
+    try:
+        print(f"[Hosted Payment] Configuring payment for: email={user_data.email}, topic={user_data.topic}")
+        
+        # Check for duplicate using shared service
+        is_duplicate, sanitized_topic, message = user_service.check_duplicate_user(user_data.email, user_data.topic)
+        if is_duplicate:
+            print(f"[Hosted Payment] Duplicate found for email={user_data.email}, topic={sanitized_topic}")
+            return {
+                "success": False,
+                "message": message,
+                "email": user_data.email,
+                "topic": sanitized_topic
+            }
+        
+        # Configure hosted button payment
+        result = paypal_service.create_hosted_button_payment(user_data.email, sanitized_topic)
+        
+        if result.get('success'):
+            return {
+                "success": True,
+                "message": result.get('message'),
+                "config": result.get('config'),
+                "email": user_data.email,
+                "topic": sanitized_topic
+            }
+        else:
+            return {
+                "success": False,
+                "message": f"Hosted payment configuration failed: {result.get('error')}",
+                "email": user_data.email,
+                "topic": sanitized_topic
+            }
+            
+    except Exception as e:
+        print(f"[Hosted Payment] Error configuring payment: {e}")
+        import traceback
+        traceback.print_exc()
+        return {
+            "success": False,
+            "message": f"Error configuring hosted payment: {str(e)}",
+            "email": user_data.email,
+            "topic": user_data.topic
+        }
+
 @app.post("/verify-payment")
 async def verify_payment(payment_data: PaymentVerification):
     """Verify and process payment, then register user"""
@@ -143,6 +193,69 @@ async def verify_payment(payment_data: PaymentVerification):
             "success": False,
             "message": f"Error verifying payment: {str(e)}"
         }
+
+@app.post("/paypal-webhook")
+async def paypal_webhook(request: Request):
+    """Handle PayPal webhook notifications for payment events"""
+    try:
+        # Get the raw body for webhook verification
+        body = await request.body()
+        headers = dict(request.headers)
+        
+        print(f"[Webhook] Received PayPal webhook: {headers.get('paypal-transmission-id', 'unknown')}")
+        
+        # Parse the webhook data
+        webhook_data = await request.json()
+        print(f"[Webhook] Webhook data: {webhook_data}")
+        
+        # Check if this is a payment completion event
+        if webhook_data.get('event_type') == 'PAYMENT.CAPTURE.COMPLETED':
+            resource = webhook_data.get('resource', {})
+            
+            # Extract payment details
+            payment_id = resource.get('id')
+            amount = resource.get('amount', {}).get('value')
+            currency = resource.get('amount', {}).get('currency_code')
+            
+            # Extract custom data (email and topic) from the payment
+            custom_id = resource.get('custom_id', '')
+            
+            if custom_id and '|' in custom_id:
+                email, topic = custom_id.split('|', 1)
+                print(f"[Webhook] Payment completed for: email={email}, topic={topic}")
+                
+                # Check for duplicate user
+                is_duplicate, sanitized_topic, message = user_service.check_duplicate_user(email, topic)
+                if is_duplicate:
+                    print(f"[Webhook] Duplicate found for email={email}, topic={sanitized_topic}")
+                    return {"status": "duplicate", "message": message}
+                
+                # Generate learning plan
+                result = report_service.generate_initial_learning_plan(email, sanitized_topic)
+                
+                if result.get('success'):
+                    print(f"[Webhook] Learning plan generated successfully for {email}")
+                    return {"status": "success", "message": "Learning plan generated"}
+                else:
+                    print(f"[Webhook] Failed to generate learning plan: {result.get('message')}")
+                    return {"status": "error", "message": result.get('message')}
+            else:
+                print(f"[Webhook] No custom_id found in payment resource")
+                return {"status": "error", "message": "No user data found in payment"}
+        
+        elif webhook_data.get('event_type') == 'PAYMENT.CAPTURE.DENIED':
+            print(f"[Webhook] Payment denied: {webhook_data}")
+            return {"status": "denied", "message": "Payment was denied"}
+        
+        else:
+            print(f"[Webhook] Unhandled event type: {webhook_data.get('event_type')}")
+            return {"status": "ignored", "message": "Event type not handled"}
+            
+    except Exception as e:
+        print(f"[Webhook] Error processing webhook: {e}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Webhook processing error: {str(e)}")
 
 USERS_FILE = os.path.join(os.path.dirname(__file__), "users.json")
 

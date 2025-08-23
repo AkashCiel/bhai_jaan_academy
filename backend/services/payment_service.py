@@ -26,6 +26,47 @@ class PayPalService:
         self.success_url = "https://akashciel.github.io/bhai_jaan_academy/?payment=success"
         self.cancel_url = "https://akashciel.github.io/bhai_jaan_academy/?payment=cancel"
     
+    def create_hosted_button_payment(self, email: str, topic: str) -> Dict[str, any]:
+        """
+        Create a hosted button payment configuration
+        
+        Args:
+            email: User's email address
+            topic: Learning topic
+            
+        Returns:
+            Dictionary with payment configuration
+        """
+        try:
+            # For hosted buttons, we need to configure the button with custom data
+            # The custom_id will be passed to the webhook
+            custom_id = f"{email}|{topic}"
+            
+            payment_config = {
+                "email": email,
+                "topic": topic,
+                "amount": self.amount,
+                "currency": self.currency,
+                "description": f"{self.description} for {topic}",
+                "custom_id": custom_id,
+                "button_id": "BAWT3J3MX5BW2"
+            }
+            
+            logger.info(f"Hosted button payment config created for {email} - {topic}")
+            return {
+                "success": True,
+                "config": payment_config,
+                "message": "Hosted button payment configured"
+            }
+            
+        except Exception as e:
+            error_msg = f"Error creating hosted button payment config: {str(e)}"
+            logger.error(error_msg)
+            return {
+                "success": False,
+                "error": error_msg
+            }
+
     def create_payment(self, email: str, topic: str) -> Tuple[bool, str, Optional[str]]:
         """
         Create a PayPal payment for the learning plan

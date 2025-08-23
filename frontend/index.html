@@ -6,6 +6,8 @@
     <title>Bhai Jaan Academy - Learn Any Topic in 30 Days</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=BAAoyuvKIYGu5TbJ7tQTrpKm0QEdE3DDVgp0W0bdA7gMHQUoF6SZD1KxT9ViHO9lQGsYqo-9S75bW2SKNo&components=hosted-buttons&disable-funding=venmo&currency=EUR"></script>
 </head>
 <body class="landing-bg min-h-screen">
     <div class="container mx-auto px-4 py-8">
@@ -95,6 +97,26 @@
                         <span id="submitText">Start Learning</span>
                         <span id="loadingText" class="hidden">Preparing your plan...</span>
                     </button>
+
+                    <!-- PayPal Alternative Payment Button -->
+                    <div class="mt-4 text-center">
+                        <p class="text-sm text-gray-600 mb-3">Or pay directly with PayPal:</p>
+                        <div id="paypal-container-BAWT3J3MX5BW2"></div>
+                        
+                        <!-- Hosted Payment Success Message -->
+                        <div id="hostedPaymentMessage" class="hidden mt-4 p-3 foreground-opacity border border-blue-200 rounded-lg text-dark">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p id="hostedPaymentText" class="text-sm text-dark"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
 
                 <!-- Success Message -->

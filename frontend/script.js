@@ -6,6 +6,48 @@ import { ABOUT_TEXT } from './constants.js';
 // Set about text content
 document.getElementById('aboutText').textContent = ABOUT_TEXT;
 
+// Initialize PayPal hosted button
+function initializePayPalButton() {
+    if (typeof paypal !== 'undefined') {
+        paypal.HostedButtons({
+            hostedButtonId: "BAWT3J3MX5BW2",
+        }).render("#paypal-container-BAWT3J3MX5BW2");
+        
+        console.log('PayPal button initialized successfully');
+    } else {
+        console.error('PayPal SDK not loaded');
+    }
+}
+
+// Configure hosted payment when form is filled
+async function configureHostedPayment(email, topic) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/configure-hosted-payment`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                topic: topic
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+            console.log('Hosted payment configured successfully');
+            return { success: true, data };
+        } else {
+            console.error('Hosted payment configuration failed:', data.message);
+            return { success: false, error: data.message || 'Configuration failed' };
+        }
+    } catch (error) {
+        console.error('Network error configuring hosted payment:', error);
+        return { success: false, error: 'Network error. Please check your connection.' };
+    }
+}
+
 // Video modal functionality
 const demoButton = document.getElementById('demoButton');
 const videoModal = document.getElementById('videoModal');
@@ -63,6 +105,8 @@ const errorMessage = document.getElementById('errorMessage');
 const errorText = document.getElementById('errorText');
 const emailError = document.getElementById('emailError');
 const topicError = document.getElementById('topicError');
+const hostedPaymentMessage = document.getElementById('hostedPaymentMessage');
+const hostedPaymentText = document.getElementById('hostedPaymentText');
 
 // Utility functions
 function showMessage(type, message) {
@@ -224,10 +268,55 @@ async function handleSubmit(event) {
     }
 }
 
+// Show hosted payment message
+function showHostedPaymentMessage(type, message) {
+    hostedPaymentText.textContent = message;
+    hostedPaymentMessage.classList.remove('hidden');
+    
+    if (type === 'success') {
+        hostedPaymentMessage.classList.add('border-green-200');
+        hostedPaymentMessage.classList.remove('border-blue-200');
+    } else {
+        hostedPaymentMessage.classList.add('border-blue-200');
+        hostedPaymentMessage.classList.remove('border-green-200');
+    }
+}
+
+// Hide hosted payment message
+function hideHostedPaymentMessage() {
+    hostedPaymentMessage.classList.add('hidden');
+}
+
+// Handle form input changes to configure hosted payment
+function handleFormInput() {
+    const email = emailInput.value.trim();
+    const topic = topicInput.value.trim();
+    
+    // Only configure if both fields have valid content
+    if (email && topic && validateEmail(email) && validateTopic(topic)) {
+        // Show configuring message
+        showHostedPaymentMessage('info', 'Configuring PayPal payment...');
+        
+        // Configure hosted payment in background
+        configureHostedPayment(email, topic).then(result => {
+            if (result.success) {
+                console.log('Hosted payment ready for PayPal button');
+                showHostedPaymentMessage('success', 'PayPal payment ready! Click the button above to pay.');
+            } else {
+                console.warn('Hosted payment configuration failed:', result.error);
+                showHostedPaymentMessage('error', 'Payment configuration failed. Please try again.');
+            }
+        });
+    } else {
+        // Hide message if form is incomplete
+        hideHostedPaymentMessage();
+    }
+}
+
 // Event listeners
 learningForm.addEventListener('submit', handleSubmit);
 
-// Real-time validation
+// Real-time validation and hosted payment configuration
 emailInput.addEventListener('blur', () => {
     const email = emailInput.value.trim();
     if (email && !validateEmail(email)) {
@@ -236,6 +325,7 @@ emailInput.addEventListener('blur', () => {
         emailError.classList.add('hidden');
         emailInput.classList.remove('border-red-500');
     }
+    handleFormInput();
 });
 
 topicInput.addEventListener('blur', () => {
@@ -246,6 +336,7 @@ topicInput.addEventListener('blur', () => {
         topicError.classList.add('hidden');
         topicInput.classList.remove('border-red-500');
     }
+    handleFormInput();
 });
 
 // Clear errors when user starts typing
@@ -347,6 +438,9 @@ function handlePaymentReturn() {
 
 // Add some nice animations on page load
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize PayPal button
+    initializePayPalButton();
+    
     // Handle payment return
     handlePaymentReturn();
     

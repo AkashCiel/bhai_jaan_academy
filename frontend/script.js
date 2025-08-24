@@ -48,7 +48,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Configuration
-const API_BASE_URL = 'https://bhai-jaan-academy.onrender.com'; // Production backend URL
+const API_BASE_URL = 'http://localhost:8000'; // Local backend URL
 
 // DOM Elements
 const learningForm = document.getElementById('learningForm');
@@ -209,7 +209,12 @@ async function handleSubmit(event) {
     // Create payment
     const paymentResult = await createPayment(email, topic);
     
+    console.log('Payment creation result:', paymentResult);
+    
     if (paymentResult.success && paymentResult.data.success) {
+        // Log the approval URL before redirecting
+        console.log('Redirecting to PayPal approval URL:', paymentResult.data.approval_url);
+        
         // Redirect to PayPal
         window.location.href = paymentResult.data.approval_url;
     } else {
@@ -313,9 +318,24 @@ headerElement.addEventListener('touchend', toggleHeader);
 // Handle payment success/cancel from URL parameters
 function handlePaymentReturn() {
     const urlParams = new URLSearchParams(window.location.search);
+    
+    // Log ALL parameters to see what PayPal actually sends
+    console.log('All URL parameters:', Object.fromEntries(urlParams.entries()));
+    
     const paymentStatus = urlParams.get('payment');
-    const paymentId = urlParams.get('token');      // token is the payment ID
-    const payerId = urlParams.get('PayerID');     // PayerID is the payer ID
+    
+    // Try multiple possible parameter names for payment ID
+    const paymentId = urlParams.get('paymentId') || 
+                     urlParams.get('token') || 
+                     urlParams.get('PayerID') ||
+                     urlParams.get('payment_id');
+                     
+    const payerId = urlParams.get('PayerID') || 
+                    urlParams.get('payerId');
+    
+    console.log('Extracted paymentId:', paymentId);
+    console.log('Extracted payerId:', payerId);
+    console.log('Payment status:', paymentStatus);
     
     if (paymentStatus === 'success' && paymentId && payerId) {
         // Payment was successful, verify it
@@ -342,6 +362,16 @@ function handlePaymentReturn() {
         
         // Clean up URL
         window.history.replaceState({}, document.title, window.location.pathname);
+    } else {
+        // Log when parameters are missing
+        console.log('Missing parameters:', {
+            paymentStatus,
+            paymentId,
+            payerId,
+            hasPaymentStatus: !!paymentStatus,
+            hasPaymentId: !!paymentId,
+            hasPayerId: !!payerId
+        });
     }
 }
 

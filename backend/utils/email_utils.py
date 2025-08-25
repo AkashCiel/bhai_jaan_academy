@@ -1,6 +1,7 @@
 import os
 from typing import Dict, Any
 from config import settings
+from config.constants import FEEDBACK_CONFIG
 
 def load_email_template(template_name: str, variables: Dict[str, Any]) -> str:
     """
@@ -31,6 +32,10 @@ def load_email_template(template_name: str, variables: Dict[str, Any]) -> str:
 def get_fallback_template(template_name: str, variables: Dict[str, Any]) -> str:
     """Fallback templates if files don't exist."""
     if template_name == 'welcome':
+        # Generate feedback URLs for fallback template
+        discord_feedback_url = FEEDBACK_CONFIG['DISCORD_CHANNEL_URL']
+        email_feedback_url = f"mailto:{FEEDBACK_CONFIG['FEEDBACK_EMAIL']}?subject={FEEDBACK_CONFIG['FEEDBACK_EMAIL_SUBJECT'].replace(' ', '%20')}"
+        
         return f"""
         <html>
         <body>
@@ -42,6 +47,15 @@ def get_fallback_template(template_name: str, variables: Dict[str, Any]) -> str:
             <br>
             <p>Remember, Rome wasn't built in a day!</p>
             <p>— The Bhai Jaan Academy Team</p>
+            <br>
+            <hr style="border: 1px solid #e5e7eb; margin: 20px 0;">
+            <div style="text-align: center; padding: 20px 0;">
+                <h3 style="color: #374151; margin-bottom: 15px;">Have feedback? We'd love to hear from you!</h3>
+                <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                    <a href="{discord_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Join our Discord Community</a>
+                    <a href="{email_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #10B981; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Send us an Email</a>
+                </div>
+            </div>
         </body>
         </html>
         """

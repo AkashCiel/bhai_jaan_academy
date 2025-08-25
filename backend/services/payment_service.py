@@ -18,8 +18,8 @@ class PayPalService:
         })
         
         # Payment configuration
-        self.amount = "99.00"
-        self.currency = "INR"  # Using INR for live payments
+        self.amount = "1.50"
+        self.currency = "EUR"  # Using EUR for live payments
         self.description = "Bhai Jaan Academy Learning Plan"
         
         # Redirect URLs

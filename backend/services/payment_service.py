@@ -12,19 +12,19 @@ class PayPalService:
         """Initialize PayPal service with sandbox configuration"""
         # Configure PayPal SDK globally
         paypalrestsdk.configure({
-            'mode': 'sandbox',  # Use sandbox for testing
+            'mode': 'live',  # Use live for production
             'client_id': os.getenv('PAYPAL_CLIENT_ID'),
             'client_secret': os.getenv('PAYPAL_CLIENT_SECRET')
         })
         
         # Payment configuration
         self.amount = "99.00"
-        self.currency = "USD"  # Using USD for sandbox testing (INR not supported in sandbox)
+        self.currency = "INR"  # Using INR for live payments
         self.description = "Bhai Jaan Academy Learning Plan"
         
         # Redirect URLs
-        self.success_url = "https://akashciel.github.io/bhai_jaan_academy/?payment=success"
-        self.cancel_url = "https://akashciel.github.io/bhai_jaan_academy/?payment=cancel"
+        self.success_url = "https://bhaijaanacademy.com/?payment=success"  # Update to your live domain
+        self.cancel_url = "https://bhaijaanacademy.com/?payment=cancel"    # Update to your live domain
     
     def create_payment(self, email: str, topic: str) -> Tuple[bool, str, Optional[str]]:
         """

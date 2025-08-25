@@ -109,7 +109,8 @@ class PayPalService:
                 # Extract email from custom field
                 email = None
                 if payment.transactions and len(payment.transactions) > 0:
-                    email = payment.transactions[0].get('custom')
+                    email = payment.transactions[0]['custom']
+                    logger.info(f"Email extracted: {email}")
                 
                 return True, "Payment verified successfully", email
             else:
@@ -137,9 +138,9 @@ class PayPalService:
             return {
                 "id": payment.id,
                 "state": payment.state,
-                "amount": payment.transactions[0].amount.total if payment.transactions else None,
-                "currency": payment.transactions[0].amount.currency if payment.transactions else None,
-                "email": payment.transactions[0].get('custom') if payment.transactions else None
+                "amount": payment.transactions[0]['amount']['total'] if payment.transactions else None,
+                "currency": payment.transactions[0]['amount']['currency'] if payment.transactions else None,
+                "email": payment.transactions[0]['custom'] if payment.transactions else None
             }
         except Exception as e:
             logger.error(f"Error getting payment details: {str(e)}")

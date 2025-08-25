@@ -48,7 +48,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Configuration
-const API_BASE_URL = 'https://bhai-jaan-academy.onrender.com'; // Production backend URL
+const API_BASE_URL = 'http://localhost:8000'; // Local backend URL for testing
 
 // DOM Elements
 const learningForm = document.getElementById('learningForm');

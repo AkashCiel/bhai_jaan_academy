@@ -98,7 +98,7 @@ async def verify_payment(payment_data: PaymentVerification):
         print(f"[Payment] Verifying payment: payment_id={payment_data.payment_id}")
         
         # Verify payment with PayPal
-        success, message, email = paypal_service.verify_payment(payment_data.payment_id, payment_data.payer_id)
+        success, message, email, topic = paypal_service.verify_payment(payment_data.payment_id, payment_data.payer_id)
         
         if not success:
             return {
@@ -112,17 +112,11 @@ async def verify_payment(payment_data: PaymentVerification):
                 "message": "Payment verified but email not found"
             }
         
-        # Get payment details to extract topic
-        payment_details = paypal_service.get_payment_details(payment_data.payment_id)
-        if not payment_details:
+        if not topic:
             return {
                 "success": False,
-                "message": "Could not retrieve payment details"
+                "message": "Payment verified but topic not found"
             }
-        
-        # Extract topic from payment description
-        description = payment_details.get('description', '')
-        topic = description.replace('Bhai Jaan Academy Learning Plan for ', '') if 'Bhai Jaan Academy Learning Plan for ' in description else 'Unknown Topic'
         
         print(f"[Payment] Payment verified successfully for: email={email}, topic={topic}")
         

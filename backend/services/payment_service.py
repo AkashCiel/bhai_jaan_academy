@@ -63,7 +63,7 @@ class PayPalService:
                         "currency": self.currency
                     },
                     "description": f"{self.description} for {topic}",
-                    "custom": email  # Store email in custom field
+                    "custom": f"{email}|{topic}"  # Store both email and topic
                 }]
             }
             
@@ -88,7 +88,7 @@ class PayPalService:
             logger.error(error_msg)
             return False, error_msg, None
     
-    def verify_payment(self, payment_id: str, payer_id: str) -> Tuple[bool, str, Optional[str]]:
+    def verify_payment(self, payment_id: str, payer_id: str) -> Tuple[bool, str, Optional[str], Optional[str]]:
         """
         Verify and capture a PayPal payment
         
@@ -97,7 +97,7 @@ class PayPalService:
             payer_id: PayPal payer ID
             
         Returns:
-            Tuple of (success, message, email)
+            Tuple of (success, message, email, topic)
         """
         try:
             # Execute payment using correct SDK pattern
@@ -106,22 +106,30 @@ class PayPalService:
             if payment.execute({"payer_id": payer_id}):
                 logger.info(f"Payment {payment_id} executed successfully")
                 
-                # Extract email from custom field
+                # Extract email and topic from custom field
                 email = None
+                topic = None
                 if payment.transactions and len(payment.transactions) > 0:
-                    email = payment.transactions[0]['custom']
-                    logger.info(f"Email extracted: {email}")
+                    custom_data = payment.transactions[0]['custom']
+                    if '|' in custom_data:
+                        email, topic = custom_data.split('|', 1)
+                        logger.info(f"Email extracted: {email}")
+                        logger.info(f"Topic extracted: {topic}")
+                    else:
+                        # Fallback for old format (email only)
+                        email = custom_data
+                        logger.info(f"Email extracted: {email} (old format)")
                 
-                return True, "Payment verified successfully", email
+                return True, "Payment verified successfully", email, topic
             else:
                 error_msg = f"Payment execution failed: {payment.error}"
                 logger.error(error_msg)
-                return False, error_msg, None
+                return False, error_msg, None, None
                 
         except Exception as e:
             error_msg = f"Error verifying payment: {str(e)}"
             logger.error(error_msg)
-            return False, error_msg, None
+            return False, error_msg, None, None
     
     def get_payment_details(self, payment_id: str) -> Optional[Dict]:
         """

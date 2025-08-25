@@ -23,8 +23,8 @@ class PayPalService:
         self.description = "Bhai Jaan Academy Learning Plan"
         
         # Redirect URLs
-        self.success_url = "https://bhaijaanacademy.com/?payment=success"  # Update to your live domain
-        self.cancel_url = "https://bhaijaanacademy.com/?payment=cancel"    # Update to your live domain
+        self.success_url = "https://akashciel.github.io/bhai_jaan_academy/?payment=success"
+        self.cancel_url = "https://akashciel.github.io/bhai_jaan_academy/?payment=cancel"
     
     def create_payment(self, email: str, topic: str) -> Tuple[bool, str, Optional[str]]:
         """

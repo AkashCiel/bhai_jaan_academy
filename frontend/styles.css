@@ -170,7 +170,7 @@
 
 /* JavaScript-controlled expansion */
 .header-expandable.expanded .about-content-expanded {
-    max-height: 300px;
+    max-height: fit-content;
     opacity: 1;
 }
 

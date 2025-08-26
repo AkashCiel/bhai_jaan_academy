@@ -369,11 +369,11 @@ function handlePaymentReturn() {
     
     if (paymentStatus === 'success' && paymentId && payerId) {
         // Payment was successful, verify it
-        showMessage('success', 'Payment successful! Processing payment, please DO NOT close this window...');
+        showMessage('success', 'Payment successful! Verifying payment and generating your learning plan. Please come back to this window in a few minutes.');
         
         verifyPayment(paymentId, payerId).then(result => {
             if (result.success && result.data.success) {
-                showMessage('success', `We have successfully registered you! We will send you a learning plan when it's ready. You can close this page.`);
+                showMessage('success', `We have successfully registered you! You should receive your learning plan shortly on your email. You can close this page.`);
                 learningForm.reset();
                 submitBtn.disabled = true;
             } else {

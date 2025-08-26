@@ -4,7 +4,7 @@
 import { ABOUT_TEXT } from './constants.js';
 
 // Set about text content
-document.getElementById('aboutText').textContent = ABOUT_TEXT;
+document.getElementById('aboutText').innerHTML = ABOUT_TEXT;
 
 // Video modal functionality
 const demoButton = document.getElementById('demoButton');

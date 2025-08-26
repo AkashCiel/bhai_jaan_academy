@@ -11,6 +11,14 @@ EMAIL_TEMPLATES = {
     'REPORT': 'templates/report_email.html'
 }
 
+# Payment configuration
+PAYMENT_CONFIG = {
+    'AMOUNT': '1.99',
+    'CURRENCY': 'EUR',
+    'DESCRIPTION': 'Bhai Jaan Academy Learning Plan',
+    'MODE': 'live'  # 'sandbox' for testing, 'live' for production
+}
+
 # Feedback configuration
 FEEDBACK_CONFIG = {
     'DISCORD_CHANNEL_URL': 'https://discord.gg/fcazNe43',

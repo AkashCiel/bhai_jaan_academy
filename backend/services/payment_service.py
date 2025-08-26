@@ -2,6 +2,7 @@ import os
 import paypalrestsdk
 from typing import Dict, Optional, Tuple
 import logging
+from config import settings
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -9,18 +10,18 @@ logger = logging.getLogger(__name__)
 
 class PayPalService:
     def __init__(self):
-        """Initialize PayPal service with sandbox configuration"""
+        """Initialize PayPal service with configuration from settings"""
         # Configure PayPal SDK globally
         paypalrestsdk.configure({
-            'mode': 'live',  # Use live for production
+            'mode': settings.PAYMENT_MODE,  # Use live for production
             'client_id': os.getenv('PAYPAL_CLIENT_ID'),
             'client_secret': os.getenv('PAYPAL_CLIENT_SECRET')
         })
         
-        # Payment configuration
-        self.amount = "1.50"
-        self.currency = "EUR"  # Using EUR for live payments
-        self.description = "Bhai Jaan Academy Learning Plan"
+        # Payment configuration from settings
+        self.amount = settings.PAYMENT_AMOUNT
+        self.currency = settings.PAYMENT_CURRENCY
+        self.description = settings.PAYMENT_DESCRIPTION
         
         # Redirect URLs
         self.success_url = "https://akashciel.github.io/bhai_jaan_academy/?payment=success"

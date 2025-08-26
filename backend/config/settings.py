@@ -2,7 +2,7 @@ import os
 from typing import Optional
 from pydantic_settings import BaseSettings
 from pydantic import Field
-from .constants import AI_MODELS, GITHUB_CONFIG, MAIN_REPO_CONFIG, FILE_EXTENSIONS, EMAIL_TEMPLATES, DELAYS
+from .constants import AI_MODELS, GITHUB_CONFIG, MAIN_REPO_CONFIG, FILE_EXTENSIONS, EMAIL_TEMPLATES, DELAYS, PAYMENT_CONFIG
 
 class Settings(BaseSettings):
     # OpenAI Configuration
@@ -43,6 +43,12 @@ class Settings(BaseSettings):
     # PayPal Configuration
     PAYPAL_CLIENT_ID: Optional[str] = Field(default=None, validation_alias='PAYPAL_CLIENT_ID')
     PAYPAL_CLIENT_SECRET: Optional[str] = Field(default=None, validation_alias='PAYPAL_CLIENT_SECRET')
+    
+    # Payment Configuration
+    PAYMENT_AMOUNT: str = Field(default=PAYMENT_CONFIG['AMOUNT'], validation_alias='PAYMENT_AMOUNT')
+    PAYMENT_CURRENCY: str = Field(default=PAYMENT_CONFIG['CURRENCY'], validation_alias='PAYMENT_CURRENCY')
+    PAYMENT_DESCRIPTION: str = Field(default=PAYMENT_CONFIG['DESCRIPTION'], validation_alias='PAYMENT_DESCRIPTION')
+    PAYMENT_MODE: str = Field(default=PAYMENT_CONFIG['MODE'], validation_alias='PAYMENT_MODE')
     
     class Config:
         env_file = ".env"

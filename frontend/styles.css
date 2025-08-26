@@ -49,6 +49,7 @@
 .demo-button {
     transition: all 0.2s ease-in-out;
     width: 200px;
+    cursor: pointer;
 }
 
 .demo-button:hover {

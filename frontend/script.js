@@ -1,10 +1,13 @@
 // Bhai Jaan Academy Frontend JavaScript
 
 // Import constants
-import { ABOUT_TEXT } from './constants.js';
+import { ABOUT_TEXT, YOUTUBE_VIDEO_URL } from './constants.js';
 
 // Set about text content
 document.getElementById('aboutText').innerHTML = ABOUT_TEXT;
+
+// Set YouTube video URL
+document.getElementById('youtubeIframe').src = YOUTUBE_VIDEO_URL;
 
 // Video modal functionality
 const demoButton = document.getElementById('demoButton');

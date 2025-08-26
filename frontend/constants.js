@@ -4,3 +4,5 @@ export const ABOUT_TEXT = `Thanks to the internet, we can learn almost anything.
 2. Access to members-only channel to provide feedback and vote for new features for a month<br>
 3. Regenerate your content with the latest features<br><br>
 Watch the demo video and let's go!`;
+
+export const YOUTUBE_VIDEO_URL = 'https://www.youtube.com/embed/Pf9UJXvu9PA?si=jigRnO8PIQJqXW_L';

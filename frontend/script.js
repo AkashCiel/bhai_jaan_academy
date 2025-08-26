@@ -309,11 +309,38 @@ function toggleHeader(event) {
     }
 }
 
-// Universal event handling for all interaction methods
+// Desktop behavior (unchanged)
 headerElement.addEventListener('mouseenter', expandHeader);
 headerElement.addEventListener('mouseleave', collapseHeader);
 headerElement.addEventListener('click', toggleHeader);
-headerElement.addEventListener('touchend', toggleHeader);
+
+// Mobile touch handling with scroll detection
+let touchStartTime = 0;
+let touchStartX = 0;
+let touchStartY = 0;
+
+headerElement.addEventListener('touchstart', (e) => {
+    touchStartTime = Date.now();
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+});
+
+headerElement.addEventListener('touchend', (e) => {
+    const touchEndTime = Date.now();
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    
+    const duration = touchEndTime - touchStartTime;
+    const distance = Math.sqrt(
+        Math.pow(touchEndX - touchStartX, 2) + 
+        Math.pow(touchEndY - touchStartY, 2)
+    );
+    
+    // Only toggle if it's a genuine tap (short duration, minimal movement)
+    if (duration < 300 && distance < 10) {
+        toggleHeader(e);
+    }
+});
 
 // Handle payment success/cancel from URL parameters
 function handlePaymentReturn() {

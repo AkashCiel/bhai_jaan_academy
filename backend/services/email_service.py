@@ -1,6 +1,7 @@
 import requests
 from typing import Dict, Any
 from config import settings
+from config.constants import FEEDBACK_CONFIG
 from utils.email_utils import load_email_template
 
 class EmailService:
@@ -18,10 +19,16 @@ class EmailService:
             print(f"[Email Service] Email service not configured. Skipping welcome email for {email}")
             return False
         
+        # Generate feedback URLs
+        discord_feedback_url = FEEDBACK_CONFIG['DISCORD_CHANNEL_URL']
+        email_feedback_url = f"mailto:{FEEDBACK_CONFIG['FEEDBACK_EMAIL']}?subject={FEEDBACK_CONFIG['FEEDBACK_EMAIL_SUBJECT'].replace(' ', '%20')}"
+        
         subject = f"Your 30-Day Learning Plan for {topic} - Bhai Jaan Academy"
         html_email_content = load_email_template('welcome', {
             'topic': topic,
-            'plan_url': plan_url
+            'plan_url': plan_url,
+            'discord_feedback_url': discord_feedback_url,
+            'email_feedback_url': email_feedback_url
         })
         
         try:
@@ -49,12 +56,18 @@ class EmailService:
             print(f"[Email Service] Email service not configured. Skipping report email for {user['email']}")
             return False
         
+        # Generate feedback URLs
+        discord_feedback_url = FEEDBACK_CONFIG['DISCORD_CHANNEL_URL']
+        email_feedback_url = f"mailto:{FEEDBACK_CONFIG['FEEDBACK_EMAIL']}?subject={FEEDBACK_CONFIG['FEEDBACK_EMAIL_SUBJECT'].replace(' ', '%20')}"
+        
         subject = f"Your new learning report on {topic} is ready! - Bhai Jaan Academy"
         html_email_content = load_email_template('report', {
             'email': user['email'],
             'topic': topic,
             'plan_url': plan_url,
-            'report_url': report_url
+            'report_url': report_url,
+            'discord_feedback_url': discord_feedback_url,
+            'email_feedback_url': email_feedback_url
         })
         
         try:

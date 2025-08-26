@@ -11,6 +11,13 @@ EMAIL_TEMPLATES = {
     'REPORT': 'templates/report_email.html'
 }
 
+# Feedback configuration
+FEEDBACK_CONFIG = {
+    'DISCORD_CHANNEL_URL': 'https://discord.gg/fcazNe43',
+    'FEEDBACK_EMAIL': 'laughing.buddha.lab@gmail.com',
+    'FEEDBACK_EMAIL_SUBJECT': 'How to make Bhai Jaan Academy better?'
+}
+
 # AI model configurations
 AI_MODELS = {
     'DEFAULT': 'gpt-4o-mini',

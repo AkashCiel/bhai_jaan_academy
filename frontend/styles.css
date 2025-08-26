@@ -172,6 +172,7 @@
 .header-expandable.expanded .about-content-expanded {
     max-height: fit-content;
     opacity: 1;
+    overflow: visible;
 }
 
 .hint-text {

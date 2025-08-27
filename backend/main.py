@@ -138,6 +138,45 @@ async def verify_payment(payment_data: PaymentVerification):
             "message": f"Error verifying payment: {str(e)}"
         }
 
+@app.post("/register-user-without-payment")
+async def register_user_without_payment(user_data: UserSubmission):
+    """Register user and generate learning plan without payment"""
+    try:
+        print(f"[Registration] Registering user without payment: email={user_data.email}, topic={user_data.topic}")
+        
+        # Check for duplicate using shared service
+        is_duplicate, sanitized_topic, message = user_service.check_duplicate_user(user_data.email, user_data.topic)
+        if is_duplicate:
+            print(f"[Registration] Duplicate found for email={user_data.email}, topic={sanitized_topic}")
+            return {
+                "success": False,
+                "message": message,
+                "email": user_data.email,
+                "topic": sanitized_topic
+            }
+        
+        # Generate learning plan directly
+        result = report_service.generate_initial_learning_plan(user_data.email, sanitized_topic)
+        
+        # Add payment bypass indicator
+        if result.get('success'):
+            result['payment_bypassed'] = True
+            result['message'] = f"Learning plan created successfully! (Payments disabled) - {result['message']}"
+        
+        print(f"[Registration] User registered successfully: email={user_data.email}, topic={sanitized_topic}")
+        return result
+        
+    except Exception as e:
+        print(f"[Registration] Error registering user: {e}")
+        import traceback
+        traceback.print_exc()
+        return {
+            "success": False,
+            "message": f"Error registering user: {str(e)}",
+            "email": user_data.email,
+            "topic": user_data.topic
+        }
+
 USERS_FILE = os.path.join(os.path.dirname(__file__), "users.json")
 
 # --- Scheduler logic (refactored for reuse) ---

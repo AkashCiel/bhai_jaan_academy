@@ -53,6 +53,9 @@ document.addEventListener('keydown', (e) => {
 // Configuration
 const API_BASE_URL = 'https://bhai-jaan-academy.onrender.com'; // Production backend URL
 
+// Hardcoded payment configuration
+const PAYMENTS_ENABLED = false; // Set to 'true' to enable payments, 'false' to disable
+
 // DOM Elements
 const learningForm = document.getElementById('learningForm');
 const emailInput = document.getElementById('email');
@@ -192,6 +195,33 @@ async function verifyPayment(paymentId, payerId) {
     }
 }
 
+// Register user without payment
+async function registerUserWithoutPayment(email, topic) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/register-user-without-payment`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                topic: topic
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            return { success: true, data };
+        } else {
+            return { success: false, error: data.detail || 'An error occurred' };
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+        return { success: false, error: 'Network error. Please check your connection.' };
+    }
+}
+
 // Form submission handler
 async function handleSubmit(event) {
     event.preventDefault();
@@ -207,28 +237,57 @@ async function handleSubmit(event) {
     submitBtn.disabled = true;
     submitText.classList.add('hidden');
     loadingText.classList.remove('hidden');
-    showMessage('success', 'Creating payment... Please wait.');
+    showMessage('success', 'Processing your request... Please wait.');
 
-    // Create payment
-    const paymentResult = await createPayment(email, topic);
-    
-    console.log('Payment creation result:', paymentResult);
-    
-    if (paymentResult.success && paymentResult.data.success) {
-        // Log the approval URL before redirecting
-        console.log('Redirecting to PayPal approval URL:', paymentResult.data.approval_url);
+    if (PAYMENTS_ENABLED) {
+        // Create payment
+        const paymentResult = await createPayment(email, topic);
         
-        // Redirect to PayPal
-        window.location.href = paymentResult.data.approval_url;
+        console.log('Payment creation result:', paymentResult);
+        
+        if (paymentResult.success && paymentResult.data.success) {
+            // Log the approval URL before redirecting
+            console.log('Redirecting to PayPal approval URL:', paymentResult.data.approval_url);
+            
+            // Redirect to PayPal
+            window.location.href = paymentResult.data.approval_url;
+        } else {
+            // Show error message
+            const errorMessage = paymentResult.error || paymentResult.data.message || 'Payment creation failed. Please try again.';
+            showMessage('error', errorMessage);
+            
+            // Reset form state
+            submitBtn.disabled = false;
+            submitText.classList.remove('hidden');
+            loadingText.classList.add('hidden');
+        }
     } else {
-        // Show error message
-        const errorMessage = paymentResult.error || paymentResult.data.message || 'Payment creation failed. Please try again.';
-        showMessage('error', errorMessage);
+        // Register user without payment
+        const registrationResult = await registerUserWithoutPayment(email, topic);
         
-        // Reset form state
-        submitBtn.disabled = false;
-        submitText.classList.remove('hidden');
-        loadingText.classList.add('hidden');
+        console.log('Registration result:', registrationResult);
+        
+        if (registrationResult.success && registrationResult.data.success) {
+            // Show success message
+            showMessage('success', registrationResult.data.message);
+            
+            // Reset form
+            learningForm.reset();
+            
+            // Reset form state
+            submitBtn.disabled = false;
+            submitText.classList.remove('hidden');
+            loadingText.classList.add('hidden');
+        } else {
+            // Show error message
+            const errorMessage = registrationResult.error || registrationResult.data.message || 'Registration failed. Please try again.';
+            showMessage('error', errorMessage);
+            
+            // Reset form state
+            submitBtn.disabled = false;
+            submitText.classList.remove('hidden');
+            loadingText.classList.add('hidden');
+        }
     }
 }
 

@@ -233,10 +233,7 @@ async def run_scheduler(
                 error_msg = f"User {user.get('email', 'Unknown')}: {str(e)}"
                 errors.append(error_msg)
                 print(f"[Scheduler] Error processing user: {error_msg}")
-        
-        # Save updated users using service
-        user_service.save_users([user for user in updated_users if user is not None])
-        
+    
         # Send daily report notification (only if processing all users)
         if not (email and topic):
             try:

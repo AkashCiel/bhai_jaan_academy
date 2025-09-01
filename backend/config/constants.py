@@ -267,6 +267,8 @@ QUIZ REQUIREMENTS:
 - Include detailed explanations for why each option is correct or incorrect
 - Ensure the correct answer is clearly marked for each question
 - Make questions appropriate for the user's current learning level
+- IMPORTANT: Distribute correct answers randomly across A, B, C, D positions
+- Avoid patterns - do not put the correct answer in the same position for multiple questions
 
 QUIZ FORMAT:
 Use this exact structure at the end of your report:

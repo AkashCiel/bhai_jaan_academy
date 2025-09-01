@@ -35,9 +35,12 @@ def get_fallback_template(template_name: str, variables: Dict[str, Any]) -> str:
         # Generate feedback URLs for fallback template
         discord_feedback_url = FEEDBACK_CONFIG['DISCORD_CHANNEL_URL']
         email_feedback_url = f"mailto:{FEEDBACK_CONFIG['FEEDBACK_EMAIL']}?subject={FEEDBACK_CONFIG['FEEDBACK_EMAIL_SUBJECT'].replace(' ', '%20')}"
-        show_discord_links = FEEDBACK_CONFIG.get('SHOW_DISCORD_LINKS', False)
         
-        discord_link_html = f'<a href="{discord_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Join our Discord Community</a>' if show_discord_links else ''
+        # Use discord_link_html from variables if provided, otherwise compute it
+        discord_link_html = variables.get('discord_link_html', '')
+        if not discord_link_html:
+            show_discord_links = FEEDBACK_CONFIG.get('SHOW_DISCORD_LINKS', False)
+            discord_link_html = f'<a href="{discord_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Join our Discord Community</a>' if show_discord_links else ''
         
         return f"""
         <html>
@@ -66,9 +69,12 @@ def get_fallback_template(template_name: str, variables: Dict[str, Any]) -> str:
         # Generate feedback URLs for fallback template
         discord_feedback_url = FEEDBACK_CONFIG['DISCORD_CHANNEL_URL']
         email_feedback_url = f"mailto:{FEEDBACK_CONFIG['FEEDBACK_EMAIL']}?subject={FEEDBACK_CONFIG['FEEDBACK_EMAIL_SUBJECT'].replace(' ', '%20')}"
-        show_discord_links = FEEDBACK_CONFIG.get('SHOW_DISCORD_LINKS', False)
         
-        discord_link_html = f'<a href="{discord_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Join our Discord Community</a>' if show_discord_links else ''
+        # Use discord_link_html from variables if provided, otherwise compute it
+        discord_link_html = variables.get('discord_link_html', '')
+        if not discord_link_html:
+            show_discord_links = FEEDBACK_CONFIG.get('SHOW_DISCORD_LINKS', False)
+            discord_link_html = f'<a href="{discord_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Join our Discord Community</a>' if show_discord_links else ''
         
         return f"""
         <html>

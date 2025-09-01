@@ -13,9 +13,7 @@
     <div style="text-align: center; padding: 20px 0;">
         <h3 style="color: #374151; margin-bottom: 15px;">Have feedback? We'd love to hear from you!</h3>
         <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-            {% if show_discord_links %}
-            <a href="{{discord_feedback_url}}" style="display: inline-block; padding: 12px 24px; background-color: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Join our Discord Community</a>
-            {% endif %}
+            {{discord_link_html}}
             <a href="{{email_feedback_url}}" style="display: inline-block; padding: 12px 24px; background-color: #10B981; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Send us an Email</a>
         </div>
     </div>

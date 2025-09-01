@@ -36,6 +36,12 @@ def get_fallback_template(template_name: str, variables: Dict[str, Any]) -> str:
         discord_feedback_url = FEEDBACK_CONFIG['DISCORD_CHANNEL_URL']
         email_feedback_url = f"mailto:{FEEDBACK_CONFIG['FEEDBACK_EMAIL']}?subject={FEEDBACK_CONFIG['FEEDBACK_EMAIL_SUBJECT'].replace(' ', '%20')}"
         
+        # Use discord_link_html from variables if provided, otherwise compute it
+        discord_link_html = variables.get('discord_link_html', '')
+        if not discord_link_html:
+            show_discord_links = FEEDBACK_CONFIG.get('SHOW_DISCORD_LINKS', False)
+            discord_link_html = f'<a href="{discord_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Join our Discord Community</a>' if show_discord_links else ''
+        
         return f"""
         <html>
         <body>
@@ -43,7 +49,7 @@ def get_fallback_template(template_name: str, variables: Dict[str, Any]) -> str:
             <p>Thank you for signing up to learn about <strong>{variables.get('topic', '')}</strong>!</p>
             <p>We're excited to help you master this topic in just 30 days.</p>
             <p>Your personalized learning plan is ready. <a href='{variables.get('plan_url', '')}'>Click here to view your plan</a>.</p>
-            <p><em>If you cannot find the page, please come back in a few minutes.</em></p>
+            <p><em>The reports and links can take some time to be active, just try again in a few minutes :)</em></p>
             <br>
             <p>Remember, Rome wasn't built in a day!</p>
             <p>— The Bhai Jaan Academy Team</p>
@@ -52,7 +58,7 @@ def get_fallback_template(template_name: str, variables: Dict[str, Any]) -> str:
             <div style="text-align: center; padding: 20px 0;">
                 <h3 style="color: #374151; margin-bottom: 15px;">Have feedback? We'd love to hear from you!</h3>
                 <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-                    <a href="{discord_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Join our Discord Community</a>
+                    {discord_link_html}
                     <a href="{email_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #10B981; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Send us an Email</a>
                 </div>
             </div>
@@ -64,6 +70,12 @@ def get_fallback_template(template_name: str, variables: Dict[str, Any]) -> str:
         discord_feedback_url = FEEDBACK_CONFIG['DISCORD_CHANNEL_URL']
         email_feedback_url = f"mailto:{FEEDBACK_CONFIG['FEEDBACK_EMAIL']}?subject={FEEDBACK_CONFIG['FEEDBACK_EMAIL_SUBJECT'].replace(' ', '%20')}"
         
+        # Use discord_link_html from variables if provided, otherwise compute it
+        discord_link_html = variables.get('discord_link_html', '')
+        if not discord_link_html:
+            show_discord_links = FEEDBACK_CONFIG.get('SHOW_DISCORD_LINKS', False)
+            discord_link_html = f'<a href="{discord_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Join our Discord Community</a>' if show_discord_links else ''
+        
         return f"""
         <html>
         <body>
@@ -74,7 +86,7 @@ def get_fallback_template(template_name: str, variables: Dict[str, Any]) -> str:
                 <li><a href='{variables.get('plan_url', '')}'>View your full learning plan</a></li>
                 <li><a href='{variables.get('report_url', '')}'>Read your new report: {variables.get('topic', '')}</a></li>
             </ul>
-            <p><em>If you cannot find the page, please come back in a few minutes.</em></p>
+            <p><em>The reports and links can take some time to be active, just try again in a few minutes :)</em></p>
             <br>
             <p>Keep up the great work!</p>
             <p>— The Bhai Jaan Academy Team</p>
@@ -83,7 +95,7 @@ def get_fallback_template(template_name: str, variables: Dict[str, Any]) -> str:
             <div style="text-align: center; padding: 20px 0;">
                 <h3 style="color: #374151; margin-bottom: 15px;">Have feedback? We'd love to hear from you!</h3>
                 <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-                    <a href="{discord_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Join our Discord Community</a>
+                    {discord_link_html}
                     <a href="{email_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #10B981; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Send us an Email</a>
                 </div>
             </div>

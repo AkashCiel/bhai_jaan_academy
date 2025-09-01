@@ -23,12 +23,17 @@ class EmailService:
         discord_feedback_url = FEEDBACK_CONFIG['DISCORD_CHANNEL_URL']
         email_feedback_url = f"mailto:{FEEDBACK_CONFIG['FEEDBACK_EMAIL']}?subject={FEEDBACK_CONFIG['FEEDBACK_EMAIL_SUBJECT'].replace(' ', '%20')}"
         
+        # Pre-compute Discord link HTML based on configuration
+        show_discord_links = FEEDBACK_CONFIG['SHOW_DISCORD_LINKS']
+        discord_link_html = f'<a href="{discord_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Join our Discord Community</a>' if show_discord_links else ''
+        
         subject = f"Your 30-Day Learning Plan for {topic} - Bhai Jaan Academy"
         html_email_content = load_email_template('welcome', {
             'topic': topic,
             'plan_url': plan_url,
             'discord_feedback_url': discord_feedback_url,
-            'email_feedback_url': email_feedback_url
+            'email_feedback_url': email_feedback_url,
+            'discord_link_html': discord_link_html
         })
         
         try:
@@ -60,6 +65,10 @@ class EmailService:
         discord_feedback_url = FEEDBACK_CONFIG['DISCORD_CHANNEL_URL']
         email_feedback_url = f"mailto:{FEEDBACK_CONFIG['FEEDBACK_EMAIL']}?subject={FEEDBACK_CONFIG['FEEDBACK_EMAIL_SUBJECT'].replace(' ', '%20')}"
         
+        # Pre-compute Discord link HTML based on configuration
+        show_discord_links = FEEDBACK_CONFIG['SHOW_DISCORD_LINKS']
+        discord_link_html = f'<a href="{discord_feedback_url}" style="display: inline-block; padding: 12px 24px; background-color: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Join our Discord Community</a>' if show_discord_links else ''
+        
         subject = f"Your new learning report on {topic} is ready! - Bhai Jaan Academy"
         html_email_content = load_email_template('report', {
             'email': user['email'],
@@ -67,7 +76,8 @@ class EmailService:
             'plan_url': plan_url,
             'report_url': report_url,
             'discord_feedback_url': discord_feedback_url,
-            'email_feedback_url': email_feedback_url
+            'email_feedback_url': email_feedback_url,
+            'discord_link_html': discord_link_html
         })
         
         try:

@@ -23,7 +23,8 @@ PAYMENT_CONFIG = {
 FEEDBACK_CONFIG = {
     'DISCORD_CHANNEL_URL': 'https://discord.gg/fcazNe43',
     'FEEDBACK_EMAIL': 'laughing.buddha.lab@gmail.com',
-    'FEEDBACK_EMAIL_SUBJECT': 'How to make Bhai Jaan Academy better?'
+    'FEEDBACK_EMAIL_SUBJECT': 'How to make Bhai Jaan Academy better?',
+    'SHOW_DISCORD_LINKS': False  # Control Discord link visibility
 }
 
 # AI model configurations

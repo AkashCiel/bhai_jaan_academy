@@ -69,6 +69,13 @@ class ReportService:
                 print(f"[Report Service] Generating report for first topic: {first_topic}")
                 try:
                     report_content = self.ai_service.generate_report_content(first_topic)
+                    # Extract quiz and strip from content for separate rendering
+                    try:
+                        quiz_obj = self.ai_service.extract_quiz_from_report(report_content)
+                        content_without_quiz = self.ai_service.strip_quiz_section(report_content) if quiz_obj else report_content
+                    except Exception:
+                        quiz_obj = None
+                        content_without_quiz = report_content
                     
                     # Create initial context summary
                     try:
@@ -95,11 +102,12 @@ class ReportService:
                         print(f"[Report Service] Warning: Failed to save report response: {e}")
                     
                     # Convert markdown to HTML
-                    report_content_html = markdown.markdown(report_content)
+                    report_content_html = markdown.markdown(content_without_quiz)
                     report_html = generate_topic_report_html(
                         topic=first_topic,
                         user_email=email,
-                        report_content=report_content_html
+                        report_content=report_content_html,
+                        quiz=quiz_obj
                     )
                     
                     # Upload the report HTML
@@ -169,11 +177,7 @@ class ReportService:
     def generate_next_report(self, user: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """Generate next report for existing user"""
         try:
-            # Check if report should be generated
-            if not self.user_service.should_generate_report(user):
-                print(f"[Report Service] Skipping {user['email']} (already sent today)")
-                return user
-            
+            print(f"[Report Service] Generating next report for {user['email']}")
             # Get next topic
             idx, topic = self.user_service.get_next_topic(user)
             if topic is None:
@@ -222,8 +226,15 @@ class ReportService:
                 print(f"[Report Service] Warning: Failed to save report response: {e}")
             
             # Convert to HTML and generate report
-            report_content_html = markdown.markdown(report_content_md)
-            report_html = generate_topic_report_html(topic, user["email"], report_content_html)
+            try:
+                quiz_obj = self.ai_service.extract_quiz_from_report(report_content_md)
+                content_without_quiz = self.ai_service.strip_quiz_section(report_content_md) if quiz_obj else report_content_md
+            except Exception:
+                quiz_obj = None
+                content_without_quiz = report_content_md
+
+            report_content_html = markdown.markdown(content_without_quiz)
+            report_html = generate_topic_report_html(topic, user["email"], report_content_html, quiz=quiz_obj)
             
             # Upload report
             plan_topic = user["main_topic"]

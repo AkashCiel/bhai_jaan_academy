@@ -197,11 +197,27 @@ USERS_FILE = os.path.join(os.path.dirname(__file__), "users.json")
 # def generate_report_content(topic):
 
 from fastapi.responses import JSONResponse
+from typing import Optional
+
 @app.post("/run-scheduler")
-async def run_scheduler(request: Request):
+async def run_scheduler(
+    request: Request, 
+    email: Optional[str] = None, 
+    topic: Optional[str] = None
+):
     try:
         # Use service layer for scheduler operations
-        users = user_service.load_users()
+        all_users = user_service.load_users()
+        
+        # Filter users if email/topic provided
+        if email and topic:
+            users = [user for user in all_users 
+                    if user.get("email") == email and user.get("main_topic") == topic]
+            if not users:
+                return {"status": "error", "message": f"No user found with email={email} and topic={topic}"}
+        else:
+            users = all_users
+        
         updated_users = []
         success_count = 0
         errors = []
@@ -217,27 +233,32 @@ async def run_scheduler(request: Request):
                 error_msg = f"User {user.get('email', 'Unknown')}: {str(e)}"
                 errors.append(error_msg)
                 print(f"[Scheduler] Error processing user: {error_msg}")
+    
+        # Send daily report notification (only if processing all users)
+        if not (email and topic):
+            try:
+                from services.notification_service import NotificationService
+                notification_service = NotificationService()
+                notification_service.send_daily_report(len(all_users), success_count, errors)
+            except Exception as notification_error:
+                print(f"[Scheduler] Failed to send daily report: {notification_error}")
         
-        # Save updated users using service
-        user_service.save_users([user for user in updated_users if user is not None])
-        
-        # Send daily report notification
-        try:
-            from services.notification_service import NotificationService
-            notification_service = NotificationService()
-            notification_service.send_daily_report(len(users), success_count, errors)
-        except Exception as notification_error:
-            print(f"[Scheduler] Failed to send daily report: {notification_error}")
-        
-        return {"status": "ok", "message": "Scheduler run complete.", "users_processed": len(users)}
+        return {
+            "status": "ok", 
+            "message": f"Scheduler run complete. Processed {len(users)} user(s).", 
+            "users_processed": len(users),
+            "success_count": success_count,
+            "errors": errors
+        }
     except Exception as e:
-        # Send error alert notification
-        try:
-            from services.notification_service import NotificationService
-            notification_service = NotificationService()
-            notification_service.send_error_alert("Scheduler Failure", str(e))
-        except Exception as notification_error:
-            print(f"[Scheduler] Failed to send error alert: {notification_error}")
+        # Send error alert notification (only if processing all users)
+        if not (email and topic):
+            try:
+                from services.notification_service import NotificationService
+                notification_service = NotificationService()
+                notification_service.send_error_alert("Scheduler Failure", str(e))
+            except Exception as notification_error:
+                print(f"[Scheduler] Failed to send error alert: {notification_error}")
         
         print(f"Error in scheduler: {e}")
         import traceback

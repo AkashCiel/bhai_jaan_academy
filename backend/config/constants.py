@@ -67,6 +67,7 @@ The report should include:
 - Real-world applications or examples
 - A rich narrative that connects the concepts to each other and to real-world applications. Its best if this narrative is presented as one or multiple stories.
 - A conclusion that summarizes the key takeaways and provides a call to action for the user to explore the topic further.
+- An interactive quiz at the end to test understanding of key concepts (see QUIZ_GENERATION instructions)
 """,
     
     # Content composition guidelines
@@ -130,8 +131,8 @@ The tone should be clear, engaging, and accessible to someone new to the subject
     
     # System messages
     'SYSTEM_MESSAGES': {
-        'REPORT_GENERATOR': "You are an expert educator and science communicator.",
-        'CONTEXT_AWARE_GENERATOR': "You are an expert educator and science communicator who creates coherent, progressive learning experiences.",
+        'REPORT_GENERATOR': "You are an expert educator and science communicator who creates engaging, interactive learning experiences.",
+        'CONTEXT_AWARE_GENERATOR': "You are an expert educator and science communicator who creates coherent, progressive learning experiences with interactive assessment.",
         'SUMMARY_GENERATOR': "You are an expert educational content curator who creates coherent learning summaries.",
         'INITIAL_SUMMARY_GENERATOR': "You are an expert educational content curator who creates foundational learning summaries."
     },
@@ -242,6 +243,7 @@ Include interactive elements for key concepts:
 - "Further Exploration" prompts for deeper learning
 - "Self-Assessment" questions for key concepts
 - "Key Takeaways" summaries at the end of each section
+- A comprehensive quiz at the end to test understanding (see QUIZ_GENERATION instructions)
 """,
     
     # Learning journey integration
@@ -252,5 +254,128 @@ Integrate the learning journey by:
 - Creating bridges between past and present concepts
 - Maintaining the narrative flow of the user's learning progression
 - Highlighting the user's growing expertise and understanding
+""",
+
+    # Quiz generation prompts
+    'QUIZ_GENERATION': """
+IMPORTANT: At the end of every report, generate an interactive quiz that tests the user's understanding of the key concepts covered.
+
+QUIZ REQUIREMENTS:
+- Create exactly FIVE quiz questions per report
+- Each question should test understanding of different key concepts from the report
+- Provide exactly 4 multiple-choice options (A, B, C, D) for each question
+- Include detailed explanations for why each option is correct or incorrect
+- Ensure the correct answer is clearly marked for each question
+- Make questions appropriate for the user's current learning level
+- IMPORTANT: Distribute correct answers randomly across A, B, C, D positions
+- Avoid patterns - do not put the correct answer in the same position for multiple questions
+
+QUIZ FORMAT:
+Use this exact structure at the end of your report:
+
+## Interactive Quiz: Test Your Understanding
+
+**Question 1:** [Write a clear, specific question about the first key concept]
+
+**Options:**
+A) [First option text]
+B) [Second option text] 
+C) [Third option text]
+D) [Fourth option text]
+
+**Correct Answer:** [Letter of correct option]
+
+**Explanations:**
+- **Option A:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option B:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option C:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option D:** [Explain why this is correct or incorrect, with specific details from the report]
+
+**Question 2:** [Write a clear, specific question about the second key concept]
+
+**Options:**
+A) [First option text]
+B) [Second option text] 
+C) [Third option text]
+D) [Fourth option text]
+
+**Correct Answer:** [Letter of correct option]
+
+**Explanations:**
+- **Option A:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option B:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option C:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option D:** [Explain why this is correct or incorrect, with specific details from the report]
+
+**Question 3:** [Write a clear, specific question about the third key concept]
+
+**Options:**
+A) [First option text]
+B) [Second option text] 
+C) [Third option text]
+D) [Fourth option text]
+
+**Correct Answer:** [Letter of correct option]
+
+**Explanations:**
+- **Option A:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option B:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option C:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option D:** [Explain why this is correct or incorrect, with specific details from the report]
+
+**Question 4:** [Write a clear, specific question about the fourth key concept]
+
+**Options:**
+A) [First option text]
+B) [Second option text] 
+C) [Third option text]
+D) [Fourth option text]
+
+**Correct Answer:** [Letter of correct option]
+
+**Explanations:**
+- **Option A:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option B:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option C:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option D:** [Explain why this is correct or incorrect, with specific details from the report]
+
+**Question 5:** [Write a clear, specific question about the fifth key concept]
+
+**Options:**
+A) [First option text]
+B) [Second option text] 
+C) [Third option text]
+D) [Fourth option text]
+
+**Correct Answer:** [Letter of correct option]
+
+**Explanations:**
+- **Option A:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option B:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option C:** [Explain why this is correct or incorrect, with specific details from the report]
+- **Option D:** [Explain why this is correct or incorrect, with specific details from the report]
+
+**Why This Matters:** [Brief explanation of why understanding these concepts is important for the user's learning journey]
+""",
+
+    'QUIZ_CONTENT_GUIDELINES': """
+QUIZ CONTENT GUIDELINES:
+- Questions should test conceptual understanding, not just memorization
+- All options should be plausible but clearly distinguishable
+- Explanations should reference specific content from the report
+- Difficulty should match the user's current learning stage
+- Questions should encourage critical thinking about the material
+- Avoid "trick questions" - focus on genuine learning assessment
+- Ensure explanations are educational and help reinforce learning
+""",
+
+    'QUIZ_INTEGRATION': """
+QUIZ INTEGRATION INSTRUCTIONS:
+- Place the quiz at the very end of the report, after all content
+- The quiz should feel like a natural conclusion to the learning material
+- Use the quiz to reinforce key takeaways from the report
+- Ensure each question connects directly to different main concepts covered
+- Make the quiz engaging and motivating for continued learning
+- Present all 5 questions together for comprehensive assessment
 """
-} 
+}

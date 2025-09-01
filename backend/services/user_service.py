@@ -74,26 +74,27 @@ class UserService:
             return (idx, topics[idx])
         return None, None
     
-    def should_generate_report(self, user: Dict[str, Any]) -> bool:
-        """Determine if a report should be generated for user"""
-        import datetime
+    # Keep this for reference, but not used in the current implementation
+    # def should_generate_report(self, user: Dict[str, Any]) -> bool:
+    #     """Determine if a report should be generated for user"""
+    #     import datetime
         
-        now = datetime.datetime.now(datetime.timezone.utc)
-        last_report_time = user.get("last_report_time")
-        current_index = user.get("current_index", 0)
+    #     now = datetime.datetime.now(datetime.timezone.utc)
+    #     last_report_time = user.get("last_report_time")
+    #     current_index = user.get("current_index", 0)
         
-        # If current_index == 1 and last_report_time is today, skip
-        if last_report_time:
-            try:
-                last_dt = datetime.datetime.fromisoformat(last_report_time)
-            except Exception:
-                last_dt = None
-        else:
-            last_dt = None
+    #     # If current_index == 1 and last_report_time is today, skip
+    #     if last_report_time:
+    #         try:
+    #             last_dt = datetime.datetime.fromisoformat(last_report_time)
+    #         except Exception:
+    #             last_dt = None
+    #     else:
+    #         last_dt = None
             
-        if current_index == 1 and last_dt and self._is_same_utc_day(now, last_dt):
-            return False
-        return True
+    #     if current_index == 1 and last_dt and self._is_same_utc_day(now, last_dt):
+    #         return False
+    #     return True
     
     def _is_same_utc_day(self, dt1, dt2):
         """Check if two datetime objects are on the same UTC day"""

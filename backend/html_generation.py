@@ -294,7 +294,8 @@ def update_learning_plan_html(
 def generate_topic_report_html(
     topic: str,
     user_email: str,
-    report_content: str
+    report_content: str,
+    quiz: Dict | None = None
 ) -> str:
     """
     Generates a well-structured HTML report for a topic using Tailwind CSS.
@@ -302,6 +303,124 @@ def generate_topic_report_html(
     # Parse the AI response to convert structural markers to HTML
     parsed_content = parse_ai_response_to_html(report_content)
     
+    # Prepare optional quiz block
+    quiz_script = ""
+    quiz_html = ""
+    if quiz:
+        import json as _json
+        quiz_json = _json.dumps(quiz)
+        quiz_script = f"""
+      <script>
+        window.__QUIZ__ = {quiz_json};
+      </script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {{
+          const quiz = window.__QUIZ__;
+          if (!quiz || !quiz.questions) return;
+          const container = document.getElementById('interactive-quiz');
+          if (!container) return;
+
+          const qEl = document.createElement('h2');
+          qEl.className = 'text-xl font-bold mt-8 mb-4';
+          qEl.textContent = 'Interactive Quiz: Test Your Understanding';
+          container.appendChild(qEl);
+
+          // Render each question
+          quiz.questions.forEach((q, questionIndex) => {{
+            const questionContainer = document.createElement('div');
+            questionContainer.className = 'mb-8 p-4 border rounded bg-gray-50';
+            
+            const questionTitle = document.createElement('h3');
+            questionTitle.className = 'text-lg font-semibold mb-3';
+            questionTitle.textContent = `Question ${{questionIndex + 1}}: ${{q.question}}`;
+            questionContainer.appendChild(questionTitle);
+
+            const form = document.createElement('form');
+            form.className = 'space-y-3';
+            q.options.forEach(opt => {{
+              const label = document.createElement('label');
+              label.className = 'flex items-start gap-3 p-3 border rounded hover:bg-gray-50 cursor-pointer';
+              const input = document.createElement('input');
+              input.type = 'radio';
+              input.name = `quizOption_${{questionIndex}}`;
+              input.value = opt.id;
+              input.className = 'mt-1';
+              const span = document.createElement('span');
+              span.innerHTML = `<strong>${{opt.id}})</strong> ${{opt.text}}`;
+              label.appendChild(input);
+              label.appendChild(span);
+              form.appendChild(label);
+            }});
+
+            const submit = document.createElement('button');
+            submit.type = 'button';
+            submit.className = 'mt-4 px-4 py-2 bg-gray-800 text-white rounded hover:bg-black';
+            submit.textContent = 'Submit Answer';
+            form.appendChild(submit);
+
+            const feedback = document.createElement('div');
+            feedback.className = 'mt-4';
+            
+            questionContainer.appendChild(form);
+            questionContainer.appendChild(feedback);
+            container.appendChild(questionContainer);
+
+            function renderExplanation(selectedId, question) {{
+              feedback.innerHTML = '';
+              const isCorrect = selectedId === question.correct_answer;
+              const header = document.createElement('p');
+              header.className = isCorrect ? 'text-green-700 font-bold' : 'text-red-700 font-bold';
+              header.textContent = isCorrect ? 'Correct!' : 'Not quite.';
+              feedback.appendChild(header);
+
+              const list = document.createElement('ul');
+              list.className = 'mt-2 list-disc pl-6';
+              question.options.forEach(opt => {{
+                const li = document.createElement('li');
+                const label = document.createElement('span');
+                label.innerHTML = `<strong>Option ${{opt.id}}:</strong> ${{opt.explanation}}`;
+                if (opt.id === question.correct_answer) {{
+                  li.className = 'text-green-800';
+                }} else if (opt.id === selectedId) {{
+                  li.className = 'text-red-800';
+                }}
+                li.appendChild(label);
+                list.appendChild(li);
+              }});
+              feedback.appendChild(list);
+            }}
+
+            submit.addEventListener('click', function() {{
+              const selected = questionContainer.querySelector(`input[name="quizOption_${{questionIndex}}"]:checked`);
+              if (!selected) {{
+                feedback.innerHTML = '<p class="text-yellow-800">Please select an option first.</p>';
+                return;
+              }}
+              renderExplanation(selected.value, q);
+            }});
+          }});
+
+          // Add "Why This Matters" section at the end
+          if (quiz.why_it_matters) {{
+            const whySection = document.createElement('div');
+            whySection.className = 'mt-6 p-4 bg-blue-50 border rounded';
+            const whyTitle = document.createElement('h3');
+            whyTitle.className = 'font-bold text-blue-800 mb-2';
+            whyTitle.textContent = 'Why This Matters:';
+            const whyText = document.createElement('p');
+            whyText.className = 'text-blue-700';
+            whyText.textContent = quiz.why_it_matters;
+            whySection.appendChild(whyTitle);
+            whySection.appendChild(whyText);
+            container.appendChild(whySection);
+          }}
+        }});
+      </script>
+        """
+        quiz_html = """
+        <section id="interactive-quiz" class="mt-10 p-4 border rounded bg-white/70"></section>
+        """
+
     return f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -486,6 +605,7 @@ def generate_topic_report_html(
         <article class="report-content prose prose-lg tex2jax_process">
           {parsed_content}
         </article>
+        {quiz_html}
         <footer class="mt-8 text-sm text-gray-600">
           <p>Bhai Jaan Academy &copy; 2024</p>
         </footer>
@@ -504,6 +624,7 @@ def generate_topic_report_html(
           }}
         }});
       </script>
+      {quiz_script}
     </body>
     </html>
     """ 

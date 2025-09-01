@@ -261,7 +261,7 @@ Integrate the learning journey by:
 IMPORTANT: At the end of every report, generate an interactive quiz that tests the user's understanding of the key concepts covered.
 
 QUIZ REQUIREMENTS:
-- Create exactly ONE quiz question per report
+- Create exactly FIVE quiz questions per report
 - The question should test understanding of the most important concept from the report
 - Provide exactly 4 multiple-choice options (A, B, C, D)
 - Include detailed explanations for why each option is correct or incorrect

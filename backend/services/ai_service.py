@@ -31,6 +31,10 @@ class AIService:
 
 {AI_PROMPTS['INTERACTIVE_ELEMENTS']}
 
+{AI_PROMPTS['QUIZ_GENERATION']}
+{AI_PROMPTS['QUIZ_CONTENT_GUIDELINES']}
+{AI_PROMPTS['QUIZ_INTEGRATION']}
+
 {AI_PROMPTS['FORMATTING_INSTRUCTIONS']}
 
 Example format:
@@ -88,6 +92,10 @@ Learning Plan Structure:
 {AI_PROMPTS['CONCEPT_CONNECTIONS']}
 
 {AI_PROMPTS['INTERACTIVE_ELEMENTS']}
+
+{AI_PROMPTS['QUIZ_GENERATION']}
+{AI_PROMPTS['QUIZ_CONTENT_GUIDELINES']}
+{AI_PROMPTS['QUIZ_INTEGRATION']}
 
 {AI_PROMPTS['FORMATTING_INSTRUCTIONS']}
 
@@ -172,6 +180,59 @@ If the topic is not suitable for learning or is inappropriate, respond with "ERR
             import traceback
             traceback.print_exc()
             return f"ERROR: {str(e)}"
+
+    def _parse_quiz_from_markdown(self, content: str) -> Optional[Dict[str, Any]]:
+        """Extract structured quiz data from the 'Interactive Quiz' section in markdown."""
+        try:
+            quiz_section_match = re.search(r"##\s*Interactive Quiz:\s*Test Your Understanding([\s\S]+)$", content, re.IGNORECASE)
+            if not quiz_section_match:
+                return None
+            quiz_block = quiz_section_match.group(1)
+
+            def extract(pattern: str) -> Optional[str]:
+                m = re.search(pattern, quiz_block, re.IGNORECASE | re.MULTILINE)
+                return m.group(1).strip() if m else None
+
+            question = extract(r"\*\*Question:\*\*\s*(.+)")
+            correct_answer = extract(r"\*\*Correct Answer:\*\*\s*([A-D])\b")
+            why_matters = extract(r"\*\*Why This Matters:\*\*\s*(.+)")
+
+            option_texts: Dict[str, str] = {}
+            for opt in ["A", "B", "C", "D"]:
+                txt = extract(rf"^{opt}\)\s+(.+)$")
+                if txt:
+                    option_texts[opt] = txt
+
+            option_explanations: Dict[str, str] = {}
+            for opt in ["A", "B", "C", "D"]:
+                expl = extract(rf"-\s*\*\*Option {opt}:\*\*\s*(.+)")
+                if expl:
+                    option_explanations[opt] = expl
+
+            if not (question and correct_answer and len(option_texts) == 4 and len(option_explanations) == 4):
+                return None
+
+            options = [
+                {"id": k, "text": option_texts[k], "explanation": option_explanations.get(k, "")}
+                for k in ["A", "B", "C", "D"]
+            ]
+
+            return {
+                "question": question,
+                "options": options,
+                "correct_answer": correct_answer,
+                "why_it_matters": why_matters or ""
+            }
+        except Exception:
+            return None
+
+    def strip_quiz_section(self, content: str) -> str:
+        """Remove the quiz section from the markdown content (if present)."""
+        return re.sub(r"\n?##\s*Interactive Quiz:\s*Test Your Understanding[\s\S]+$", "", content, flags=re.IGNORECASE)
+
+    def extract_quiz_from_report(self, content: str) -> Optional[Dict[str, Any]]:
+        """Public helper to extract a quiz object from report markdown."""
+        return self._parse_quiz_from_markdown(content)
 
     def generate_report_content(self, topic: str) -> str:
         """

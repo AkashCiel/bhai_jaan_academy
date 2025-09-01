@@ -294,7 +294,8 @@ def update_learning_plan_html(
 def generate_topic_report_html(
     topic: str,
     user_email: str,
-    report_content: str
+    report_content: str,
+    quiz: Dict | None = None
 ) -> str:
     """
     Generates a well-structured HTML report for a topic using Tailwind CSS.
@@ -302,6 +303,108 @@ def generate_topic_report_html(
     # Parse the AI response to convert structural markers to HTML
     parsed_content = parse_ai_response_to_html(report_content)
     
+    # Prepare optional quiz block
+    quiz_script = ""
+    quiz_html = ""
+    if quiz:
+        import json as _json
+        quiz_json = _json.dumps(quiz)
+        quiz_script = f"""
+      <script>
+        window.__QUIZ__ = {quiz_json};
+      </script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {{
+          const quiz = window.__QUIZ__;
+          if (!quiz) return;
+          const container = document.getElementById('interactive-quiz');
+          if (!container) return;
+
+          const qEl = document.createElement('h2');
+          qEl.className = 'text-xl font-bold mt-8 mb-4';
+          qEl.textContent = 'Interactive Quiz: Test Your Understanding';
+          container.appendChild(qEl);
+
+          const question = document.createElement('p');
+          question.className = 'mb-4 font-semibold';
+          question.textContent = quiz.question;
+          container.appendChild(question);
+
+          const form = document.createElement('form');
+          form.className = 'space-y-3';
+          quiz.options.forEach(opt => {{
+            const label = document.createElement('label');
+            label.className = 'flex items-start gap-3 p-3 border rounded hover:bg-gray-50 cursor-pointer';
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quizOption';
+            input.value = opt.id;
+            input.className = 'mt-1';
+            const span = document.createElement('span');
+            span.innerHTML = `<strong>${{opt.id}})</strong> ${{opt.text}}`;
+            label.appendChild(input);
+            label.appendChild(span);
+            form.appendChild(label);
+          }});
+
+          const submit = document.createElement('button');
+          submit.type = 'button';
+          submit.className = 'mt-4 px-4 py-2 bg-gray-800 text-white rounded hover:bg-black';
+          submit.textContent = 'Submit Answer';
+          form.appendChild(submit);
+
+          const feedback = document.createElement('div');
+          feedback.className = 'mt-4';
+          container.appendChild(form);
+          container.appendChild(feedback);
+
+          function renderExplanation(selectedId) {{
+            feedback.innerHTML = '';
+            const isCorrect = selectedId === quiz.correct_answer;
+            const header = document.createElement('p');
+            header.className = isCorrect ? 'text-green-700 font-bold' : 'text-red-700 font-bold';
+            header.textContent = isCorrect ? 'Correct!' : 'Not quite.';
+            feedback.appendChild(header);
+
+            const list = document.createElement('ul');
+            list.className = 'mt-2 list-disc pl-6';
+            quiz.options.forEach(opt => {{
+              const li = document.createElement('li');
+              const label = document.createElement('span');
+              label.innerHTML = `<strong>Option ${{opt.id}}:</strong> ${{opt.explanation}}`;
+              if (opt.id === quiz.correct_answer) {{
+                li.className = 'text-green-800';
+              }} else if (opt.id === selectedId) {{
+                li.className = 'text-red-800';
+              }}
+              li.appendChild(label);
+              list.appendChild(li);
+            }});
+            feedback.appendChild(list);
+
+            if (quiz.why_it_matters) {{
+              const why = document.createElement('p');
+              why.className = 'mt-3 text-gray-800';
+              why.innerHTML = `<strong>Why This Matters:</strong> ${{quiz.why_it_matters}}`;
+              feedback.appendChild(why);
+            }}
+          }}
+
+          submit.addEventListener('click', function() {{
+            const selected = container.querySelector('input[name="quizOption"]:checked');
+            if (!selected) {{
+              feedback.innerHTML = '<p class="text-yellow-800">Please select an option first.</p>';
+              return;
+            }}
+            renderExplanation(selected.value);
+          }});
+        }});
+      </script>
+        """
+        quiz_html = """
+        <section id="interactive-quiz" class="mt-10 p-4 border rounded bg-white/70"></section>
+        """
+
     return f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -486,6 +589,7 @@ def generate_topic_report_html(
         <article class="report-content prose prose-lg tex2jax_process">
           {parsed_content}
         </article>
+        {quiz_html}
         <footer class="mt-8 text-sm text-gray-600">
           <p>Bhai Jaan Academy &copy; 2024</p>
         </footer>
@@ -504,6 +608,7 @@ def generate_topic_report_html(
           }}
         }});
       </script>
+      {quiz_script}
     </body>
     </html>
     """ 

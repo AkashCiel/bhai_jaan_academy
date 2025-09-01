@@ -177,11 +177,7 @@ class ReportService:
     def generate_next_report(self, user: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """Generate next report for existing user"""
         try:
-            # Check if report should be generated
-            if not self.user_service.should_generate_report(user):
-                print(f"[Report Service] Skipping {user['email']} (already sent today)")
-                return user
-            
+            print(f"[Report Service] Generating next report for {user['email']}")
             # Get next topic
             idx, topic = self.user_service.get_next_topic(user)
             if topic is None:

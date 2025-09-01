@@ -28,7 +28,8 @@ class EmailService:
             'topic': topic,
             'plan_url': plan_url,
             'discord_feedback_url': discord_feedback_url,
-            'email_feedback_url': email_feedback_url
+            'email_feedback_url': email_feedback_url,
+            'show_discord_links': FEEDBACK_CONFIG['SHOW_DISCORD_LINKS']
         })
         
         try:
@@ -67,7 +68,8 @@ class EmailService:
             'plan_url': plan_url,
             'report_url': report_url,
             'discord_feedback_url': discord_feedback_url,
-            'email_feedback_url': email_feedback_url
+            'email_feedback_url': email_feedback_url,
+            'show_discord_links': FEEDBACK_CONFIG['SHOW_DISCORD_LINKS']
         })
         
         try:

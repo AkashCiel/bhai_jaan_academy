@@ -4,7 +4,7 @@
     <p>Thank you for signing up to learn about <strong>{{topic}}</strong>!</p>
     <p>We're excited to help you master this topic in just 30 days.</p>
     <p>Your personalized learning plan is ready. <a href='{{plan_url}}'>Click here to view your plan</a>.</p>
-    <p><em>If you cannot find the page, please come back in a few minutes.</em></p>
+    <p><em>The reports and links can take some time to be active, just try again in a few minutes :)</em></p>
     <br>
     <p>Remember, Rome wasn't built in a day!</p>
     <p>— The Bhai Jaan Academy Team</p>
@@ -13,7 +13,9 @@
     <div style="text-align: center; padding: 20px 0;">
         <h3 style="color: #374151; margin-bottom: 15px;">Have feedback? We'd love to hear from you!</h3>
         <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+            {% if show_discord_links %}
             <a href="{{discord_feedback_url}}" style="display: inline-block; padding: 12px 24px; background-color: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Join our Discord Community</a>
+            {% endif %}
             <a href="{{email_feedback_url}}" style="display: inline-block; padding: 12px 24px; background-color: #10B981; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s;">Send us an Email</a>
         </div>
     </div>

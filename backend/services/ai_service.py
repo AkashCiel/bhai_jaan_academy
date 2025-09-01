@@ -189,39 +189,62 @@ If the topic is not suitable for learning or is inappropriate, respond with "ERR
                 return None
             quiz_block = quiz_section_match.group(1)
 
-            def extract(pattern: str) -> Optional[str]:
-                m = re.search(pattern, quiz_block, re.IGNORECASE | re.MULTILINE)
-                return m.group(1).strip() if m else None
+            # Extract "Why This Matters" first (appears at the end)
+            why_matters_match = re.search(r"\*\*Why This Matters:\*\*\s*(.+)", quiz_block, re.IGNORECASE)
+            why_matters = why_matters_match.group(1).strip() if why_matters_match else ""
 
-            question = extract(r"\*\*Question:\*\*\s*(.+)")
-            correct_answer = extract(r"\*\*Correct Answer:\*\*\s*([A-D])\b")
-            why_matters = extract(r"\*\*Why This Matters:\*\*\s*(.+)")
-
-            option_texts: Dict[str, str] = {}
-            for opt in ["A", "B", "C", "D"]:
-                txt = extract(rf"^{opt}\)\s+(.+)$")
-                if txt:
-                    option_texts[opt] = txt
-
-            option_explanations: Dict[str, str] = {}
-            for opt in ["A", "B", "C", "D"]:
-                expl = extract(rf"-\s*\*\*Option {opt}:\*\*\s*(.+)")
-                if expl:
-                    option_explanations[opt] = expl
-
-            if not (question and correct_answer and len(option_texts) == 4 and len(option_explanations) == 4):
+            # Find all question blocks (Question 1, Question 2, etc.)
+            question_blocks = re.findall(r"\*\*Question (\d+):\*\*([\s\S]*?)(?=\*\*Question \d+:\*\*|\*\*Why This Matters:\*\*|$)", quiz_block, re.IGNORECASE)
+            
+            if not question_blocks:
                 return None
 
-            options = [
-                {"id": k, "text": option_texts[k], "explanation": option_explanations.get(k, "")}
-                for k in ["A", "B", "C", "D"]
-            ]
+            questions = []
+            for question_num, block in question_blocks:
+                def extract_from_block(pattern: str) -> Optional[str]:
+                    m = re.search(pattern, block, re.IGNORECASE | re.MULTILINE)
+                    return m.group(1).strip() if m else None
+
+                # Extract question text (first line after "Question N:")
+                question_text_match = re.search(r"^\s*(.+)", block.strip(), re.MULTILINE)
+                question_text = question_text_match.group(1).strip() if question_text_match else None
+
+                # Extract correct answer
+                correct_answer = extract_from_block(r"\*\*Correct Answer:\*\*\s*([A-D])\b")
+
+                # Extract options
+                option_texts: Dict[str, str] = {}
+                for opt in ["A", "B", "C", "D"]:
+                    txt = extract_from_block(rf"^{opt}\)\s+(.+)$")
+                    if txt:
+                        option_texts[opt] = txt
+
+                # Extract explanations
+                option_explanations: Dict[str, str] = {}
+                for opt in ["A", "B", "C", "D"]:
+                    expl = extract_from_block(rf"-\s*\*\*Option {opt}:\*\*\s*(.+)")
+                    if expl:
+                        option_explanations[opt] = expl
+
+                # Only include question if all required parts are present
+                if question_text and correct_answer and len(option_texts) == 4 and len(option_explanations) == 4:
+                    options = [
+                        {"id": k, "text": option_texts[k], "explanation": option_explanations.get(k, "")}
+                        for k in ["A", "B", "C", "D"]
+                    ]
+                    
+                    questions.append({
+                        "question": question_text,
+                        "options": options,
+                        "correct_answer": correct_answer
+                    })
+
+            if not questions:
+                return None
 
             return {
-                "question": question,
-                "options": options,
-                "correct_answer": correct_answer,
-                "why_it_matters": why_matters or ""
+                "questions": questions,
+                "why_it_matters": why_matters
             }
         except Exception:
             return None

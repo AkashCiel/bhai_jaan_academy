@@ -316,7 +316,7 @@ def generate_topic_report_html(
       <script>
         document.addEventListener('DOMContentLoaded', function() {{
           const quiz = window.__QUIZ__;
-          if (!quiz) return;
+          if (!quiz || !quiz.questions) return;
           const container = document.getElementById('interactive-quiz');
           if (!container) return;
 
@@ -325,79 +325,95 @@ def generate_topic_report_html(
           qEl.textContent = 'Interactive Quiz: Test Your Understanding';
           container.appendChild(qEl);
 
-          const question = document.createElement('p');
-          question.className = 'mb-4 font-semibold';
-          question.textContent = quiz.question;
-          container.appendChild(question);
+          // Render each question
+          quiz.questions.forEach((q, questionIndex) => {{
+            const questionContainer = document.createElement('div');
+            questionContainer.className = 'mb-8 p-4 border rounded bg-gray-50';
+            
+            const questionTitle = document.createElement('h3');
+            questionTitle.className = 'text-lg font-semibold mb-3';
+            questionTitle.textContent = `Question ${{questionIndex + 1}}: ${{q.question}}`;
+            questionContainer.appendChild(questionTitle);
 
-          const form = document.createElement('form');
-          form.className = 'space-y-3';
-          quiz.options.forEach(opt => {{
-            const label = document.createElement('label');
-            label.className = 'flex items-start gap-3 p-3 border rounded hover:bg-gray-50 cursor-pointer';
-            const input = document.createElement('input');
-            input.type = 'radio';
-            input.name = 'quizOption';
-            input.value = opt.id;
-            input.className = 'mt-1';
-            const span = document.createElement('span');
-            span.innerHTML = `<strong>${{opt.id}})</strong> ${{opt.text}}`;
-            label.appendChild(input);
-            label.appendChild(span);
-            form.appendChild(label);
-          }});
-
-          const submit = document.createElement('button');
-          submit.type = 'button';
-          submit.className = 'mt-4 px-4 py-2 bg-gray-800 text-white rounded hover:bg-black';
-          submit.textContent = 'Submit Answer';
-          form.appendChild(submit);
-
-          const feedback = document.createElement('div');
-          feedback.className = 'mt-4';
-          container.appendChild(form);
-          container.appendChild(feedback);
-
-          function renderExplanation(selectedId) {{
-            feedback.innerHTML = '';
-            const isCorrect = selectedId === quiz.correct_answer;
-            const header = document.createElement('p');
-            header.className = isCorrect ? 'text-green-700 font-bold' : 'text-red-700 font-bold';
-            header.textContent = isCorrect ? 'Correct!' : 'Not quite.';
-            feedback.appendChild(header);
-
-            const list = document.createElement('ul');
-            list.className = 'mt-2 list-disc pl-6';
-            quiz.options.forEach(opt => {{
-              const li = document.createElement('li');
-              const label = document.createElement('span');
-              label.innerHTML = `<strong>Option ${{opt.id}}:</strong> ${{opt.explanation}}`;
-              if (opt.id === quiz.correct_answer) {{
-                li.className = 'text-green-800';
-              }} else if (opt.id === selectedId) {{
-                li.className = 'text-red-800';
-              }}
-              li.appendChild(label);
-              list.appendChild(li);
+            const form = document.createElement('form');
+            form.className = 'space-y-3';
+            q.options.forEach(opt => {{
+              const label = document.createElement('label');
+              label.className = 'flex items-start gap-3 p-3 border rounded hover:bg-gray-50 cursor-pointer';
+              const input = document.createElement('input');
+              input.type = 'radio';
+              input.name = `quizOption_${{questionIndex}}`;
+              input.value = opt.id;
+              input.className = 'mt-1';
+              const span = document.createElement('span');
+              span.innerHTML = `<strong>${{opt.id}})</strong> ${{opt.text}}`;
+              label.appendChild(input);
+              label.appendChild(span);
+              form.appendChild(label);
             }});
-            feedback.appendChild(list);
 
-            if (quiz.why_it_matters) {{
-              const why = document.createElement('p');
-              why.className = 'mt-3 text-gray-800';
-              why.innerHTML = `<strong>Why This Matters:</strong> ${{quiz.why_it_matters}}`;
-              feedback.appendChild(why);
-            }}
-          }}
+            const submit = document.createElement('button');
+            submit.type = 'button';
+            submit.className = 'mt-4 px-4 py-2 bg-gray-800 text-white rounded hover:bg-black';
+            submit.textContent = 'Submit Answer';
+            form.appendChild(submit);
 
-          submit.addEventListener('click', function() {{
-            const selected = container.querySelector('input[name="quizOption"]:checked');
-            if (!selected) {{
-              feedback.innerHTML = '<p class="text-yellow-800">Please select an option first.</p>';
-              return;
+            const feedback = document.createElement('div');
+            feedback.className = 'mt-4';
+            
+            questionContainer.appendChild(form);
+            questionContainer.appendChild(feedback);
+            container.appendChild(questionContainer);
+
+            function renderExplanation(selectedId, question) {{
+              feedback.innerHTML = '';
+              const isCorrect = selectedId === question.correct_answer;
+              const header = document.createElement('p');
+              header.className = isCorrect ? 'text-green-700 font-bold' : 'text-red-700 font-bold';
+              header.textContent = isCorrect ? 'Correct!' : 'Not quite.';
+              feedback.appendChild(header);
+
+              const list = document.createElement('ul');
+              list.className = 'mt-2 list-disc pl-6';
+              question.options.forEach(opt => {{
+                const li = document.createElement('li');
+                const label = document.createElement('span');
+                label.innerHTML = `<strong>Option ${{opt.id}}:</strong> ${{opt.explanation}}`;
+                if (opt.id === question.correct_answer) {{
+                  li.className = 'text-green-800';
+                }} else if (opt.id === selectedId) {{
+                  li.className = 'text-red-800';
+                }}
+                li.appendChild(label);
+                list.appendChild(li);
+              }});
+              feedback.appendChild(list);
             }}
-            renderExplanation(selected.value);
+
+            submit.addEventListener('click', function() {{
+              const selected = questionContainer.querySelector(`input[name="quizOption_${{questionIndex}}"]:checked`);
+              if (!selected) {{
+                feedback.innerHTML = '<p class="text-yellow-800">Please select an option first.</p>';
+                return;
+              }}
+              renderExplanation(selected.value, q);
+            }});
           }});
+
+          // Add "Why This Matters" section at the end
+          if (quiz.why_it_matters) {{
+            const whySection = document.createElement('div');
+            whySection.className = 'mt-6 p-4 bg-blue-50 border rounded';
+            const whyTitle = document.createElement('h3');
+            whyTitle.className = 'font-bold text-blue-800 mb-2';
+            whyTitle.textContent = 'Why This Matters:';
+            const whyText = document.createElement('p');
+            whyText.className = 'text-blue-700';
+            whyText.textContent = quiz.why_it_matters;
+            whySection.appendChild(whyTitle);
+            whySection.appendChild(whyText);
+            container.appendChild(whySection);
+          }}
         }});
       </script>
         """

@@ -464,12 +464,11 @@ button, input, select, textarea {
     min-width: 280px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px) translateX(-50%); /* Center horizontally and slide up */
+    transform: translateX(-50%); /* Center horizontally only */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none; /* Prevents hover box from interfering with input */
-    left: 50%; /* Center horizontally */
-    bottom: 100%; /* Position above demo button */
-    margin-bottom: 1rem; /* Space between hover box and demo button */
+    center: 100%; /* Center horizontally */
+    /* Remove bottom positioning - let JavaScript handle vertical positioning */
 }
 
 .topic-hover-box.show {

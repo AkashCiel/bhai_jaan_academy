@@ -121,8 +121,8 @@ function positionHoverBox() {
     const demoRect = demoButtonContainer.getBoundingClientRect();
     const containerRect = learningForm.getBoundingClientRect();
     
-    // Position above demo button, centered
-    const top = demoRect.top - containerRect.top - 10; // 10px above demo button
+    // Position above demo button: top of hover box = top of demo button - 10px
+    const top = demoRect.top - containerRect.top - 10; // 10px above demo button top
     
     // CSS handles horizontal centering with left: 50% and transform: translateX(-50%)
     topicHoverBox.style.top = `${top}px`;

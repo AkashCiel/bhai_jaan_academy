@@ -448,4 +448,43 @@ button, input, select, textarea {
 .text-contrast {
     color: #f8fafc !important; /* near-white for dark backgrounds */
     text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+}
+
+/* Topic Hover Box Styles */
+.topic-hover-box {
+    position: absolute;
+    z-index: 999999 !important; /* Maximum z-index to ensure it's above everything */
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    padding: 1rem;
+    max-width: 320px;
+    min-width: 280px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px) translateX(-50%); /* Center horizontally and slide up */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none; /* Prevents hover box from interfering with input */
+    left: 50%; /* Center horizontally */
+    bottom: 100%; /* Position above demo button */
+    margin-bottom: 1rem; /* Space between hover box and demo button */
+}
+
+.topic-hover-box.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Mobile responsive adjustments for hover box */
+@media (max-width: 640px) {
+    .topic-hover-box {
+        max-width: calc(100vw - 2rem);
+        min-width: 250px;
+        padding: 0.75rem;
+        font-size: 0.875rem;
+        margin-bottom: 0.75rem; /* Slightly less margin on mobile */
+    }
 } 

@@ -70,6 +70,9 @@ const errorText = document.getElementById('errorText');
 const emailError = document.getElementById('emailError');
 const topicError = document.getElementById('topicError');
 
+// Topic hover box elements
+const topicHoverBox = document.getElementById('topicHoverBox');
+
 // Utility functions
 function showMessage(type, message) {
     // Hide all messages first
@@ -92,6 +95,37 @@ function clearErrors() {
     topicError.classList.add('hidden');
     emailInput.classList.remove('border-red-500');
     topicInput.classList.remove('border-red-500');
+}
+
+// Topic hover box functions
+function showTopicHoverBox() {
+    if (topicHoverBox) {
+        positionHoverBox();
+        topicHoverBox.classList.add('show');
+    }
+}
+
+function hideTopicHoverBox() {
+    if (topicHoverBox) {
+        topicHoverBox.classList.remove('show');
+    }
+}
+
+function positionHoverBox() {
+    if (!topicHoverBox) return;
+    
+    // Get demo button container for positioning reference
+    const demoButtonContainer = document.querySelector('.demo-button-container');
+    if (!demoButtonContainer) return;
+    
+    const demoRect = demoButtonContainer.getBoundingClientRect();
+    const containerRect = learningForm.getBoundingClientRect();
+    
+    // Position above demo button, centered
+    const top = demoRect.top - containerRect.top - 10; // 10px above demo button
+    
+    // CSS handles horizontal centering with left: 50% and transform: translateX(-50%)
+    topicHoverBox.style.top = `${top}px`;
 }
 
 function showFieldError(field, message) {
@@ -329,6 +363,16 @@ topicInput.addEventListener('input', () => {
         topicInput.classList.remove('border-red-500');
     }
 });
+
+// Topic hover box event listeners
+topicInput.addEventListener('focus', showTopicHoverBox);
+topicInput.addEventListener('input', showTopicHoverBox);
+topicInput.addEventListener('blur', hideTopicHoverBox);
+
+// Ensure autofill is disabled across all browsers
+topicInput.setAttribute('autocomplete', 'off');
+topicInput.setAttribute('data-lpignore', 'true'); // LastPass ignore
+topicInput.setAttribute('data-form-type', 'other'); // Additional autofill prevention
 
 // Health check on page load
 window.addEventListener('load', async () => {

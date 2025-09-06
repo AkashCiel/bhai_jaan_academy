@@ -265,22 +265,6 @@ async def run_scheduler(
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/migrate-users")
-async def migrate_users():
-    """Migrate existing users to include the 'paid' field"""
-    try:
-        print("[Migration] Starting user migration...")
-        user_service.migrate_existing_users()
-        return {
-            "status": "success",
-            "message": "User migration completed successfully"
-        }
-    except Exception as e:
-        print(f"[Migration] Error during migration: {e}")
-        import traceback
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Migration failed: {str(e)}")
-
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000) 

@@ -35,11 +35,13 @@ class UserService:
         return user_repository.find_by_email_and_topic(email, topic)
     
     def add_user(self, email: str, topic: str, learning_plan: List[str], plan_url: str, 
-                 report_links: Optional[Dict[int, str]] = None, last_report_time: Optional[str] = None) -> Dict[str, Any]:
+                 report_links: Optional[Dict[int, str]] = None, last_report_time: Optional[str] = None, 
+                 paid: bool = False) -> Dict[str, Any]:
         """Add new user to the system"""
         user_entry = {
             "email": email,
             "main_topic": topic,
+            "paid": paid,
             "learning_plan": learning_plan,
             "current_index": 1 if report_links else 0,
             "plan_url": plan_url,
@@ -99,6 +101,53 @@ class UserService:
     def _is_same_utc_day(self, dt1, dt2):
         """Check if two datetime objects are on the same UTC day"""
         return dt1.date() == dt2.date() 
+
+    def should_generate_report(self, user: Dict[str, Any]) -> bool:
+        """
+        Check if user should receive a report based on PAID status and current_index
+        
+        Args:
+            user: User dictionary
+            
+        Returns:
+            True if report should be generated, False otherwise
+        """
+        current_index = user.get("current_index", 0)
+        paid = user.get("paid", True)  # Default to True for existing users
+        
+        # First 10 reports are free
+        if current_index < 10:
+            return True
+        
+        # Beyond 10 reports, check PAID status
+        return paid
+
+    def migrate_existing_users(self) -> None:
+        """
+        Migrate existing users to include the 'paid' field.
+        Sets paid=True for all existing users by default.
+        """
+        try:
+            users = self.load_users()
+            updated_users = []
+            migrated_count = 0
+            
+            for user in users:
+                if 'paid' not in user:
+                    user['paid'] = True  # Default to True for existing users
+                    migrated_count += 1
+                    print(f"[Migration] Added paid=True to user: {user.get('email', 'Unknown')} - {user.get('main_topic', 'Unknown')}")
+                updated_users.append(user)
+            
+            if migrated_count > 0:
+                self.save_users(updated_users)
+                print(f"[Migration] Successfully migrated {migrated_count} users with paid=True")
+            else:
+                print("[Migration] No users needed migration - all users already have 'paid' field")
+                
+        except Exception as e:
+            print(f"[Migration] Error during migration: {e}")
+            raise
 
     def check_duplicate_user(self, email: str, topic: str) -> tuple[bool, str, str]:
         """

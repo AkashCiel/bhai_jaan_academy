@@ -120,8 +120,8 @@ async def verify_payment(payment_data: PaymentVerification):
         
         print(f"[Payment] Payment verified successfully for: email={email}, topic={topic}")
         
-        # Generate learning plan using existing service
-        result = report_service.generate_initial_learning_plan(email, topic)
+        # Generate learning plan using existing service with paid=True
+        result = report_service.generate_initial_learning_plan(email, topic, paid=True)
         
         # Add payment information to result
         result['payment_id'] = payment_data.payment_id
@@ -155,8 +155,8 @@ async def register_user_without_payment(user_data: UserSubmission):
                 "topic": sanitized_topic
             }
         
-        # Generate learning plan directly
-        result = report_service.generate_initial_learning_plan(user_data.email, sanitized_topic)
+        # Generate learning plan directly with paid=False
+        result = report_service.generate_initial_learning_plan(user_data.email, sanitized_topic, paid=False)
         
         # Add payment bypass indicator
         if result.get('success'):
@@ -264,6 +264,22 @@ async def run_scheduler(
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/migrate-users")
+async def migrate_users():
+    """Migrate existing users to include the 'paid' field"""
+    try:
+        print("[Migration] Starting user migration...")
+        user_service.migrate_existing_users()
+        return {
+            "status": "success",
+            "message": "User migration completed successfully"
+        }
+    except Exception as e:
+        print(f"[Migration] Error during migration: {e}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Migration failed: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn

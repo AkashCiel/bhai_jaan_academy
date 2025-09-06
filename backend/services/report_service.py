@@ -183,7 +183,7 @@ class ReportService:
             # Check if user should receive a report based on PAID status and current_index
             if not self.user_service.should_generate_report(user):
                 current_index = user.get("current_index", 0)
-                paid = user.get("paid", True)
+                paid = user.get("paid", False)
                 print(f"[Report Service] Skipping report for {user['email']} - payment required (index: {current_index}, paid: {paid})")
                 return user
             

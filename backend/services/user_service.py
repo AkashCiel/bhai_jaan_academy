@@ -35,11 +35,13 @@ class UserService:
         return user_repository.find_by_email_and_topic(email, topic)
     
     def add_user(self, email: str, topic: str, learning_plan: List[str], plan_url: str, 
-                 report_links: Optional[Dict[int, str]] = None, last_report_time: Optional[str] = None) -> Dict[str, Any]:
+                 report_links: Optional[Dict[int, str]] = None, last_report_time: Optional[str] = None, 
+                 paid: bool = False) -> Dict[str, Any]:
         """Add new user to the system"""
         user_entry = {
             "email": email,
             "main_topic": topic,
+            "paid": paid,
             "learning_plan": learning_plan,
             "current_index": 1 if report_links else 0,
             "plan_url": plan_url,
@@ -74,31 +76,30 @@ class UserService:
             return (idx, topics[idx])
         return None, None
     
-    # Keep this for reference, but not used in the current implementation
-    # def should_generate_report(self, user: Dict[str, Any]) -> bool:
-    #     """Determine if a report should be generated for user"""
-    #     import datetime
-        
-    #     now = datetime.datetime.now(datetime.timezone.utc)
-    #     last_report_time = user.get("last_report_time")
-    #     current_index = user.get("current_index", 0)
-        
-    #     # If current_index == 1 and last_report_time is today, skip
-    #     if last_report_time:
-    #         try:
-    #             last_dt = datetime.datetime.fromisoformat(last_report_time)
-    #         except Exception:
-    #             last_dt = None
-    #     else:
-    #         last_dt = None
-            
-    #     if current_index == 1 and last_dt and self._is_same_utc_day(now, last_dt):
-    #         return False
-    #     return True
     
     def _is_same_utc_day(self, dt1, dt2):
         """Check if two datetime objects are on the same UTC day"""
         return dt1.date() == dt2.date() 
+
+    def should_generate_report(self, user: Dict[str, Any]) -> bool:
+        """
+        Check if user should receive a report based on PAID status and current_index
+        
+        Args:
+            user: User dictionary
+            
+        Returns:
+            True if report should be generated, False otherwise
+        """
+        current_index = user.get("current_index", 0)
+        paid = user.get("paid", False)
+        
+        # First 10 reports are free
+        if current_index < 10:
+            return True
+        
+        # Beyond 10 reports, check PAID status
+        return paid
 
     def check_duplicate_user(self, email: str, topic: str) -> tuple[bool, str, str]:
         """

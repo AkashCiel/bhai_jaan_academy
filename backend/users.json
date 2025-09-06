@@ -2,6 +2,7 @@
   {
     "email": "akash.adroit.singh@gmail.com",
     "main_topic": "Quantum Computing",
+    "paid": true,
     "learning_plan": [
       "Introduction to Quantum Computing",
       "Classical vs. Quantum Computing",
@@ -73,6 +74,7 @@
   {
     "email": "kunalbhaijain@gmail.com",
     "main_topic": "Semiconductors",
+    "paid": true,
     "learning_plan": [
       "Introduction to Semiconductors",
       "Basic Electronic Components",
@@ -144,6 +146,7 @@
   {
     "email": "singhanjanikumar6@gmail.com",
     "main_topic": "About Yog",
+    "paid": true,
     "learning_plan": [
       "Introduction to Yoga** - Understanding the origins and philosophy.",
       "Basic Yoga Poses** - Learning foundational poses (e.g., Mountain, Downward Dog).",
@@ -176,7 +179,7 @@
       "Advanced Breathwork Techniques** - Exploring different Pranayama practices.",
       "Integrating Yoga into Daily Life** - Applying yoga principles off the mat."
     ],
-    "current_index": 17,
+    "current_index": 22,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/About_Yog/About%20Yog.html",
     "report_links": {
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/About_Yog/Introduction_to_Yoga_-_Understanding_the_origins_and_philosophy.html",
@@ -195,13 +198,19 @@
       "13": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/About_Yog/Chakras_and_Energy_Flow_-_Introduction_to_the_chakra_system.html",
       "14": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/About_Yog/Incorporating_Breath_in_Movement_-_Synchronizing_breath_with_movement.html",
       "15": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/About_Yog/Yoga_Philosophy_-_Study_of_the_Yoga_Sutras_and_Eight_Limbs_of_Yoga.html",
-      "16": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/About_Yog/Yoga_Anatomy_Basics_-_Understanding_major_muscle_groups_and_their_functions.html"
+      "16": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/About_Yog/Yoga_Anatomy_Basics_-_Understanding_major_muscle_groups_and_their_functions.html",
+      "17": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/About_Yog/Creating_a_Balanced_Practice_-_Structuring_a_well-rounded_yoga_session.html",
+      "18": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/About_Yog/Restorative_Yoga_-_Techniques_for_deep_relaxation_and_recovery.html",
+      "19": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/About_Yog/Journaling_Your_Yoga_Journey_-_Importance_of_reflection_and_tracking_progress.html",
+      "20": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/About_Yog/Advanced_Poses_-_Techniques_for_poses_like_Handstand_and_Scorpion.html",
+      "21": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/About_Yog/Adjustments_and_Assists_-_Learning_how_to_safely_assist_others_in_poses.html"
     },
-    "last_report_time": "2025-08-31T18:23:24.950208+00:00"
+    "last_report_time": "2025-09-05T18:23:32.867062+00:00"
   },
   {
     "email": "akash.singh.0762@gmail.com",
     "main_topic": "Ai Alignment Research",
+    "paid": true,
     "learning_plan": [
       "Introduction to AI",
       "Understanding Machine Learning",
@@ -234,7 +243,7 @@
       "Philosophical Underpinnings of AI Values",
       "Future Directions in AI Alignment Research"
     ],
-    "current_index": 16,
+    "current_index": 21,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Ai%20Alignment%20Research.html",
     "report_links": {
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Introduction_to_AI.html",
@@ -252,13 +261,19 @@
       "12": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Scalable_Oversight.html",
       "13": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Robustness_and_Uncertainty_in_AI.html",
       "14": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Multi-agent_Systems.html",
-      "15": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Value_Learning.html"
+      "15": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Value_Learning.html",
+      "16": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Reward_Hacking.html",
+      "17": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Safe_Exploration.html",
+      "18": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Human-AI_Collaboration.html",
+      "19": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Current_Trends_in_AI_Alignment_Research.html",
+      "20": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Ai_Alignment_Research/Theoretical_Foundations_of_AI_Alignment.html"
     },
-    "last_report_time": "2025-08-31T18:24:31.079597+00:00"
+    "last_report_time": "2025-09-05T18:24:40.560232+00:00"
   },
   {
     "email": "amit27.lko@gmail.com",
     "main_topic": "Python Programming",
+    "paid": true,
     "learning_plan": [
       "Introduction to Python",
       "Basic Syntax and Variables",
@@ -291,19 +306,25 @@
       "Building RESTful APIs",
       "Advanced Projects"
     ],
-    "current_index": 4,
+    "current_index": 9,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/amit27lko/Python_Programming/Python%20Programming.html",
     "report_links": {
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/amit27lko/Python_Programming/Introduction_to_Python.html",
       "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/amit27lko/Python_Programming/Basic_Syntax_and_Variables.html",
       "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/amit27lko/Python_Programming/Control_Structures.html",
-      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/amit27lko/Python_Programming/Functions.html"
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/amit27lko/Python_Programming/Functions.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/amit27lko/Python_Programming/Data_Structures.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/amit27lko/Python_Programming/String_Manipulation.html",
+      "6": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/amit27lko/Python_Programming/File_InputOutput.html",
+      "7": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/amit27lko/Python_Programming/Error_Handling.html",
+      "8": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/amit27lko/Python_Programming/Basic_Modules_and_Libraries.html"
     },
-    "last_report_time": "2025-08-31T18:25:30.596041+00:00"
+    "last_report_time": "2025-09-05T18:25:44.597866+00:00"
   },
   {
     "email": "singhanjanikumar6@gmail.com",
     "main_topic": "Indian New Parliament",
+    "paid": true,
     "learning_plan": [
       "Introduction to the Indian Parliament",
       "Structure of the Parliament",
@@ -336,19 +357,25 @@
       "Impact of Social Movements on Legislative Changes",
       "Future Challenges for the Indian Parliament"
     ],
-    "current_index": 4,
+    "current_index": 9,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/Indian_New_Parliament/Indian%20New%20Parliament.html",
     "report_links": {
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/Indian_New_Parliament/Introduction_to_the_Indian_Parliament.html",
       "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/Indian_New_Parliament/Structure_of_the_Parliament.html",
       "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/Indian_New_Parliament/Roles_and_Responsibilities_of_Members_of_Parliament_MPs.html",
-      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/Indian_New_Parliament/How_a_Bill_Becomes_a_Law.html"
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/Indian_New_Parliament/How_a_Bill_Becomes_a_Law.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/Indian_New_Parliament/The_Role_of_the_President_in_Parliament.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/Indian_New_Parliament/Basic_Parliamentary_Terminology.html",
+      "6": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/Indian_New_Parliament/Functions_of_Parliamentary_Committees.html",
+      "7": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/Indian_New_Parliament/The_Budget_Process_in_Parliament.html",
+      "8": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhanjanikumar6/Indian_New_Parliament/Introduction_to_the_Constitution_of_India.html"
     },
-    "last_report_time": "2025-08-31T18:26:28.221898+00:00"
+    "last_report_time": "2025-09-05T18:26:47.486589+00:00"
   },
   {
     "email": "rashmi151902@gmail.com",
     "main_topic": "Chemistry",
+    "paid": true,
     "learning_plan": [
       "Introduction to Chemistry**: Understanding what chemistry is and its importance.",
       "Atoms and Elements**: Basic structure of atoms; definition of elements and the periodic table.",
@@ -381,19 +408,26 @@
       "Materials Chemistry**: Properties and applications of metals, polymers, and nanomaterials.",
       "Environmental Chemistry**: Study of chemical processes in the environment and pollution."
     ],
-    "current_index": 4,
+    "current_index": 10,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Chemistry/Chemistry.html",
     "report_links": {
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Chemistry/Introduction_to_Chemistry_Understanding_what_chemistry_is_and_its_importance.html",
       "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Chemistry/Atoms_and_Elements_Basic_structure_of_atoms_definition_of_elements_and_the_periodic_table.html",
       "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Chemistry/Compounds_and_Mixtures_Differences_between_compounds_and_mixtures_examples.html",
-      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Chemistry/Chemical_Bonds_Introduction_to_ionic_and_covalent_bonds.html"
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Chemistry/Chemical_Bonds_Introduction_to_ionic_and_covalent_bonds.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Chemistry/Chemical_Reactions_Basics_of_chemical_reactions_reactants_and_products.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Chemistry/Acids_and_Bases_Definitions_and_properties_of_acids_and_bases_pH_scale_introduction.html",
+      "6": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Chemistry/States_of_Matter_Solids_liquids_gases_and_plasma_changes_in_state.html",
+      "7": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Chemistry/Introduction_to_the_Mole_Understanding_the_mole_concept_and_Avogadros_number.html",
+      "8": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Chemistry/Stoichiometry_Basics_Simple_calculations_involving_moles_and_mass.html",
+      "9": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Chemistry/Laboratory_Safety_Basic_safety_protocols_and_equipment_in_a_chemistry_lab.html"
     },
-    "last_report_time": "2025-08-31T18:27:21.420881+00:00"
+    "last_report_time": "2025-09-05T18:27:51.549794+00:00"
   },
   {
     "email": "rashmi151902@gmail.com",
     "main_topic": "Physical Chemistry",
+    "paid": true,
     "learning_plan": [
       "Introduction to Physical Chemistry**: Overview of key concepts and the relevance of physical chemistry.",
       "States of Matter**: Understanding solids, liquids, gases, and phase transitions.",
@@ -426,19 +460,25 @@
       "Computational Chemistry**: Introduction to methods and applications in chemical research.",
       "Current Trends in Physical Chemistry**: Overview of contemporary research and future directions."
     ],
-    "current_index": 4,
+    "current_index": 9,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Physical_Chemistry/Physical%20Chemistry.html",
     "report_links": {
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Physical_Chemistry/Introduction_to_Physical_Chemistry_Overview_of_key_concepts_and_the_relevance_of_physical_chemistry.html",
       "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Physical_Chemistry/States_of_Matter_Understanding_solids_liquids_gases_and_phase_transitions.html",
       "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Physical_Chemistry/Basic_Thermodynamics_Laws_of_thermodynamics_and_their_applications.html",
-      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Physical_Chemistry/Ideal_Gas_Law_Understanding_the_behavior_of_ideal_gases_and_calculations.html"
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Physical_Chemistry/Ideal_Gas_Law_Understanding_the_behavior_of_ideal_gases_and_calculations.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Physical_Chemistry/Kinetic_Molecular_Theory_Insights_into_molecular_motion_and_gas_behavior.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Physical_Chemistry/Thermodynamic_Functions_Internal_energy_enthalpy_and_their_significance.html",
+      "6": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Physical_Chemistry/Heat_Capacity_Differentiating_between_specific_heat_and_molar_heat_capacity.html",
+      "7": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Physical_Chemistry/Enthalpy_Changes_Concepts_of_exothermic_and_endothermic_processes.html",
+      "8": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/rashmi151902/Physical_Chemistry/Phase_Diagrams_Introduction_to_phase_diagrams_and_critical_points.html"
     },
-    "last_report_time": "2025-08-31T18:28:21.823508+00:00"
+    "last_report_time": "2025-09-05T18:28:45.648008+00:00"
   },
   {
     "email": "singhbandanaritz@gmail.com",
     "main_topic": "Balance Dite",
+    "paid": true,
     "learning_plan": [
       "Introduction to Balanced Diet** - Understanding the concept and importance.",
       "Macronutrients** - Overview of carbohydrates, proteins, and fats.",
@@ -471,19 +511,25 @@
       "Behavioral Change Techniques** - Strategies for making lasting dietary changes.",
       "Current Trends in Nutrition** - Analyzing popular diets and their scientific backing."
     ],
-    "current_index": 4,
+    "current_index": 9,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Balance_Dite/Balance%20Dite.html",
     "report_links": {
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Balance_Dite/Introduction_to_Balanced_Diet_-_Understanding_the_concept_and_importance.html",
       "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Balance_Dite/Macronutrients_-_Overview_of_carbohydrates_proteins_and_fats.html",
       "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Balance_Dite/Micronutrients_-_Understanding_vitamins_and_minerals_essential_for_health.html",
-      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Balance_Dite/Food_Groups_-_Introduction_to_different_food_categories_grains_fruits_vegetables_protein_dairy.html"
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Balance_Dite/Food_Groups_-_Introduction_to_different_food_categories_grains_fruits_vegetables_protein_dairy.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Balance_Dite/Portion_Control_-_Learning_about_serving_sizes_and_how_to_measure_them.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Balance_Dite/Reading_Nutrition_Labels_-_How_to_interpret_food_labels_for_better_choices.html",
+      "6": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Balance_Dite/Healthy_Cooking_Methods_-_Exploring_techniques_like_steaming_grilling_and_baking.html",
+      "7": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Balance_Dite/Hydration_-_Importance_of_water_and_how_much_to_drink_daily.html",
+      "8": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Balance_Dite/Meal_Planning_Basics_-_Introduction_to_planning_balanced_meals_for_the_week.html"
     },
-    "last_report_time": "2025-08-31T18:29:19.063492+00:00"
+    "last_report_time": "2025-09-05T18:29:44.695182+00:00"
   },
   {
     "email": "singhbandanaritz@gmail.com",
     "main_topic": "Kabeer Dohawali",
+    "paid": true,
     "learning_plan": [
       "Introduction to Kabeer Dohawali**: Understanding its historical context and significance.",
       "Basic Structure of Kabeer Dohawali**: Exploring the format and components of dohas.",
@@ -516,19 +562,25 @@
       "Engaging with Criticism**: Understanding and critiquing scholarly works on Kabeer.",
       "Publishing Your Work**: Strategies for sharing your own dohas and interpretations."
     ],
-    "current_index": 4,
+    "current_index": 9,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Kabeer_Dohawali/Kabeer%20Dohawali.html",
     "report_links": {
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Kabeer_Dohawali/Introduction_to_Kabeer_Dohawali_Understanding_its_historical_context_and_significance.html",
       "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Kabeer_Dohawali/Basic_Structure_of_Kabeer_Dohawali_Exploring_the_format_and_components_of_dohas.html",
       "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Kabeer_Dohawali/Famous_Kabeer_Dohas_An_overview_of_notable_dohas_and_their_meanings.html",
-      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Kabeer_Dohawali/Language_and_Vocabulary_Learning_essential_terms_used_in_Kabeer_Dohawali.html"
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Kabeer_Dohawali/Language_and_Vocabulary_Learning_essential_terms_used_in_Kabeer_Dohawali.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Kabeer_Dohawali/Themes_in_Kabeer_Dohawali_Identifying_common_themes_such_as_spirituality_love_and_societal_issues.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Kabeer_Dohawali/Recitation_Techniques_Basics_of_how_to_recite_dohas_effectively.html",
+      "6": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Kabeer_Dohawali/Kabeers_Philosophy_Introduction_to_the_core_philosophies_expressed_in_Kabeer_Dohawali.html",
+      "7": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Kabeer_Dohawali/Cultural_Impact_Understanding_the_influence_of_Kabeer_Dohawali_on_Indian_culture.html",
+      "8": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Kabeer_Dohawali/Simple_Interpretations_Learning_how_to_interpret_dohas_in_simple_language.html"
     },
-    "last_report_time": "2025-08-31T18:30:15.198503+00:00"
+    "last_report_time": "2025-09-05T18:30:49.090751+00:00"
   },
   {
     "email": "star_pratibha@rediffmail.com",
     "main_topic": "Geography",
+    "paid": true,
     "learning_plan": [
       "Introduction to Geography",
       "Maps and Globes",
@@ -561,18 +613,24 @@
       "Urban Planning and Development",
       "Geographic Information Science (GIS)"
     ],
-    "current_index": 3,
+    "current_index": 8,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geography/Geography.html",
     "report_links": {
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geography/Introduction_to_Geography.html",
       "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geography/Maps_and_Globes.html",
-      "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geography/Physical_Geography.html"
+      "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geography/Physical_Geography.html",
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geography/Human_Geography.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geography/Continents_and_Oceans.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geography/Countries_and_Capitals.html",
+      "6": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geography/Geographic_Tools.html",
+      "7": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geography/Weather_vs_Climate.html"
     },
-    "last_report_time": "2025-08-31T18:31:05.513039+00:00"
+    "last_report_time": "2025-09-05T18:31:59.041546+00:00"
   },
   {
     "email": "star_pratibha@rediffmail.com",
     "main_topic": "Geomorphology",
+    "paid": true,
     "learning_plan": [
       "Introduction to Geomorphology",
       "Earth's Surface Processes",
@@ -605,18 +663,24 @@
       "The Role of Biogeomorphology",
       "Research Trends in Geomorphology"
     ],
-    "current_index": 3,
+    "current_index": 8,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geomorphology/Geomorphology.html",
     "report_links": {
       "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geomorphology/Introduction_to_Geomorphology.html",
       "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geomorphology/Earths_Surface_Processes.html",
-      "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geomorphology/Landforms_and_Landscapes.html"
+      "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geomorphology/Landforms_and_Landscapes.html",
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geomorphology/Plate_Tectonics_and_Geomorphology.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geomorphology/Fluvial_Processes.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geomorphology/Glacial_Processes.html",
+      "6": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geomorphology/Coastal_Geomorphology.html",
+      "7": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Geomorphology/Desert_Landscapes.html"
     },
-    "last_report_time": "2025-08-31T18:32:25.287256+00:00"
+    "last_report_time": "2025-09-05T18:32:53.951575+00:00"
   },
   {
     "email": "star_pratibha@rediffmail.com",
     "main_topic": "Gis Ugc Net Jrf",
+    "paid": true,
     "learning_plan": [
       "Introduction to GIS**: Understanding GIS concepts, components, and applications.",
       "Geospatial Data Types**: Vector vs. Raster data; data formats and structures.",
@@ -649,16 +713,22 @@
       "GIS in Urban Planning**: Applications of GIS in urban development and planning processes.",
       "Future Trends in GIS**: Exploring emerging trends such as AI, IoT, and big data in GIS."
     ],
-    "current_index": 1,
+    "current_index": 6,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Gis_Ugc_Net_Jrf/Gis%20Ugc%20Net%20Jrf.html",
     "report_links": {
-      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Gis_Ugc_Net_Jrf/Introduction_to_GIS_Understanding_GIS_concepts_components_and_applications.html"
+      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Gis_Ugc_Net_Jrf/Introduction_to_GIS_Understanding_GIS_concepts_components_and_applications.html",
+      "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Gis_Ugc_Net_Jrf/Geospatial_Data_Types_Vector_vs_Raster_data_data_formats_and_structures.html",
+      "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Gis_Ugc_Net_Jrf/Map_Elements_and_Design_Understanding_map_components_design_principles_and_symbology.html",
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Gis_Ugc_Net_Jrf/Coordinate_Systems_and_Projections_Basics_of_geographic_and_projected_coordinate_systems.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Gis_Ugc_Net_Jrf/Data_Sources_for_GIS_Types_of_data_sources_public_domain_datasets_and_how_to_access_them.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/starpratibha/Gis_Ugc_Net_Jrf/Basic_Spatial_Analysis_Introduction_to_spatial_analysis_techniques_and_their_applications.html"
     },
-    "last_report_time": "2025-08-31T07:02:46.908736+00:00"
+    "last_report_time": "2025-09-05T18:34:01.434106+00:00"
   },
   {
     "email": "manishkumarfd7882@gmail.com",
     "main_topic": "Python Programming For Beginners",
+    "paid": true,
     "learning_plan": [
       "Introduction to Python**: Overview, installation, and setting up the environment.",
       "Basic Syntax**: Understanding indentation, comments, and basic statements.",
@@ -691,16 +761,22 @@
       "Frameworks**: Introduction to Flask or Django for web development.",
       "Project**: Building a complete application that incorporates learned concepts."
     ],
-    "current_index": 1,
+    "current_index": 6,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/manishkumarfd7882/Python_Programming_For_Beginners/Python%20Programming%20For%20Beginners.html",
     "report_links": {
-      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/manishkumarfd7882/Python_Programming_For_Beginners/Introduction_to_Python_Overview_installation_and_setting_up_the_environment.html"
+      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/manishkumarfd7882/Python_Programming_For_Beginners/Introduction_to_Python_Overview_installation_and_setting_up_the_environment.html",
+      "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/manishkumarfd7882/Python_Programming_For_Beginners/Basic_Syntax_Understanding_indentation_comments_and_basic_statements.html",
+      "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/manishkumarfd7882/Python_Programming_For_Beginners/Variables_and_Data_Types_Working_with_integers_floats_strings_and_booleans.html",
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/manishkumarfd7882/Python_Programming_For_Beginners/Operators_Arithmetic_comparison_logical_and_assignment_operators.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/manishkumarfd7882/Python_Programming_For_Beginners/Control_Structures_if_statements_else_and_elif.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/manishkumarfd7882/Python_Programming_For_Beginners/Loops_Introduction_to_for_and_while_loops.html"
     },
-    "last_report_time": "2025-08-31T09:10:04.333441+00:00"
+    "last_report_time": "2025-09-05T18:35:09.032146+00:00"
   },
   {
     "email": "singhbandanaritz@gmail.com",
     "main_topic": "Karmyog",
+    "paid": true,
     "learning_plan": [
       "Introduction to Karmyog**: Understanding the concept and importance of Karmyog in daily life.",
       "History of Karmyog**: Exploring its origins and evolution over time.",
@@ -733,16 +809,22 @@
       "Karmyog in Global Context**: Understanding how Karmyog is practiced and perceived around the world.",
       "Creating a Karmyog Community**: Strategies for building and sustaining a community focused on Karmyog."
     ],
-    "current_index": 1,
+    "current_index": 6,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Karmyog/Karmyog.html",
     "report_links": {
-      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Karmyog/Introduction_to_Karmyog_Understanding_the_concept_and_importance_of_Karmyog_in_daily_life.html"
+      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Karmyog/Introduction_to_Karmyog_Understanding_the_concept_and_importance_of_Karmyog_in_daily_life.html",
+      "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Karmyog/History_of_Karmyog_Exploring_its_origins_and_evolution_over_time.html",
+      "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Karmyog/Principles_of_Karmyog_Key_principles_and_philosophies_behind_Karmyog.html",
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Karmyog/Karmyog_vs_Other_Yoga_Practices_Differentiating_Karmyog_from_other_forms_of_yoga.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Karmyog/The_Role_of_Intention_in_Karmyog_Understanding_how_intention_influences_practice.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Karmyog/Basic_Mindfulness_Techniques_Simple_mindfulness_exercises_to_incorporate_into_daily_activities.html"
     },
-    "last_report_time": "2025-08-31T11:53:36.078465+00:00"
+    "last_report_time": "2025-09-05T18:36:11.272621+00:00"
   },
   {
     "email": "singhbandanaritz@gmail.com",
     "main_topic": "Book Secret S",
+    "paid": true,
     "learning_plan": [
       "Introduction to the Law of Attraction",
       "Understanding Positive Thinking",
@@ -775,16 +857,22 @@
       "Mentorship and Community in Personal Growth",
       "Creating Sustainable Practices for Long-term Success"
     ],
-    "current_index": 1,
+    "current_index": 6,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Book_Secret_S/Book%20Secret%20S.html",
     "report_links": {
-      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Book_Secret_S/Introduction_to_the_Law_of_Attraction.html"
+      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Book_Secret_S/Introduction_to_the_Law_of_Attraction.html",
+      "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Book_Secret_S/Understanding_Positive_Thinking.html",
+      "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Book_Secret_S/The_Role_of_Gratitude_in_Manifestation.html",
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Book_Secret_S/Visualization_Techniques_for_Beginners.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Book_Secret_S/The_Power_of_Affirmations.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/singhbandanaritz/Book_Secret_S/Setting_Intentions_How_to_Do_It.html"
     },
-    "last_report_time": "2025-08-31T12:21:47.549182+00:00"
+    "last_report_time": "2025-09-05T18:37:12.749504+00:00"
   },
   {
     "email": "jagritis1608@gmail.com",
     "main_topic": "Digital Marketing",
+    "paid": true,
     "learning_plan": [
       "Introduction to Digital Marketing",
       "Understanding SEO (Search Engine Optimization)",
@@ -817,58 +905,22 @@
       "Legal and Ethical Issues in Digital Marketing",
       "Future Trends in Digital Marketing"
     ],
-    "current_index": 1,
+    "current_index": 6,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/jagritis1608/Digital_Marketing/Digital%20Marketing.html",
     "report_links": {
-      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/jagritis1608/Digital_Marketing/Introduction_to_Digital_Marketing.html"
+      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/jagritis1608/Digital_Marketing/Introduction_to_Digital_Marketing.html",
+      "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/jagritis1608/Digital_Marketing/Understanding_SEO_Search_Engine_Optimization.html",
+      "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/jagritis1608/Digital_Marketing/Social_Media_Marketing_Fundamentals.html",
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/jagritis1608/Digital_Marketing/Content_Marketing_Basics.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/jagritis1608/Digital_Marketing/Email_Marketing_Essentials.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/jagritis1608/Digital_Marketing/Introduction_to_PPC_Pay-Per-Click_Advertising.html"
     },
-    "last_report_time": "2025-08-31T16:36:55.092135+00:00"
-  },
-  {
-    "email": "prakhar720@gmail.com",
-    "main_topic": "Vibe Coding",
-    "learning_plan": [
-      "Introduction to Vibe Coding",
-      "Setting Up the Development Environment",
-      "Basic Syntax and Structure",
-      "Control Structures",
-      "Functions and Methods",
-      "Basic Input and Output",
-      "Data Structures",
-      "Error Handling",
-      "Creating Your First Application",
-      "Introduction to Version Control",
-      "Advanced Data Structures",
-      "Asynchronous Programming",
-      "APIs and Web Services",
-      "User Interface Design Principles",
-      "State Management",
-      "Testing and Debugging",
-      "Middleware Concepts",
-      "Database Integration",
-      "Security Best Practices",
-      "Version Control Mastery",
-      "Performance Optimization",
-      "Advanced Asynchronous Patterns",
-      "Building Scalable Applications",
-      "Microservices Architecture",
-      "Real-Time Data Handling",
-      "Containerization and Deployment",
-      "CI/CD Pipeline Implementation",
-      "GraphQL and RESTful APIs",
-      "Advanced Security Techniques",
-      "Capstone Project"
-    ],
-    "current_index": 1,
-    "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/Vibe_Coding/Vibe%20Coding.html",
-    "report_links": {
-      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/Vibe_Coding/Introduction_to_Vibe_Coding.html"
-    },
-    "last_report_time": "2025-09-01T08:41:45.582293+00:00"
+    "last_report_time": "2025-09-05T18:38:18.362998+00:00"
   },
   {
     "email": "prakhar720@gmail.com",
     "main_topic": "How To Vibe Code To Build Apps Without Coding Knowledge",
+    "paid": true,
     "learning_plan": [
       "Introduction to No-Code Platforms",
       "Understanding the Basics of App Development",
@@ -901,16 +953,22 @@
       "Building a Community Around Your App",
       "Future Trends in No-Code Development"
     ],
-    "current_index": 1,
+    "current_index": 6,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/How_To_Vibe_Code_To_Build_Apps_Without_Coding_Knowledge/How%20To%20Vibe%20Code%20To%20Build%20Apps%20Without%20Coding%20Knowledge.html",
     "report_links": {
-      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/How_To_Vibe_Code_To_Build_Apps_Without_Coding_Knowledge/Introduction_to_No-Code_Platforms.html"
+      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/How_To_Vibe_Code_To_Build_Apps_Without_Coding_Knowledge/Introduction_to_No-Code_Platforms.html",
+      "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/How_To_Vibe_Code_To_Build_Apps_Without_Coding_Knowledge/Understanding_the_Basics_of_App_Development.html",
+      "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/How_To_Vibe_Code_To_Build_Apps_Without_Coding_Knowledge/Exploring_Popular_No-Code_Platforms.html",
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/How_To_Vibe_Code_To_Build_Apps_Without_Coding_Knowledge/Setting_Up_Your_First_No-Code_Project.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/How_To_Vibe_Code_To_Build_Apps_Without_Coding_Knowledge/User_Interface_UI_Design_Fundamentals.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/How_To_Vibe_Code_To_Build_Apps_Without_Coding_Knowledge/Understanding_User_Experience_UX.html"
     },
-    "last_report_time": "2025-09-01T08:49:57.109603+00:00"
+    "last_report_time": "2025-09-05T18:39:21.929265+00:00"
   },
   {
     "email": "prakhar720@gmail.com",
     "main_topic": "Learn Korean As An English Speaker",
+    "paid": true,
     "learning_plan": [
       "Hangul Alphabet**: Understanding and practicing the Korean writing system.",
       "Basic Greetings and Introductions**: Common phrases for meeting and greeting people.",
@@ -943,16 +1001,22 @@
       "Korean History and Traditions**: Exploring significant historical events and cultural traditions.",
       "Creative Writing**: Encouraging creative expression through writing short stories or essays in Korean."
     ],
-    "current_index": 1,
+    "current_index": 6,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/Learn_Korean_As_An_English_Speaker/Learn%20Korean%20As%20An%20English%20Speaker.html",
     "report_links": {
-      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/Learn_Korean_As_An_English_Speaker/Hangul_Alphabet_Understanding_and_practicing_the_Korean_writing_system.html"
+      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/Learn_Korean_As_An_English_Speaker/Hangul_Alphabet_Understanding_and_practicing_the_Korean_writing_system.html",
+      "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/Learn_Korean_As_An_English_Speaker/Basic_Greetings_and_Introductions_Common_phrases_for_meeting_and_greeting_people.html",
+      "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/Learn_Korean_As_An_English_Speaker/Numbers_and_Counting_Learning_how_to_count_in_Korean_and_the_use_of_native_vs_Sino-Korean_numbers.html",
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/Learn_Korean_As_An_English_Speaker/Common_Verbs_Introduction_to_essential_verbs_and_their_conjugations_in_present_tense.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/Learn_Korean_As_An_English_Speaker/Basic_Sentence_Structure_Understanding_the_Subject-Object-Verb_SOV_structure.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/prakhar720/Learn_Korean_As_An_English_Speaker/Colors_and_Descriptions_Learning_color_vocabulary_and_adjectives_for_basic_descriptions.html"
     },
-    "last_report_time": "2025-09-01T08:52:50.779715+00:00"
+    "last_report_time": "2025-09-05T18:40:33.563511+00:00"
   },
   {
     "email": "akash.singh.0762@gmail.com",
     "main_topic": "Options Trading",
+    "paid": true,
     "learning_plan": [
       "Introduction to Options",
       "Types of Options",
@@ -985,11 +1049,20 @@
       "Global Events and Options Markets",
       "Developing a Personal Trading Plan"
     ],
-    "current_index": 1,
+    "current_index": 10,
     "plan_url": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Options_Trading/Options%20Trading.html",
     "report_links": {
-      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Options_Trading/Introduction_to_Options.html"
+      "0": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Options_Trading/Introduction_to_Options.html",
+      "1": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Options_Trading/Types_of_Options.html",
+      "2": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Options_Trading/Options_Terminology.html",
+      "3": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Options_Trading/How_Options_Work.html",
+      "4": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Options_Trading/Options_Pricing_Models.html",
+      "5": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Options_Trading/Understanding_Leverage_in_Options.html",
+      "6": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Options_Trading/Risk_and_Reward_in_Options_Trading.html",
+      "7": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Options_Trading/Basic_Options_Strategies.html",
+      "8": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Options_Trading/The_Role_of_Time_Decay.html",
+      "9": "https://akashciel.github.io/bhai_jaan_academy_reports/reports/akashsingh0762/Options_Trading/Setting_Up_a_Trading_Account.html"
     },
-    "last_report_time": "2025-09-01T09:03:51.085963+00:00"
+    "last_report_time": "2025-09-05T18:41:28.899897+00:00"
   }
 ]

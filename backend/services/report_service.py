@@ -18,7 +18,7 @@ class ReportService:
         self.email_service = EmailService()
         self.context_service = ContextService()
     
-    def generate_initial_learning_plan(self, email: str, topic: str) -> Dict[str, Any]:
+    def generate_initial_learning_plan(self, email: str, topic: str, paid: bool = False) -> Dict[str, Any]:
         """Generate initial learning plan for new user"""
         try:
             print(f"[Report Service] Generating learning plan for topic: {topic}")
@@ -137,7 +137,8 @@ class ReportService:
                 learning_plan=topic_titles,
                 plan_url=updated_public_url,
                 report_links=report_links,
-                last_report_time=last_report_time
+                last_report_time=last_report_time,
+                paid=paid
             )
             
             print(f"[Report Service] User entry added to users.json.")
@@ -178,6 +179,14 @@ class ReportService:
         """Generate next report for existing user"""
         try:
             print(f"[Report Service] Generating next report for {user['email']}")
+            
+            # Check if user should receive a report based on PAID status and current_index
+            if not self.user_service.should_generate_report(user):
+                current_index = user.get("current_index", 0)
+                paid = user.get("paid", False)
+                print(f"[Report Service] Skipping report for {user['email']} - payment required (index: {current_index}, paid: {paid})")
+                return user
+            
             # Get next topic
             idx, topic = self.user_service.get_next_topic(user)
             if topic is None:

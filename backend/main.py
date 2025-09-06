@@ -120,8 +120,8 @@ async def verify_payment(payment_data: PaymentVerification):
         
         print(f"[Payment] Payment verified successfully for: email={email}, topic={topic}")
         
-        # Generate learning plan using existing service
-        result = report_service.generate_initial_learning_plan(email, topic)
+        # Generate learning plan using existing service with paid=True
+        result = report_service.generate_initial_learning_plan(email, topic, paid=True)
         
         # Add payment information to result
         result['payment_id'] = payment_data.payment_id
@@ -155,8 +155,8 @@ async def register_user_without_payment(user_data: UserSubmission):
                 "topic": sanitized_topic
             }
         
-        # Generate learning plan directly
-        result = report_service.generate_initial_learning_plan(user_data.email, sanitized_topic)
+        # Generate learning plan directly with paid=False
+        result = report_service.generate_initial_learning_plan(user_data.email, sanitized_topic, paid=False)
         
         # Add payment bypass indicator
         if result.get('success'):

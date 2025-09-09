@@ -319,6 +319,33 @@ html {
         border-radius: 1rem 1rem 0 0 !important;
         overflow-y: visible !important;
     }
+
+    /* Deterministic spacing for mobile buttons above registration */
+    .registration-box-mobile {
+        --gap: 8px;
+        --legal-height: 36px;
+        --demo-height: 44px;
+    }
+
+    /* Legal button sits directly above the registration box */
+    .legal-link-container {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 180px;
+        bottom: calc(100% + var(--gap));
+        z-index: 999;
+    }
+
+    /* Demo button sits above legal button */
+    .demo-button-container {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 180px;
+        bottom: calc(100% + var(--gap) + var(--legal-height) + var(--gap));
+        z-index: 999;
+    }
     .registration-box-mobile,
     .registration-box-mobile input,
     .registration-box-mobile button,

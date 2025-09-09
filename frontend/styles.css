@@ -486,4 +486,96 @@ button, input, select, textarea {
         font-size: 0.875rem;
         margin-bottom: 0.75rem; /* Slightly less margin on mobile */
     }
+}
+
+/* Legal Page Styles */
+.legal-section {
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.pricing-card {
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.pricing-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.collapsible-section {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.collapsible-section:last-child {
+    border-bottom: none;
+}
+
+.collapsible-header {
+    transition: all 0.2s ease;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+}
+
+.collapsible-header:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.collapsible-content {
+    transition: all 0.3s ease;
+    padding: 0 0.75rem 0.75rem 0.75rem;
+}
+
+.back-to-home-btn {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legal-link {
+    text-decoration: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.legal-link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile responsive adjustments for legal page */
+@media (max-width: 640px) {
+    .legal-section {
+        padding: 1rem !important;
+        margin: 0.5rem 0 !important;
+    }
+    
+    .pricing-card {
+        padding: 1rem !important;
+    }
+    
+    .collapsible-header {
+        padding: 0.5rem !important;
+        font-size: 1rem !important;
+    }
+    
+    .collapsible-content {
+        padding: 0 0.5rem 0.5rem 0.5rem !important;
+    }
+    
+    .back-to-home-btn {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.875rem !important;
+    }
+    
+    .legal-link {
+        font-size: 0.75rem !important;
+        padding: 0.375rem 0.5rem !important;
+    }
 } 

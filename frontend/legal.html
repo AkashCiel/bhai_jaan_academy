@@ -20,14 +20,24 @@
                 </h1>
                 <div class="w-24"></div> <!-- Spacer for centering -->
             </div>
-            <p class="text-lg text-dark">
-                A service offered by LaughingBuddha.<br>
-                KvK: 98190512<br>
-                Email: laughing.buddha.lab@gmail.com<br><br>
-                Hammarskjöldlaan 109<br>
-                2286 GZ Rijswijk<br>
-                The Netherlands
-            </p>
+            <div class="collapsible-section">
+                <button class="collapsible-header w-full text-left font-semibold text-lg py-2 flex items-center justify-between">
+                    <span>Contact Information</span>
+                    <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="collapsible-content hidden">
+                    <p class="text-lg text-dark">
+                        A service offered by LaughingBuddha.<br>
+                        KvK: 98190512<br>
+                        Email: laughing.buddha.lab@gmail.com<br><br>
+                        Hammarskjöldlaan 109<br>
+                        2286 GZ Rijswijk<br>
+                        The Netherlands
+                    </p>
+                </div>
+            </div>
         </div>
 
         <!-- Main Content Container -->
@@ -43,7 +53,7 @@
                 </div>
                 
                 <div class="grid md:grid-cols-2 gap-6 mb-6">
-                    <!-- Free Tier -->
+                    <!-- Basic Tier -->
                     <div class="pricing-card bg-white bg-opacity-30 rounded-xl p-6 border border-blue-200">
                         <h3 class="text-xl font-semibold text-dark mb-2">Single Topic</h3>
                         <div class="text-3xl font-bold text-blue-600 mb-4">INR 149</div>
@@ -60,40 +70,45 @@
                                 </svg>
                                 Vote for new features for a month. Regenerate your content with the latest features.
                             </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Full refund within 20 days of registration. No questions asked.
+                            </li>
                         </ul>
                     </div>
 
                     <!-- Premium Tier -->
                     <div class="pricing-card bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-300 relative">
                         <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                            <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">Most Popular</span>
                         </div>
-                        <h3 class="text-xl font-semibold text-dark mb-2">Premium Plan</h3>
-                        <div class="text-3xl font-bold text-blue-600 mb-4">$29.99</div>
+                        <h3 class="text-xl font-semibold text-dark mb-2">Pack of 10 topics</h3>
+                        <div class="text-3xl font-bold text-blue-600 mb-4">INR 999</div>
                         <ul class="space-y-2 text-dark">
                             <li class="flex items-center">
                                 <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                Comprehensive learning plan
+                                Register 10 topics for a year. Pay once, use forever.
                             </li>
                             <li class="flex items-center">
                                 <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                Daily content delivery
+                                Vote for new features for a year. Regenerate your content with the latest features.
                             </li>
                             <li class="flex items-center">
                                 <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                Priority support
+                                Priority in feature requests.
                             </li>
                             <li class="flex items-center">
                                 <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                Content regeneration
+                                Partial refunds available at any time for all unused topics.
                             </li>
                         </ul>
                     </div>
@@ -102,8 +117,8 @@
                 <div class="bg-blue-50 bg-opacity-50 rounded-lg p-4">
                     <h4 class="font-semibold text-dark mb-2">Payment Information</h4>
                     <p class="text-dark text-sm">
-                        We accept payments through PayPal. All transactions are secure and encrypted. 
-                        You can cancel your subscription at any time. Refunds are available within 30 days of purchase.
+                        We accept payments through Razorpay. All transactions are secure and encrypted. 
+                        To request a refund, please contact us at laughing.buddha.lab@gmail.com.
                     </p>
                 </div>
             </div>
@@ -127,9 +142,8 @@
                         </button>
                         <div class="collapsible-content hidden">
                             <p class="text-sm leading-relaxed">
-                                We collect information you provide directly to us, such as when you create an account, 
-                                subscribe to our service, or contact us for support. This includes your email address, 
-                                learning topics, and any feedback you provide.
+                                We collect information you provide directly to us. This includes your email address, 
+                                and learning topics.
                             </p>
                         </div>
                     </div>
@@ -234,9 +248,7 @@
                         </button>
                         <div class="collapsible-content hidden">
                             <p class="text-sm leading-relaxed">
-                                We offer a 30-day money-back guarantee for all paid subscriptions. If you are not 
-                                satisfied with our service, you can request a full refund within 30 days of your 
-                                initial purchase. Contact us at support@bhaijaanacademy.com to process your refund.
+                                Please see specific refund policy for each plan.
                             </p>
                         </div>
                     </div>
@@ -251,7 +263,7 @@
                     please don't hesitate to contact us.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="mailto:support@bhaijaanacademy.com" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-2 px-6 rounded-lg hover:from-blue-700 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200">
+                    <a href="mailto:laughing.buddha.lab@gmail.com" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-2 px-6 rounded-lg hover:from-blue-700 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200">
                         Contact Support
                     </a>
                     <a href="index.html" class="bg-gray-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-700 transform hover:scale-105 transition-all duration-200">
